@@ -5,20 +5,20 @@ const types = Object.freeze({
     INTEGER: "INTEGER"
 });
 
-let outputMvs = "";
-let variableType = null;
-let variableCount = 0;
+let outputMvs = "",
+    variableType = null,
+    variableCount = 0;
 
-const variableTable = [];
-const typeStack = []; 
-const labelStack = []; 
-let label = 0;
+const variableTable = [],
+    typeStack = [],
+    labelStack = [];
 
-let tmpLabel;
-let tmpType;
-let tmpPos;
-let tmpVariableName;
-let tmpVariable;
+let label = 0,
+    tmpLabel,
+    tmpType,
+    tmpPos,
+    tmpVariableName,
+    tmpVariable;
 
 const addVariable = (v) => {
     const nameAlreadyExists = variableTable.some(variable => variable.name === v.name);

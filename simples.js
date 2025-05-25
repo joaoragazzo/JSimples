@@ -144,7 +144,7 @@ break;
 case 21:
 
             tmpType = typeStack.pop();
-            tmpPos = labelStack.pop(); // Aqui deveria ser uma stack de posições
+            tmpPos = labelStack.pop(); 
 
             if (variableTable[tmpPos].type != tmpType) {
                 throw new Error("Incompatibilidade de tipo!");
@@ -156,7 +156,7 @@ break;
 case 22:
 
             tmpPos = findVariablePosition($$[$0]);
-            labelStack.push(tmpPos); // Temporário - deveria ser uma stack separada
+            labelStack.push(tmpPos); 
         
 break;
 case 25:
@@ -452,20 +452,20 @@ const types = Object.freeze({
     INTEGER: "INTEGER"
 });
 
-let outputMvs = "";
-let variableType = null;
-let variableCount = 0;
+let outputMvs = "",
+    variableType = null,
+    variableCount = 0;
 
-const variableTable = [];
-const typeStack = [];  // Stack separada para tipos
-const labelStack = []; // Stack separada para labels
-let label = 0;
+const variableTable = [],
+    typeStack = [],
+    labelStack = [];
 
-let tmpLabel;
-let tmpType;
-let tmpPos;
-let tmpVariableName;
-let tmpVariable;
+let label = 0,
+    tmpLabel,
+    tmpType,
+    tmpPos,
+    tmpVariableName,
+    tmpVariable;
 
 const addVariable = (v) => {
     const nameAlreadyExists = variableTable.some(variable => variable.name === v.name);
