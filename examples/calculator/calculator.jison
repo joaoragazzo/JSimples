@@ -4,7 +4,7 @@
 %lex
 %%
 
-\s+                   /* skip whitespace */
+\s+                   
 [0-9]+("."[0-9]+)?\b  return 'NUMBER';
 "*"                   return '*';
 "/"                   return '/';
@@ -22,8 +22,6 @@
 
 /lex
 
-/* operator associations and precedence */
-
 %left '+' '-'
 %left '*' '/'
 %left '^'
@@ -34,7 +32,7 @@
 
 %start expressions
 
-%% /* language grammar */
+%% 
 
 expressions
     : e EOF
