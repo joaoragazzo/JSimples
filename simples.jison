@@ -1,5 +1,27 @@
 %{
 
+class SyntaxNode {
+    constructor(nodeName, childrens) {
+        this.name = nodeName;
+        this.childrens = childrens;
+    }
+
+    toString() {
+        const childrenToString = this.childrens
+            .map(child => {
+                    console.log(child)
+                    return child.toString()
+                }
+            ).join(", ");
+
+        if (this.childrens.length > 0)
+            return `${this.name}: [${childrenToString}]`;
+        
+        return `${this.name}`;
+    }
+}
+
+
 const types = Object.freeze({
     LOGIC: "LOGIC",
     INTEGER: "INTEGER"
@@ -85,6 +107,8 @@ const findVariablePosition = (variableName) => {
 "*"             return "T_TIMES";
 "div"           return "T_DIV";
 
+"<-"            return "T_ATRIB";
+
 ">"             return "T_GREATER";
 "<"             return "T_LESS";
 "="             return "T_EQUAL";
@@ -92,7 +116,7 @@ const findVariablePosition = (variableName) => {
 "e"             return "T_AND";
 "ou"            return "T_OR";
 "nao"           return "T_NOT";
-"<-"            return "T_ATRIB";
+
 "("             return "T_OPEN";
 ")"             return "T_CLOSE";
 
@@ -120,40 +144,83 @@ const findVariablePosition = (variableName) => {
 
 algorithm
     : header variables start_block command_list footer
+        {
+            const headerNode = $1;
+            const variablesNode = $2;
+            const startBlockNode = $3;
+            const commandsNode = $4;
+            const footerNode = $5;
+
+            const children = [headerNode];
+            if (variablesNode) children.push(variablesNode);
+            if (startBlockNode) children.push(startBlockNode);
+            if (commandsNode) children.push(commandsNode);
+            if (footerNode) children.push(footerNode);
+
+            let syntaxTree = new SyntaxNode("Algoritmo", children);
+
+            console.log("===== Tabela de variáveis =====");
+            console.log(variableTable);
+            console.log("===== MVS Output =====");
+            console.log(outputMvs)
+            console.log("===== Syntax Tree ====");
+            console.log(syntaxTree.toString())
+
+            $$ = syntaxTree;            
+        }
     ;
 
 start_block 
     : T_START
         {
-           outputMvs += `\tAMEM\t${variableCount}\n`; 
+            outputMvs += `\tAMEM\t${variableCount}\n`; 
+            $$ = new SyntaxNode($1, []);
         }
     ;
 
 header
     : T_PROGRAM T_IDENTIFIER
         {
-            outputMvs += "\tINPP\t\n"
+            outputMvs += "\tINPP\t\n";
+            $$ = new SyntaxNode("Cabeçalho", [
+                new SyntaxNode($1, []), 
+                new SyntaxNode($2, [])
+            ]);
         }
     ;
 
 variables
     : /* blank */
-    | variable_declaration
+        {
+            $$ = new SyntaxNode("Variáveis", [])
+        }
+    | variable_declaration 
+        {
+            $$ = new SyntaxNode("Variáveis", [$1]);
+        }
     ;
 
 variable_declaration
-    : type variable_list variable_declaration
-    | type variable_list 
+    : type variable_list variable_declaration 
+        {
+            $$ = new SyntaxNode("Declaração de variáveis", [$1, $2, $3])
+        }
+    | type variable_list
+        {
+            $$ = new SyntaxNode("Declaração de variáveis", [$1, $2])
+        }
     ;
 
 type 
     : T_LOGIC
         {
             variableType = types.LOGIC;
+            $$ = new SyntaxNode("Tipo", [$1])
         }
     | T_INTEGER
         {
             variableType = types.INTEGER;
+            $$ = new SyntaxNode("Tipo", [$1])
         }
     ;
 
@@ -162,24 +229,44 @@ variable_list
         {
             addVariable({type: variableType, name: $2, address: variableCount});
             variableCount++; 
+            $$ = new SyntaxNode("Lista de variáveis", [$1, $2])
         }
     | T_IDENTIFIER
         {
             addVariable({type: variableType, name: $1, address: variableCount});
             variableCount++;
+            $$ = new SyntaxNode("Lista de variáveis", [$1])
         }
     ;
 
 command_list
     : /* blank */
+        {  
+            $$ = new SyntaxNode("Lista de comandos", [])
+        }
     | command command_list
+        {
+            $$ = new SyntaxNode("Lista de comandos", [$1, $2]);
+        }
     ;
 
 command 
-    : input_output
+    : input_output 
+        {
+            $$ = new SyntaxNode("Comando", [$1]);
+        }
     | repeat_loop
+        {
+            $$ = new SyntaxNode("Comando", [$1]);
+        }
     | conditional
+        {
+            $$ = new SyntaxNode("Comando", [$1]);
+        }
     | assignment
+        {
+            $$ = new SyntaxNode("Comando", [$1]);
+        }
     ;
 
 conditional
@@ -187,6 +274,7 @@ conditional
         {
             tmpLabel = labelStack.pop();
             outputMvs += `L${tmpLabel}\tNADA\t\n`;
+            $$ = new SyntaxNode("Condicional", [$1,$2,$3,$4,$5,$6,$7]);
         }
     ;
 
@@ -201,6 +289,7 @@ then_token
 
             outputMvs += `\tDSVF\tL${++label}\n`;
             labelStack.push(label);
+            $$ = new SyntaxNode("Token então", [$1]);
         }
     ;
 
@@ -211,6 +300,7 @@ else_token
             tmpLabel = labelStack.pop();
             outputMvs += `L${tmpLabel}\tNADA\t\n`;
             labelStack.push(label);
+            $$ = new SyntaxNode("Token Senão", [$1]);
         }
     ;
 
@@ -227,6 +317,7 @@ assignment
             }
 
             outputMvs += `\tARZG\t${variableTable[tmpPos].address}\n`
+            $$ = new SyntaxNode("Atribuição", [$1, $2, $3]);
         }
     ;
 
@@ -235,12 +326,19 @@ assignment_identifier
         {
             tmpPos = findVariablePosition($1);
             labelStack.push(tmpPos); 
+            $$ = new SyntaxNode("Identificador de atribuição", [$1]);
         }
     ;
 
 input_output
-    : input 
-    | output 
+    : input
+        {
+            $$ = new SyntaxNode("Entrada/Saída", [$1]);
+        } 
+    | output
+        {
+            $$ = new SyntaxNode("Entrada/Saída", [$1]);
+        }
     ;
 
 input 
@@ -249,6 +347,7 @@ input
             let variable = findVariable($2);
             outputMvs += `\tLEIA\t\n`;
             outputMvs += `\tARZG\t${variable.address}\n`;
+            $$ = new SyntaxNode("Entrada", [$1, $2]);
         }
     ;
 
@@ -257,6 +356,7 @@ output
         {
             tmpType = typeStack.pop();
             outputMvs += `\tESCR\t\n`;
+            $$ = new SyntaxNode("Saída", [$1, $2]);
         }
     ;
 
@@ -267,6 +367,7 @@ repeat_loop
             let secondLabel = labelStack.pop();
             outputMvs += `\tDSVS\tL${secondLabel}\n`;
             outputMvs += `L${firstLabel}\tNADA\t\n`;
+            $$ = new SyntaxNode("Loop de repetição", [$1, $2, $3, $4, $5]);
         }
     ;
 
@@ -275,6 +376,7 @@ while_token
         {
             outputMvs += `L${++label}\tNADA\t\n`;
             labelStack.push(label);
+            $$ = new SyntaxNode("Token enquanto", [$1]);
         }
     ;
 
@@ -286,6 +388,7 @@ do_token
                 throw new Error("Incompatibilidade de tipo!");
             outputMvs += `\tDSVF\tL${++label}\n`;
             labelStack.push(label);
+            $$ = new SyntaxNode("Facá Token", [$1]);
         }
     ;
 
@@ -293,49 +396,62 @@ expression
     : expression T_TIMES   expression
         {
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
-            outputMvs += `\tMULT\t\n`;   
+            outputMvs += `\tMULT\t\n`;
+            $$ = new SyntaxNode("Expressão", [$1, $2, $3]);
         }
     | expression T_DIV     expression
         {
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
             outputMvs += `\tDIVI\t\n`;
+            $$ = new SyntaxNode("Expressão", [$1, $2, $3]);
         }
     | expression T_PLUS    expression
         {
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
             outputMvs += `\tSOMA\t\n`;
+            $$ = new SyntaxNode("Expressão", [$1, $2, $3]);
         }
     | expression T_MINUS   expression
         {
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
             outputMvs += `\tSUBT\t\n`;
+            $$ = new SyntaxNode("Expressão", [$1, $2, $3]);
         } 
     | expression T_GREATER expression
         {
             typeCheck(types.INTEGER, types.INTEGER, types.LOGIC);
             outputMvs += `\tCMMA\t\n`;
+            $$ = new SyntaxNode("Expressão", [$1, $2, $3]);
         } 
     | expression T_LESS    expression
         {
             typeCheck(types.INTEGER, types.INTEGER, types.LOGIC);
             outputMvs += `\tCMME\t\n`;
+            $$ = new SyntaxNode("Expressão", [$1, $2, $3]);
         } 
     | expression T_EQUAL   expression
         {
             typeCheck(types.INTEGER, types.INTEGER, types.LOGIC);
             outputMvs += `\tCMIG\t\n`;
+            $$ = new SyntaxNode("Expressão", [$1, $2, $3]);
         } 
     | expression T_AND     expression
         {
             typeCheck(types.LOGIC, types.LOGIC, types.LOGIC);
             outputMvs += `\tCONJ\t\n`;
+            $$ = new SyntaxNode("Expressão", [$1, $2, $3]);
         } 
     | expression T_OR      expression
         {
             typeCheck(types.LOGIC, types.LOGIC, types.LOGIC);
             outputMvs += `\tDISJ\t\n`;
+            $$ = new SyntaxNode("Expressão", [$1, $2, $3]);
         }
     | term
+        {
+            $$ = new SyntaxNode("Expressão", [$1]);
+        }
+    
     ;
 
 term
@@ -345,21 +461,25 @@ term
             tmpVariable = findVariable(tmpVariableName);
             outputMvs += `\tCRVG\t${tmpVariable.address}\n`;
             typeStack.push(tmpVariable.type); 
+            $$ = new SyntaxNode("Termo", [$1]);
         }
     | T_NUMBER
         {
             outputMvs += `\tCRCT\t${$1}\n`;
             typeStack.push(types.INTEGER);
+            $$ = new SyntaxNode("Termo", [$1]);
         }
     | T_T
         {
             outputMvs += `\tCRCT\t1\n`;
             typeStack.push(types.LOGIC);
+            $$ = new SyntaxNode("Termo", [$1]);
         }
     | T_F
         {
             outputMvs += `\tCRCT\t0\n`;
             typeStack.push(types.LOGIC);
+            $$ = new SyntaxNode("Termo", [$1]);
         }
     | T_NOT term
         {
@@ -369,8 +489,12 @@ term
             }
             outputMvs += `\tNEGA\t\n`;
             typeStack.push(types.LOGIC);
+            $$ = new SyntaxNode("Termo", [$1, $2]);
         }
     | T_OPEN expression T_CLOSE
+        {
+            $$ = new SyntaxNode("Termo", [$1,$2,$3]);
+        }
     ;
 
 footer
@@ -378,9 +502,7 @@ footer
         {   
             outputMvs += `\tDMEM\t${variableCount}\n`;
             outputMvs += `\tFIMP\t\n`;
-            console.log("===== Tabela de variáveis =====");
-            console.log(variableTable);
-            console.log("===== MVS Output =====");
-            console.log(outputMvs)
+
+            $$ = new SyntaxNode("Rodapé", [$1]);
         }
     ;

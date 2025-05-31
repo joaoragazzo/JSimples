@@ -83,42 +83,113 @@ performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* actio
 
 var $0 = $$.length - 1;
 switch (yystate) {
+case 1:
+
+            const headerNode = $$[$0-4];
+            const variablesNode = $$[$0-3];
+            const startBlockNode = $$[$0-2];
+            const commandsNode = $$[$0-1];
+            const footerNode = $$[$0];
+
+            const children = [headerNode];
+            if (variablesNode) children.push(variablesNode);
+            if (startBlockNode) children.push(startBlockNode);
+            if (commandsNode) children.push(commandsNode);
+            if (footerNode) children.push(footerNode);
+
+            let syntaxTree = new SyntaxNode("Algoritmo", children);
+
+            console.log("===== Tabela de variáveis =====");
+            console.log(variableTable);
+            console.log("===== MVS Output =====");
+            console.log(outputMvs)
+            console.log("===== Syntax Tree ====");
+            console.log(syntaxTree.toString())
+
+            this.$ = syntaxTree;            
+        
+break;
 case 2:
 
-           outputMvs += `\tAMEM\t${variableCount}\n`; 
+            outputMvs += `\tAMEM\t${variableCount}\n`; 
+            this.$ = new SyntaxNode($$[$0], []);
         
 break;
 case 3:
 
-            outputMvs += "\tINPP\t\n"
+            outputMvs += "\tINPP\t\n";
+            this.$ = new SyntaxNode("Cabeçalho", [
+                new SyntaxNode($$[$0-1], []), 
+                new SyntaxNode($$[$0], [])
+            ]);
+        
+break;
+case 4:
+
+            this.$ = new SyntaxNode("Variáveis", [])
+        
+break;
+case 5:
+
+            this.$ = new SyntaxNode("Variáveis", [$$[$0]]);
+        
+break;
+case 6:
+
+            this.$ = new SyntaxNode("Declaração de variáveis", [$$[$0-2], $$[$0-1], $$[$0]])
+        
+break;
+case 7:
+
+            this.$ = new SyntaxNode("Declaração de variáveis", [$$[$0-1], $$[$0]])
         
 break;
 case 8:
 
             variableType = types.LOGIC;
+            this.$ = new SyntaxNode("Tipo", [$$[$0]])
         
 break;
 case 9:
 
             variableType = types.INTEGER;
+            this.$ = new SyntaxNode("Tipo", [$$[$0]])
         
 break;
 case 10:
 
             addVariable({type: variableType, name: $$[$0], address: variableCount});
             variableCount++; 
+            this.$ = new SyntaxNode("Lista de variáveis", [$$[$0-1], $$[$0]])
         
 break;
 case 11:
 
             addVariable({type: variableType, name: $$[$0], address: variableCount});
             variableCount++;
+            this.$ = new SyntaxNode("Lista de variáveis", [$$[$0]])
+        
+break;
+case 12:
+  
+            this.$ = new SyntaxNode("Lista de comandos", [])
+        
+break;
+case 13:
+
+            this.$ = new SyntaxNode("Lista de comandos", [$$[$0-1], $$[$0]]);
+        
+break;
+case 14: case 15: case 16: case 17:
+
+            this.$ = new SyntaxNode("Comando", [$$[$0]]);
         
 break;
 case 18:
 
             tmpLabel = labelStack.pop();
             outputMvs += `L${tmpLabel}\tNADA\t\n`;
+            this.$ = new SyntaxNode("Condicional", [$$[$0-6],$$[$0-5],$$[$0-4],$$[$0-3],$$[$0-2],$$[$0-1],$$[$0]]);
         
 break;
 case 19:
@@ -131,6 +202,7 @@ case 19:
 
             outputMvs += `\tDSVF\tL${++label}\n`;
             labelStack.push(label);
+            this.$ = new SyntaxNode("Token então", [$$[$0]]);
         
 break;
 case 20:
@@ -139,6 +211,7 @@ case 20:
             tmpLabel = labelStack.pop();
             outputMvs += `L${tmpLabel}\tNADA\t\n`;
             labelStack.push(label);
+            this.$ = new SyntaxNode("Token Senão", [$$[$0]]);
         
 break;
 case 21:
@@ -151,12 +224,19 @@ case 21:
             }
 
             outputMvs += `\tARZG\t${variableTable[tmpPos].address}\n`
+            this.$ = new SyntaxNode("Atribuição", [$$[$0-2], $$[$0-1], $$[$0]]);
         
 break;
 case 22:
 
             tmpPos = findVariablePosition($$[$0]);
             labelStack.push(tmpPos); 
+            this.$ = new SyntaxNode("Identificador de atribuição", [$$[$0]]);
+        
+break;
+case 23: case 24:
+
+            this.$ = new SyntaxNode("Entrada/Saída", [$$[$0]]);
         
 break;
 case 25:
@@ -164,12 +244,14 @@ case 25:
             let variable = findVariable($$[$0]);
             outputMvs += `\tLEIA\t\n`;
             outputMvs += `\tARZG\t${variable.address}\n`;
+            this.$ = new SyntaxNode("Entrada", [$$[$0-1], $$[$0]]);
         
 break;
 case 26:
 
             tmpType = typeStack.pop();
             outputMvs += `\tESCR\t\n`;
+            this.$ = new SyntaxNode("Saída", [$$[$0-1], $$[$0]]);
         
 break;
 case 27:
@@ -178,12 +260,14 @@ case 27:
             let secondLabel = labelStack.pop();
             outputMvs += `\tDSVS\tL${secondLabel}\n`;
             outputMvs += `L${firstLabel}\tNADA\t\n`;
+            this.$ = new SyntaxNode("Loop de repetição", [$$[$0-4], $$[$0-3], $$[$0-2], $$[$0-1], $$[$0]]);
         
 break;
 case 28:
 
             outputMvs += `L${++label}\tNADA\t\n`;
             labelStack.push(label);
+            this.$ = new SyntaxNode("Token enquanto", [$$[$0]]);
         
 break;
 case 29:
@@ -193,60 +277,75 @@ case 29:
                 throw new Error("Incompatibilidade de tipo!");
             outputMvs += `\tDSVF\tL${++label}\n`;
             labelStack.push(label);
+            this.$ = new SyntaxNode("Facá Token", [$$[$0]]);
         
 break;
 case 30:
 
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
-            outputMvs += `\tMULT\t\n`;   
+            outputMvs += `\tMULT\t\n`;
+            this.$ = new SyntaxNode("Expressão", [$$[$0-2], $$[$0-1], $$[$0]]);
         
 break;
 case 31:
 
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
             outputMvs += `\tDIVI\t\n`;
+            this.$ = new SyntaxNode("Expressão", [$$[$0-2], $$[$0-1], $$[$0]]);
         
 break;
 case 32:
 
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
             outputMvs += `\tSOMA\t\n`;
+            this.$ = new SyntaxNode("Expressão", [$$[$0-2], $$[$0-1], $$[$0]]);
         
 break;
 case 33:
 
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
             outputMvs += `\tSUBT\t\n`;
+            this.$ = new SyntaxNode("Expressão", [$$[$0-2], $$[$0-1], $$[$0]]);
         
 break;
 case 34:
 
             typeCheck(types.INTEGER, types.INTEGER, types.LOGIC);
             outputMvs += `\tCMMA\t\n`;
+            this.$ = new SyntaxNode("Expressão", [$$[$0-2], $$[$0-1], $$[$0]]);
         
 break;
 case 35:
 
             typeCheck(types.INTEGER, types.INTEGER, types.LOGIC);
             outputMvs += `\tCMME\t\n`;
+            this.$ = new SyntaxNode("Expressão", [$$[$0-2], $$[$0-1], $$[$0]]);
         
 break;
 case 36:
 
             typeCheck(types.INTEGER, types.INTEGER, types.LOGIC);
             outputMvs += `\tCMIG\t\n`;
+            this.$ = new SyntaxNode("Expressão", [$$[$0-2], $$[$0-1], $$[$0]]);
         
 break;
 case 37:
 
             typeCheck(types.LOGIC, types.LOGIC, types.LOGIC);
             outputMvs += `\tCONJ\t\n`;
+            this.$ = new SyntaxNode("Expressão", [$$[$0-2], $$[$0-1], $$[$0]]);
         
 break;
 case 38:
 
             typeCheck(types.LOGIC, types.LOGIC, types.LOGIC);
             outputMvs += `\tDISJ\t\n`;
+            this.$ = new SyntaxNode("Expressão", [$$[$0-2], $$[$0-1], $$[$0]]);
+        
+break;
+case 39:
+
+            this.$ = new SyntaxNode("Expressão", [$$[$0]]);
         
 break;
 case 40:
@@ -255,24 +354,28 @@ case 40:
             tmpVariable = findVariable(tmpVariableName);
             outputMvs += `\tCRVG\t${tmpVariable.address}\n`;
             typeStack.push(tmpVariable.type); 
+            this.$ = new SyntaxNode("Termo", [$$[$0]]);
         
 break;
 case 41:
 
             outputMvs += `\tCRCT\t${$$[$0]}\n`;
             typeStack.push(types.INTEGER);
+            this.$ = new SyntaxNode("Termo", [$$[$0]]);
         
 break;
 case 42:
 
             outputMvs += `\tCRCT\t1\n`;
             typeStack.push(types.LOGIC);
+            this.$ = new SyntaxNode("Termo", [$$[$0]]);
         
 break;
 case 43:
 
             outputMvs += `\tCRCT\t0\n`;
             typeStack.push(types.LOGIC);
+            this.$ = new SyntaxNode("Termo", [$$[$0]]);
         
 break;
 case 44:
@@ -283,16 +386,20 @@ case 44:
             }
             outputMvs += `\tNEGA\t\n`;
             typeStack.push(types.LOGIC);
+            this.$ = new SyntaxNode("Termo", [$$[$0-1], $$[$0]]);
+        
+break;
+case 45:
+
+            this.$ = new SyntaxNode("Termo", [$$[$0-2],$$[$0-1],$$[$0]]);
         
 break;
 case 46:
    
             outputMvs += `\tDMEM\t${variableCount}\n`;
             outputMvs += `\tFIMP\t\n`;
-            console.log("===== Tabela de variáveis =====");
-            console.log(variableTable);
-            console.log("===== MVS Output =====");
-            console.log(outputMvs)
+
+            this.$ = new SyntaxNode("Rodapé", [$$[$0-1]]);
         
 break;
 }
@@ -445,6 +552,28 @@ parse: function parse(input) {
     }
     return true;
 }};
+
+
+class SyntaxNode {
+    constructor(nodeName, childrens) {
+        this.name = nodeName;
+        this.childrens = childrens;
+    }
+
+    toString() {
+        const childrenToString = this.childrens
+            .map(child => {
+                    console.log(child)
+                    return child.toString()
+                }
+            ).join(", ");
+
+        if (this.childrens.length > 0)
+            return `${this.name}: [${childrenToString}]`;
+        
+        return `${this.name}`;
+    }
+}
 
 
 const types = Object.freeze({
@@ -866,19 +995,19 @@ case 15:return "T_TIMES";
 break;
 case 16:return "T_DIV";
 break;
-case 17:return "T_GREATER";
+case 17:return "T_ATRIB";
 break;
-case 18:return "T_LESS";
+case 18:return "T_GREATER";
 break;
-case 19:return "T_EQUAL";
+case 19:return "T_LESS";
 break;
-case 20:return "T_AND";
+case 20:return "T_EQUAL";
 break;
-case 21:return "T_OR";
+case 21:return "T_AND";
 break;
-case 22:return "T_NOT";
+case 22:return "T_OR";
 break;
-case 23:return "T_ATRIB";
+case 23:return "T_NOT";
 break;
 case 24:return "T_OPEN";
 break;
@@ -900,7 +1029,7 @@ case 32:return 50;
 break;
 }
 },
-rules: [/^(?:\s+)/,/^(?:programa\b)/,/^(?:inicio\b)/,/^(?:fimprograma\b)/,/^(?:leia\b)/,/^(?:escreva\b)/,/^(?:se\b)/,/^(?:entao\b)/,/^(?:senao\b)/,/^(?:fimse\b)/,/^(?:enquanto\b)/,/^(?:faca\b)/,/^(?:fimenquanto\b)/,/^(?:\+)/,/^(?:-)/,/^(?:\*)/,/^(?:div\b)/,/^(?:>)/,/^(?:<)/,/^(?:=)/,/^(?:e\b)/,/^(?:ou\b)/,/^(?:nao\b)/,/^(?:<-)/,/^(?:\()/,/^(?:\))/,/^(?:inteiro\b)/,/^(?:logico\b)/,/^(?:V\b)/,/^(?:F\b)/,/^(?:$)/,/^(?:[a-zA-Z][a-zA-Z0-9]*)/,/^(?:[0-9]*)/],
+rules: [/^(?:\s+)/,/^(?:programa\b)/,/^(?:inicio\b)/,/^(?:fimprograma\b)/,/^(?:leia\b)/,/^(?:escreva\b)/,/^(?:se\b)/,/^(?:entao\b)/,/^(?:senao\b)/,/^(?:fimse\b)/,/^(?:enquanto\b)/,/^(?:faca\b)/,/^(?:fimenquanto\b)/,/^(?:\+)/,/^(?:-)/,/^(?:\*)/,/^(?:div\b)/,/^(?:<-)/,/^(?:>)/,/^(?:<)/,/^(?:=)/,/^(?:e\b)/,/^(?:ou\b)/,/^(?:nao\b)/,/^(?:\()/,/^(?:\))/,/^(?:inteiro\b)/,/^(?:logico\b)/,/^(?:V\b)/,/^(?:F\b)/,/^(?:$)/,/^(?:[a-zA-Z][a-zA-Z0-9]*)/,/^(?:[0-9]*)/],
 conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32],"inclusive":true}}
 });
 return lexer;
