@@ -1,20 +1,19 @@
 %{
 
 class SyntaxNode {
-    constructor(nodeName, childrens) {
+    constructor(nodeName, children) {
         this.name = nodeName;
-        this.childrens = childrens;
+        this.children = children;
     }
 
     toString() {
-        const childrenToString = this.childrens
+        const childrenToString = this.children
             .map(child => {
-                    console.log(child)
                     return child.toString()
                 }
             ).join(", ");
 
-        if (this.childrens.length > 0)
+        if (this.children.length > 0)
             return `${this.name}: [${childrenToString}]`;
         
         return `${this.name}`;
@@ -41,6 +40,15 @@ let label = 0,
     tmpPos,
     tmpVariableName,
     tmpVariable;
+
+const clearEverything = () => {
+    variableTable.length = 0;
+    typeStack.length = 0;
+    labelStack.length = 0;
+    outputMvs = "";
+    variableCount = 0;
+    label = 0;
+}
 
 const addVariable = (v) => {
     const nameAlreadyExists = variableTable.some(variable => variable.name === v.name);
@@ -158,15 +166,15 @@ algorithm
             if (footerNode) children.push(footerNode);
 
             let syntaxTree = new SyntaxNode("Algoritmo", children);
+            let result = { 
+                syntaxTree: syntaxTree, 
+                mvsCode: outputMvs, 
+                variableTable: [...variableTable] 
+            }
 
-            console.log("===== Tabela de variáveis =====");
-            console.log(variableTable);
-            console.log("===== MVS Output =====");
-            console.log(outputMvs)
-            console.log("===== Syntax Tree ====");
-            console.log(syntaxTree.toString())
+            clearEverything();
 
-            $$ = syntaxTree;            
+            return result;            
         }
     ;
 
@@ -215,12 +223,12 @@ type
     : T_LOGIC
         {
             variableType = types.LOGIC;
-            $$ = new SyntaxNode("Tipo", [$1])
+            $$ = new SyntaxNode("Tipo", [new SyntaxNode($1,[])])
         }
     | T_INTEGER
         {
             variableType = types.INTEGER;
-            $$ = new SyntaxNode("Tipo", [$1])
+            $$ = new SyntaxNode("Tipo", [new SyntaxNode($1, [])])
         }
     ;
 
@@ -229,13 +237,13 @@ variable_list
         {
             addVariable({type: variableType, name: $2, address: variableCount});
             variableCount++; 
-            $$ = new SyntaxNode("Lista de variáveis", [$1, $2])
+            $$ = new SyntaxNode("Lista de variáveis", [$1, new SyntaxNode($2,[])])
         }
     | T_IDENTIFIER
         {
             addVariable({type: variableType, name: $1, address: variableCount});
             variableCount++;
-            $$ = new SyntaxNode("Lista de variáveis", [$1])
+            $$ = new SyntaxNode("Lista de variáveis", [new SyntaxNode($1, [])])
         }
     ;
 
@@ -274,7 +282,7 @@ conditional
         {
             tmpLabel = labelStack.pop();
             outputMvs += `L${tmpLabel}\tNADA\t\n`;
-            $$ = new SyntaxNode("Condicional", [$1,$2,$3,$4,$5,$6,$7]);
+            $$ = new SyntaxNode("Condicional", [new SyntaxNode($1, []),$2,$3,$4,$5,$6,new SyntaxNode($7,[])]);
         }
     ;
 
@@ -289,7 +297,7 @@ then_token
 
             outputMvs += `\tDSVF\tL${++label}\n`;
             labelStack.push(label);
-            $$ = new SyntaxNode("Token então", [$1]);
+            $$ = new SyntaxNode("Token então", [new SyntaxNode($1,[])]);
         }
     ;
 
@@ -300,7 +308,7 @@ else_token
             tmpLabel = labelStack.pop();
             outputMvs += `L${tmpLabel}\tNADA\t\n`;
             labelStack.push(label);
-            $$ = new SyntaxNode("Token Senão", [$1]);
+            $$ = new SyntaxNode("Token Senão", [new SyntaxNode($1,[])]);
         }
     ;
 
@@ -317,7 +325,7 @@ assignment
             }
 
             outputMvs += `\tARZG\t${variableTable[tmpPos].address}\n`
-            $$ = new SyntaxNode("Atribuição", [$1, $2, $3]);
+            $$ = new SyntaxNode("Atribuição", [$1, new SyntaxNode($2,[]), $3]);
         }
     ;
 
@@ -326,7 +334,7 @@ assignment_identifier
         {
             tmpPos = findVariablePosition($1);
             labelStack.push(tmpPos); 
-            $$ = new SyntaxNode("Identificador de atribuição", [$1]);
+            $$ = new SyntaxNode("Identificador de atribuição", [new SyntaxNode($1,[])]);
         }
     ;
 
@@ -347,7 +355,7 @@ input
             let variable = findVariable($2);
             outputMvs += `\tLEIA\t\n`;
             outputMvs += `\tARZG\t${variable.address}\n`;
-            $$ = new SyntaxNode("Entrada", [$1, $2]);
+            $$ = new SyntaxNode("Entrada", [new SyntaxNode($1,[]), new SyntaxNode($2,[])]);
         }
     ;
 
@@ -356,7 +364,7 @@ output
         {
             tmpType = typeStack.pop();
             outputMvs += `\tESCR\t\n`;
-            $$ = new SyntaxNode("Saída", [$1, $2]);
+            $$ = new SyntaxNode("Saída", [new SyntaxNode($1,[]), $2]);
         }
     ;
 
@@ -367,7 +375,7 @@ repeat_loop
             let secondLabel = labelStack.pop();
             outputMvs += `\tDSVS\tL${secondLabel}\n`;
             outputMvs += `L${firstLabel}\tNADA\t\n`;
-            $$ = new SyntaxNode("Loop de repetição", [$1, $2, $3, $4, $5]);
+            $$ = new SyntaxNode("Loop de repetição", [$1, $2, $3, $4, new SyntaxNode($5, [])]);
         }
     ;
 
@@ -376,7 +384,7 @@ while_token
         {
             outputMvs += `L${++label}\tNADA\t\n`;
             labelStack.push(label);
-            $$ = new SyntaxNode("Token enquanto", [$1]);
+            $$ = new SyntaxNode("Token enquanto", [new SyntaxNode($1,[])]);
         }
     ;
 
@@ -388,7 +396,7 @@ do_token
                 throw new Error("Incompatibilidade de tipo!");
             outputMvs += `\tDSVF\tL${++label}\n`;
             labelStack.push(label);
-            $$ = new SyntaxNode("Facá Token", [$1]);
+            $$ = new SyntaxNode("Facá Token", [new SyntaxNode($1,[])]);
         }
     ;
 
@@ -397,55 +405,55 @@ expression
         {
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
             outputMvs += `\tMULT\t\n`;
-            $$ = new SyntaxNode("Expressão", [$1, $2, $3]);
+            $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         }
     | expression T_DIV     expression
         {
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
             outputMvs += `\tDIVI\t\n`;
-            $$ = new SyntaxNode("Expressão", [$1, $2, $3]);
+            $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         }
     | expression T_PLUS    expression
         {
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
             outputMvs += `\tSOMA\t\n`;
-            $$ = new SyntaxNode("Expressão", [$1, $2, $3]);
+            $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         }
     | expression T_MINUS   expression
         {
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
             outputMvs += `\tSUBT\t\n`;
-            $$ = new SyntaxNode("Expressão", [$1, $2, $3]);
+            $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         } 
     | expression T_GREATER expression
         {
             typeCheck(types.INTEGER, types.INTEGER, types.LOGIC);
             outputMvs += `\tCMMA\t\n`;
-            $$ = new SyntaxNode("Expressão", [$1, $2, $3]);
+            $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         } 
     | expression T_LESS    expression
         {
             typeCheck(types.INTEGER, types.INTEGER, types.LOGIC);
             outputMvs += `\tCMME\t\n`;
-            $$ = new SyntaxNode("Expressão", [$1, $2, $3]);
+            $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         } 
     | expression T_EQUAL   expression
         {
             typeCheck(types.INTEGER, types.INTEGER, types.LOGIC);
             outputMvs += `\tCMIG\t\n`;
-            $$ = new SyntaxNode("Expressão", [$1, $2, $3]);
+            $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         } 
     | expression T_AND     expression
         {
             typeCheck(types.LOGIC, types.LOGIC, types.LOGIC);
             outputMvs += `\tCONJ\t\n`;
-            $$ = new SyntaxNode("Expressão", [$1, $2, $3]);
+            $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         } 
     | expression T_OR      expression
         {
             typeCheck(types.LOGIC, types.LOGIC, types.LOGIC);
             outputMvs += `\tDISJ\t\n`;
-            $$ = new SyntaxNode("Expressão", [$1, $2, $3]);
+            $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         }
     | term
         {
@@ -461,25 +469,25 @@ term
             tmpVariable = findVariable(tmpVariableName);
             outputMvs += `\tCRVG\t${tmpVariable.address}\n`;
             typeStack.push(tmpVariable.type); 
-            $$ = new SyntaxNode("Termo", [$1]);
+            $$ = new SyntaxNode("Termo", [new SyntaxNode($1, [])]);
         }
     | T_NUMBER
         {
             outputMvs += `\tCRCT\t${$1}\n`;
             typeStack.push(types.INTEGER);
-            $$ = new SyntaxNode("Termo", [$1]);
+            $$ = new SyntaxNode("Termo", [new SyntaxNode($1, [])]);
         }
     | T_T
         {
             outputMvs += `\tCRCT\t1\n`;
             typeStack.push(types.LOGIC);
-            $$ = new SyntaxNode("Termo", [$1]);
+            $$ = new SyntaxNode("Termo", [new SyntaxNode($1, [])]);
         }
     | T_F
         {
             outputMvs += `\tCRCT\t0\n`;
             typeStack.push(types.LOGIC);
-            $$ = new SyntaxNode("Termo", [$1]);
+            $$ = new SyntaxNode("Termo", [new SyntaxNode($1, [])]);
         }
     | T_NOT term
         {
@@ -489,11 +497,11 @@ term
             }
             outputMvs += `\tNEGA\t\n`;
             typeStack.push(types.LOGIC);
-            $$ = new SyntaxNode("Termo", [$1, $2]);
+            $$ = new SyntaxNode("Termo", [new SyntaxNode($1, []), $2]);
         }
     | T_OPEN expression T_CLOSE
         {
-            $$ = new SyntaxNode("Termo", [$1,$2,$3]);
+            $$ = new SyntaxNode("Termo", [new SyntaxNode($1, []),$2,new SyntaxNode($3, [])]);
         }
     ;
 
@@ -503,6 +511,6 @@ footer
             outputMvs += `\tDMEM\t${variableCount}\n`;
             outputMvs += `\tFIMP\t\n`;
 
-            $$ = new SyntaxNode("Rodapé", [$1]);
+            $$ = new SyntaxNode("Rodapé", [new SyntaxNode($1,[])]);
         }
     ;

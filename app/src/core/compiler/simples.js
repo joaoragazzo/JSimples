@@ -1066,4 +1066,4 @@ exports.main = function commonjsMain (args) {
 if (typeof module !== 'undefined' && require.main === module) {
   exports.main(process.argv.slice(1));
 }
-}
+}export default simples;
