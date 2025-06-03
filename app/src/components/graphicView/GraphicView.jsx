@@ -3,22 +3,21 @@ import Tree from "react-d3-tree";
 import { useAppData } from "../../contexts/AppContext";
 import styled from "styled-components";
 import { FaGear } from "react-icons/fa6";
-import { Checkbox } from "antd";
+import { Checkbox, Tooltip } from "antd";
 
 const Canva = styled.div`
   border: 1px solid black;
-  height: 100%; 
+  height: 100%;
   border-radius: 7px;
-  display: flex; 
-  flex-direction: column; 
+  display: flex;
+  flex-direction: column;
 `;
 
 const GraphicWrapper = styled.div`
-  flex-grow: 1; 
-  position: relative; 
-  overflow: hidden; 
+  flex-grow: 1;
+  position: relative;
+  overflow: hidden;
 `;
-
 
 const Toolbar = styled.div`
   background-color: #f8f8f8;
@@ -39,6 +38,9 @@ const Tools = styled.div`
   padding: 10px 20px;
 `;
 
+const Config = styled(Tooltip)`
+    cursor: pointer;
+`
 export const GraphicView = () => {
   const { completeSyntaxTree, simplifiedSyntaxTree } = useAppData();
   const containerRef = useRef(null);
@@ -62,10 +64,12 @@ export const GraphicView = () => {
       <Canva>
         <Toolbar>
           Visualização da árvore sintática
-          <FaGear
-            size={20}
-            onClick={() => setIsToolsVisible(!isToolsVisible)}
-          />
+          <Config  title="Configurações" placement="bottom">
+            <FaGear
+              size={20}
+              onClick={() => setIsToolsVisible(!isToolsVisible)}
+            />
+          </Config>
         </Toolbar>
 
         {isToolsVisible && (
@@ -83,7 +87,6 @@ export const GraphicView = () => {
 
         <GraphicWrapper ref={containerRef}>
           <Tree
-            key={removeUnitaryDerivation ? "simplified" : "complete"}
             orientation="vertical"
             pathFunc="straight"
             data={
@@ -94,7 +97,6 @@ export const GraphicView = () => {
             translate={translate}
             scaleExtent={{ min: 0.5, max: 3 }}
             zoom={0.8}
-            enableLegacyTransitions={true}
           />
         </GraphicWrapper>
       </Canva>
