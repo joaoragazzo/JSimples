@@ -1,57 +1,38 @@
-import { useState } from "react";
 import "./App.css";
-import simples from "./core/compiler/simples.js";
-import { GraphicView } from "./components/GraphicView.jsx";
+import { GraphicView } from "./components/graphicView/GraphicView.jsx";
+import { Button, Col, Row } from "antd";
+import { CodeInput } from "./components/CodeInput.jsx";
+import { useAppData } from "./contexts/AppContext.jsx";
 
 function App() {
-  const [resultado, setResultado] = useState();
-  const [syntaxTree, setSyntaxTree] = useState({});
-  const [algoritmo, setAlgoritmo] = useState(`programa teste
-  inteiro a b c
-inicio
-  leia a
-  escreva b + (a + 1)
-fimprograma
-    `);
-
-  const handleClick = () => { 
-    const result = simples.parse(algoritmo)
-    console.log(result)
-    setSyntaxTree(result.syntaxTree)
-    setResultado(result.mvsCode)
-  }
+  const { parse } = useAppData();  
 
   return (
-    <>
-      <div
+    <Row
+      style={{
+        gap: "10px",
+      }}
+      
+    >
+      <Col
         style={{
           display: "flex",
-          flexDirection: "row",
-          width: "500px",
+          flexDirection: "column",
+          width: "400px",
           gap: "10px",
         }}
+        flex={"500px"}
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            width: "400px",
-            gap: "10px",
-          }}
-        >
-          <textarea 
-            type="text" 
-            rows={10}
-            style={{ width: "98%" }}
-            onChange={(e) => setAlgoritmo(e.target.value)}
-            value={algoritmo}
-          ></textarea>
-          <button onClick={handleClick}>Rodar</button>
-        </div>
-        {resultado}
-      </div>
-      <GraphicView syntaxTree={syntaxTree}/>
-    </>
+        <CodeInput />
+        <Button type="primary" onClick={parse}>
+          <b>Gerar árvore sintática</b>
+        </Button>
+      </Col>
+      <Col flex="auto">
+      <GraphicView />
+        
+      </Col>
+    </Row>
   );
 }
 
