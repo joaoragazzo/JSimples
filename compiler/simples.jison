@@ -53,8 +53,10 @@ const clearEverything = () => {
 const addVariable = (v) => {
     const nameAlreadyExists = variableTable.some(variable => variable.name === v.name);
     
-    if (nameAlreadyExists)
+    if (nameAlreadyExists) {
         throw new Error("Essa variavel já existe.");
+        clearEverything();
+    }
     
     variableTable.push(v);
 }
@@ -67,7 +69,7 @@ const typeCheck = (type1, type2, resultType) => {
         typeStack.push(resultType);
         return;
     }
-
+    clearEverything();
     throw new Error("Incompatibilidade de tipo!");
 }
 
@@ -76,6 +78,7 @@ const findVariable = (variableName) => {
     if (variable) {
         return variable;
     }
+    clearEverything();
     throw new Error("Essa variável não foi declarada!");
 }
 
@@ -84,6 +87,7 @@ const findVariablePosition = (variableName) => {
     if (index != -1) {
         return index;
     }
+    clearEverything();
     throw new Error("Essa variável não foi declarada!");
 }
 

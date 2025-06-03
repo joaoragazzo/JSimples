@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import Tree from "react-d3-tree";
 import { useAppData } from "../../contexts/AppContext";
 import styled from "styled-components";
@@ -27,6 +27,7 @@ const Toolbar = styled.div`
   box-sizing: border-box;
   padding: 10px 20px;
   border-radius: 7px 7px 0px 0px;
+  font-size: 20px;
 `;
 
 const Tools = styled.div`

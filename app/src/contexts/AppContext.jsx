@@ -1,16 +1,17 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import simples from "../core/compiler/simples.js";
+import { MVS }  from "../core/mvs/mvs.js";
 
 const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
-  const [code, setCode] = useState("");
-  
+  const [code, setCode] = useState("programa teste\ninteiro a\ninicio\nescreva a\nfimprograma");
+
   const [completeSyntaxTree, setCompleteSyntaxTree] = useState({});
-  const [simplifiedSyntaxTree ,setSimplifiedSyntaxTree] = useState({});
-  
+  const [simplifiedSyntaxTree, setSimplifiedSyntaxTree] = useState({});
+
   const [parserResponse, setParserResponse] = useState({
-    syntaxTree:{}
+    syntaxTree: {},
   });
 
   const compressSingleChildNodes = (node) => {
@@ -40,19 +41,16 @@ export const AppContextProvider = ({ children }) => {
   };
 
   const parse = () => {
-        const response = simples.parse(code);
-        setParserResponse(response);    
-        setCompleteSyntaxTree(response.syntaxTree);
+    const response = simples.parse(code);
+    setParserResponse(response);
+    setCompleteSyntaxTree(response.syntaxTree);
 
-        const treeToCompress = JSON.parse(JSON.stringify(response.syntaxTree));
-        setSimplifiedSyntaxTree(compressSingleChildNodes(treeToCompress));
-    };
+    const treeToCompress = JSON.parse(JSON.stringify(response.syntaxTree));
+    setSimplifiedSyntaxTree(compressSingleChildNodes(treeToCompress));
 
-    useEffect(() => {
-        console.log(completeSyntaxTree)
-        console.log(simplifiedSyntaxTree)
-    }, [completeSyntaxTree, simplifiedSyntaxTree])
+    MVS(response.mvsCode)
 
+  };
 
   return (
     <AppContext.Provider
@@ -64,7 +62,7 @@ export const AppContextProvider = ({ children }) => {
         parse,
 
         completeSyntaxTree,
-        simplifiedSyntaxTree
+        simplifiedSyntaxTree,
       }}
     >
       {children}

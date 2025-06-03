@@ -6,12 +6,13 @@ import { useAppData } from "../contexts/AppContext";
 const { TextArea } = Input;
 
 export const CodeInput = () => {
-  const { setCode } = useAppData();
+  const { setCode, code } = useAppData();
   return (
     <TextArea
       onChange={(e) => {
         setCode(e.target.value);
       }}
+      value={code}
     />
   );
 };
