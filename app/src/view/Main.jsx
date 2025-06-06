@@ -9,7 +9,7 @@ import styled from "styled-components";
 
 const Container = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #E0E0E0;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -103,6 +103,7 @@ export const Main = () => {
           <StyledCard>
             <InputSection>
               <SectionTitle>📝 Editor de Código</SectionTitle>
+              
               <CodeInput />
               <Row gutter={24}>
                 <Col span={12}>

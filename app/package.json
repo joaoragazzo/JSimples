@@ -11,6 +11,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@codemirror/language": "^6.11.1",
+    "@codemirror/theme-one-dark": "^6.1.2",
+    "@codemirror/view": "^6.37.1",
+    "@uiw/react-codemirror": "^4.23.12",
     "antd": "^5.25.4",
     "react": "^19.1.0",
     "react-d3-tree": "^3.6.6",

@@ -3,7 +3,7 @@ import Tree from "react-d3-tree";
 import { useAppData } from "../../contexts/AppContext";
 import styled from "styled-components";
 import { SettingOutlined, EyeOutlined } from "@ant-design/icons";
-import { Checkbox, Tooltip, Switch, Card } from "antd";
+import { Checkbox, Tooltip, Card } from "antd";
 
 const Container = styled.div`
   height: 100%;
@@ -102,16 +102,6 @@ export const GraphicView = () => {
     }
   }, []);
 
-  const customNodeStyle = {
-    fill: '#667eea',
-    stroke: '#4c63d1',
-    strokeWidth: 2,
-  };
-
-  const customLinkStyle = {
-    stroke: '#8b9dc3',
-    strokeWidth: 2,
-  };
 
   return (
     <Container>
@@ -149,36 +139,7 @@ export const GraphicView = () => {
           scaleExtent={{ min: 0.3, max: 4 }}
           zoom={0.8}
           nodeSize={{ x: 200, y: 100 }}
-          separation={{ siblings: 1, nonSiblings: 2 }}
-          styles={{
-            nodes: {
-              node: {
-                circle: customNodeStyle,
-                name: {
-                  fill: '#2c3e50',
-                  fontSize: '14px',
-                  fontWeight: '600',
-                },
-                attributes: {
-                  fill: '#7f8c8d',
-                  fontSize: '12px',
-                },
-              },
-              leafNode: {
-                circle: {
-                  ...customNodeStyle,
-                  fill: '#27ae60',
-                  stroke: '#229954',
-                },
-                name: {
-                  fill: '#2c3e50',
-                  fontSize: '14px',
-                  fontWeight: '600',
-                },
-              },
-            },
-            links: customLinkStyle,
-          }}
+          
         />
       </TreeContainer>
     </Container>

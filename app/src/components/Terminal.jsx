@@ -115,7 +115,7 @@ export const Terminal = () => {
   return (
     <TerminalContainer ref={terminalRef}>
       <WelcomeMessage>
-        🚀 Terminal de Análise Sintática - Pronto para uso
+        🚀 Terminal JSimples - Pronto para uso
       </WelcomeMessage>
       
       {logs && logs.length > 0 && (

@@ -5,7 +5,7 @@ import { MVS }  from "../core/mvs/mvs.js";
 const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
-  const [code, setCode] = useState("programa teste\ninteiro a\ninicio\na <- 1\nse a > 10 entao\nescreva a \nsenao\nescreva 0\nfimse\nfimprograma");
+  const [code, setCode] = useState("programa teste\n\tinteiro a b\n\tlogico c d\ninicio\n\ta <- 1\n\ta <- a * 3\n\tescreva a\nfimprograma");
   const [logs, setLogs] = useState([]);
 
   const [completeSyntaxTree, setCompleteSyntaxTree] = useState({});
@@ -70,7 +70,6 @@ export const AppContextProvider = ({ children }) => {
     setParserResponse(response);
     
     const syntaxTree = removeIgnoreNodes(response.syntaxTree);
-    setMVS(response.mvsCode);
     setCompleteSyntaxTree(syntaxTree);
 
     const treeToCompress = JSON.parse(JSON.stringify(syntaxTree));
