@@ -2,7 +2,6 @@ import React from "react";
 import { Input } from "antd";
 import { useAppData } from "../contexts/AppContext";
 
-
 const { TextArea } = Input;
 
 export const CodeInput = () => {
@@ -13,6 +12,7 @@ export const CodeInput = () => {
         setCode(e.target.value);
       }}
       value={code}
+      style={{minHeight: "900px"}}
     />
   );
 };

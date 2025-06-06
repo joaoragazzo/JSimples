@@ -47,7 +47,7 @@ export const GraphicView = () => {
   const containerRef = useRef(null);
   const [translate, setTranslate] = useState({ x: 0, y: 0 });
   const [isToolsVisible, setIsToolsVisible] = useState(false);
-  const [removeUnitaryDerivation, setRemoveUnitaryDerivation] = useState(false);
+  const [removeUnitaryDerivation, setRemoveUnitaryDerivation] = useState(true);
 
   useEffect(() => {
     if (containerRef.current) {

@@ -204,7 +204,7 @@ header
 variables
     : /* blank */
         {
-            $$ = new SyntaxNode("Variáveis", [])
+            $$ = new SyntaxNode("IGNORE", [])
         }
     | variable_declaration 
         {
@@ -254,7 +254,7 @@ variable_list
 command_list
     : /* blank */
         {  
-            $$ = new SyntaxNode("Lista de comandos", [])
+            $$ = new SyntaxNode("IGNORE", []);
         }
     | command command_list
         {

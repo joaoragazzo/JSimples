@@ -5,7 +5,7 @@ import { MVS }  from "../core/mvs/mvs.js";
 const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
-  const [code, setCode] = useState("programa teste\ninteiro a\ninicio\nescreva a\nfimprograma");
+  const [code, setCode] = useState("programa teste\ninteiro a\ninicio\na <- 1\nse a > 10 entao\nescreva a \nsenao\nescreva 0\nfimse\nfimprograma");
 
   const [completeSyntaxTree, setCompleteSyntaxTree] = useState({});
   const [simplifiedSyntaxTree, setSimplifiedSyntaxTree] = useState({});
@@ -13,6 +13,30 @@ export const AppContextProvider = ({ children }) => {
   const [parserResponse, setParserResponse] = useState({
     syntaxTree: {},
   });
+
+  const removeIgnoreNodes = (node) => {
+    if (!node) {
+      return null;
+    }
+  
+    if (node.name === "IGNORE") {
+      return null;
+    }
+  
+    if (!node.children || node.children.length === 0) {
+      return node;
+    }
+  
+    node.children = node.children
+      .map((child) => removeIgnoreNodes(child))
+      .filter((child) => child !== null);
+  
+    if (node.children.length === 0) {
+      delete node.children;
+    }
+  
+    return node;
+  };
 
   const compressSingleChildNodes = (node) => {
     if (!node) {
@@ -43,9 +67,10 @@ export const AppContextProvider = ({ children }) => {
   const parse = () => {
     const response = simples.parse(code);
     setParserResponse(response);
-    setCompleteSyntaxTree(response.syntaxTree);
+    const syntaxTree = removeIgnoreNodes(response.syntaxTree);
+    setCompleteSyntaxTree(syntaxTree);
 
-    const treeToCompress = JSON.parse(JSON.stringify(response.syntaxTree));
+    const treeToCompress = JSON.parse(JSON.stringify(syntaxTree));
     setSimplifiedSyntaxTree(compressSingleChildNodes(treeToCompress));
 
     MVS(response.mvsCode)

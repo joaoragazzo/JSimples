@@ -126,7 +126,7 @@ case 3:
 break;
 case 4:
 
-            this.$ = new SyntaxNode("Variáveis", [])
+            this.$ = new SyntaxNode("IGNORE", [])
         
 break;
 case 5:
@@ -172,7 +172,7 @@ case 11:
 break;
 case 12:
   
-            this.$ = new SyntaxNode("Lista de comandos", [])
+            this.$ = new SyntaxNode("IGNORE", []);
         
 break;
 case 13:

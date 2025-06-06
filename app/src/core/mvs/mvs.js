@@ -59,10 +59,16 @@ const parseMvsToJson = (code) => {
 export const MVS = (code) => {
   const algorithm = parseMvsToJson(code);
   console.log(algorithm);
+  
+  const MAX_ITERATION = 10000;
+  let iterationCounter = 0;
   let instructionPointer = 0;
   let register = algorithm[instructionPointer++];
   let memory = [];
   let stack = [];
+  let isIteration = false;
+
+  const findIndexByLabel = (label) => algorithm.findIndex(obj => obj.label === label);
 
   const malloc = (size) => {
     memory = new Array(size).fill(0);
@@ -79,6 +85,10 @@ export const MVS = (code) => {
   const popFromStack = () => {
     return stack.pop();
   };
+
+  const pushInStack = (value) => {
+    return stack.push(value);
+  }
 
   const loadOnMemory = (address) => {
     memory[address] = popFromStack();
@@ -104,38 +114,135 @@ export const MVS = (code) => {
     loadOnStack(firstValue * secondValue);
   }
 
+  const executeDsvs = () => {
+    isIteration = true;
+    instructionPointer = findIndexByLabel(register.to); 
+  }
+
+  const executeDsvf = () => {
+    let value = popFromStack();
+    if (!value) {
+      isIteration = true;
+      instructionPointer = findIndexByLabel(register.to); 
+    }
+      
+  }
+
+  const executeCmme = () => {
+    let secondValue = popFromStack();
+    let firstValue = popFromStack();
+    let result = firstValue < secondValue;
+    pushInStack(result);
+  }
+
+  const executeCmma = () => {
+    let secondValue = popFromStack();
+    let firstValue = popFromStack();
+    let result = firstValue > secondValue;
+    pushInStack(result);
+  }
+
+  const executeNega = () => {
+    let value = popFromStack();
+    pushInStack(!value);
+  }
+
+  const executeConj = () => {
+    let firstValue = popFromStack();
+    let secondValue = popFromStack();
+    pushInStack(firstValue && secondValue);
+  }
+
+  const executeDisj = () => {
+    let firstValue = popFromStack();
+    let secondValue = popFromStack();
+    pushInStack(firstValue || secondValue)
+  }
+
+  const executeDivi = () => {
+    let secondValue = popFromStack();
+    let firstValue = popFromStack();
+    pushInStack(firstValue / secondValue);
+  }
+
+  const executeEscr = () => {
+    let tmp = popFromStack();
+    console.log(tmp);
+  }
+
+
   while (register.instruction !== "FIMP") {
+    isIteration = false;
     switch (register.instruction) {
-      case "INPP":
+      case "INPP": // Inicia programa
         break;
-      case "AMEM":
+      case "AMEM": // Aloca memória
         malloc(register.parameter);
         break;
-      case "CRVG":
+      case "CRVG": // Carrega valor global
         loadOnStack(getMemoryValue(register.parameter));
         break;
-      case "ESCR":
-        let tmp = popFromStack();
-        console.log(tmp);
+      case "ESCR": // Escreva
+        executeEscr();
         break;
-      case "CRCT":
+      case "LEIA":
+        break;
+      case "CRCT": // Carrega ???
         loadOnStack(register.parameter);
         break;
-      case "ARZG":
+      case "ARZG": // Armazena valor global
         loadOnMemory(register.parameter);
         break;
-      case "SOMA":
+      case "SOMA": // Executa soma nos dois valores da stack
         executeSum();
         break;
-      case "SUBT":
+      case "SUBT": // Executa subtração nos dois valores da stack
         executeSubt();
         break;
-      case "MULT":
+      case "MULT": // Executa multiplicação nos dois valores da stack
         executeMult();
-        break;  
+        break;
+      case "NADA": // Não faz nada
+        break;
+      case "DSVS": // Desvia incondicionalmente
+        executeDsvs();
+        break;
+      case "CMME": // Compara se maior
+        executeCmme();
+        break;
+      case "DSVF": // Desvia se falso
+        executeDsvf();
+        break;
+      case "CMMA": // Compara se menor
+        executeCmma();
+        break;
+      case "NEGA": // Nega o valor na stack
+        executeNega();
+        break;
+      case "CONJ": // Realiza a operação "E"
+        executeConj();
+        break;
+      case "DISJ": // Realiza a operação "OU"
+        executeDisj();
+        break;
+      case "DIVI":
+        executeDivi();
+        break;
+      case "FIMP":
+        break;
     }
 
-    register = algorithm[instructionPointer++];
+    if (!isIteration)
+      instructionPointer++;
+    
+    if (isIteration)
+      iterationCounter++;
+    
+    if (iterationCounter === MAX_ITERATION) 
+      return;
+
+    register = algorithm[instructionPointer]
+
   }
 
   return code;
