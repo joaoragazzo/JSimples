@@ -6,6 +6,7 @@ const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
   const [code, setCode] = useState("programa teste\ninteiro a\ninicio\na <- 1\nse a > 10 entao\nescreva a \nsenao\nescreva 0\nfimse\nfimprograma");
+  const [logs, setLogs] = useState([]);
 
   const [completeSyntaxTree, setCompleteSyntaxTree] = useState({});
   const [simplifiedSyntaxTree, setSimplifiedSyntaxTree] = useState({});
@@ -67,15 +68,21 @@ export const AppContextProvider = ({ children }) => {
   const parse = () => {
     const response = simples.parse(code);
     setParserResponse(response);
+    
     const syntaxTree = removeIgnoreNodes(response.syntaxTree);
+    setMVS(response.mvsCode);
     setCompleteSyntaxTree(syntaxTree);
 
     const treeToCompress = JSON.parse(JSON.stringify(syntaxTree));
     setSimplifiedSyntaxTree(compressSingleChildNodes(treeToCompress));
-
-    MVS(response.mvsCode)
-
   };
+
+  const runAlgorithm = () => {
+    const response = simples.parse(code);
+    setParserResponse(response);
+    MVS(response.mvsCode, setLogs);
+  }
+
 
   return (
     <AppContext.Provider
@@ -88,6 +95,9 @@ export const AppContextProvider = ({ children }) => {
 
         completeSyntaxTree,
         simplifiedSyntaxTree,
+
+        logs,
+        runAlgorithm
       }}
     >
       {children}

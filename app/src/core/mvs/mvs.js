@@ -56,10 +56,10 @@ const parseMvsToJson = (code) => {
   return parsed;
 };
 
-export const MVS = (code) => {
+export const MVS = (code, output) => {
   const algorithm = parseMvsToJson(code);
   console.log(algorithm);
-  
+
   const MAX_ITERATION = 10000;
   let iterationCounter = 0;
   let instructionPointer = 0;
@@ -68,7 +68,8 @@ export const MVS = (code) => {
   let stack = [];
   let isIteration = false;
 
-  const findIndexByLabel = (label) => algorithm.findIndex(obj => obj.label === label);
+  const findIndexByLabel = (label) =>
+    algorithm.findIndex((obj) => obj.label === label);
 
   const malloc = (size) => {
     memory = new Array(size).fill(0);
@@ -88,7 +89,7 @@ export const MVS = (code) => {
 
   const pushInStack = (value) => {
     return stack.push(value);
-  }
+  };
 
   const loadOnMemory = (address) => {
     memory[address] = popFromStack();
@@ -112,64 +113,69 @@ export const MVS = (code) => {
     let secondValue = popFromStack();
     let firstValue = popFromStack();
     loadOnStack(firstValue * secondValue);
-  }
+  };
 
   const executeDsvs = () => {
     isIteration = true;
-    instructionPointer = findIndexByLabel(register.to); 
-  }
+    instructionPointer = findIndexByLabel(register.to);
+  };
 
   const executeDsvf = () => {
     let value = popFromStack();
     if (!value) {
       isIteration = true;
-      instructionPointer = findIndexByLabel(register.to); 
+      instructionPointer = findIndexByLabel(register.to);
     }
-      
-  }
+  };
 
   const executeCmme = () => {
     let secondValue = popFromStack();
     let firstValue = popFromStack();
     let result = firstValue < secondValue;
     pushInStack(result);
-  }
+  };
 
   const executeCmma = () => {
     let secondValue = popFromStack();
     let firstValue = popFromStack();
     let result = firstValue > secondValue;
     pushInStack(result);
-  }
+  };
 
   const executeNega = () => {
     let value = popFromStack();
     pushInStack(!value);
-  }
+  };
 
   const executeConj = () => {
     let firstValue = popFromStack();
     let secondValue = popFromStack();
     pushInStack(firstValue && secondValue);
-  }
+  };
 
   const executeDisj = () => {
     let firstValue = popFromStack();
     let secondValue = popFromStack();
-    pushInStack(firstValue || secondValue)
-  }
+    pushInStack(firstValue || secondValue);
+  };
 
   const executeDivi = () => {
     let secondValue = popFromStack();
     let firstValue = popFromStack();
     pushInStack(firstValue / secondValue);
-  }
+  };
 
   const executeEscr = () => {
     let tmp = popFromStack();
-    console.log(tmp);
-  }
-
+    output((prevLogs) => [
+      ...prevLogs,
+      {
+        timestamp: Date.now(),
+        type: "info",
+        message: tmp,
+      },
+    ]);
+  };
 
   while (register.instruction !== "FIMP") {
     isIteration = false;
@@ -182,7 +188,7 @@ export const MVS = (code) => {
         break;
 
       /* Operações na memória */
-      
+
       case "AMEM": // Aloca memória
         malloc(register.parameter);
         break;
@@ -203,7 +209,7 @@ export const MVS = (code) => {
         break;
       case "LEIA":
         break;
-      
+
       /* Operações matemáticas */
 
       case "SOMA": // Executa soma nos dois valores da stack
@@ -245,21 +251,15 @@ export const MVS = (code) => {
       case "DISJ": // Realiza a operação "OU"
         executeDisj();
         break;
-      
-      
     }
 
-    if (!isIteration)
-      instructionPointer++;
-    
-    if (isIteration)
-      iterationCounter++;
-    
-    if (iterationCounter === MAX_ITERATION) 
-      return;
+    if (!isIteration) instructionPointer++;
 
-    register = algorithm[instructionPointer]
+    if (isIteration) iterationCounter++;
 
+    if (iterationCounter === MAX_ITERATION) return;
+
+    register = algorithm[instructionPointer];
   }
 
   return code;
