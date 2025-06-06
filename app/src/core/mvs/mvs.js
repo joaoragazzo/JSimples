@@ -176,23 +176,36 @@ export const MVS = (code) => {
     switch (register.instruction) {
       case "INPP": // Inicia programa
         break;
+      case "FIMP":
+        break;
+      case "NADA": // Não faz nada
+        break;
+
+      /* Operações na memória */
+      
       case "AMEM": // Aloca memória
         malloc(register.parameter);
         break;
       case "CRVG": // Carrega valor global
         loadOnStack(getMemoryValue(register.parameter));
         break;
-      case "ESCR": // Escreva
-        executeEscr();
-        break;
-      case "LEIA":
-        break;
-      case "CRCT": // Carrega ???
+      case "CRCT": // Carrega valor na stack
         loadOnStack(register.parameter);
         break;
       case "ARZG": // Armazena valor global
         loadOnMemory(register.parameter);
         break;
+
+      /* Operações de IO */
+
+      case "ESCR": // Escreva
+        executeEscr();
+        break;
+      case "LEIA":
+        break;
+      
+      /* Operações matemáticas */
+
       case "SOMA": // Executa soma nos dois valores da stack
         executeSum();
         break;
@@ -202,20 +215,27 @@ export const MVS = (code) => {
       case "MULT": // Executa multiplicação nos dois valores da stack
         executeMult();
         break;
-      case "NADA": // Não faz nada
+      case "DIVI":
+        executeDivi();
         break;
+
+      /* Operações de desvio */
+
       case "DSVS": // Desvia incondicionalmente
         executeDsvs();
-        break;
-      case "CMME": // Compara se maior
-        executeCmme();
         break;
       case "DSVF": // Desvia se falso
         executeDsvf();
         break;
+      case "CMME": // Compara se maior
+        executeCmme();
+        break;
       case "CMMA": // Compara se menor
         executeCmma();
         break;
+
+      /* Operações boleanas */
+
       case "NEGA": // Nega o valor na stack
         executeNega();
         break;
@@ -225,11 +245,8 @@ export const MVS = (code) => {
       case "DISJ": // Realiza a operação "OU"
         executeDisj();
         break;
-      case "DIVI":
-        executeDivi();
-        break;
-      case "FIMP":
-        break;
+      
+      
     }
 
     if (!isIteration)
