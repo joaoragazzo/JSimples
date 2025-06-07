@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAppData } from "../contexts/AppContext";
 import styled from "styled-components";
 import CodeMirror from "@uiw/react-codemirror";
@@ -101,14 +101,21 @@ const JSimples = StreamLanguage.define({
 
 export const CodeInput = () => {
   const { setCode, code } = useAppData();
-
+  const codeCanvaRef = useRef(null);
+  const [ size, setSize ] = useState();
   const extensions = [JSimples, syntaxHighlighting(JSimplesHighlightStyle)];
 
+  useEffect(() => {
+    if (codeCanvaRef.current) {
+      const { offsetWidth, offsetHeight } = codeCanvaRef.current;
+      setSize(offsetHeight + 'px')
+    }
+  }, [])
+
   return (
-      <StyledCodeMirror>
+      <StyledCodeMirror ref={codeCanvaRef}>
         <CodeMirror
           value={code || ""}
-          height="500px"
           extensions={extensions}
           onChange={(value) => setCode(value)}
           placeholder="Digite seu código aqui..."

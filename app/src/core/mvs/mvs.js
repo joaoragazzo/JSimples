@@ -56,17 +56,22 @@ const parseMvsToJson = (code) => {
   return parsed;
 };
 
-export const MVS = (code, output) => {
+export const MVS = (code, output, onComplete = null) => {
   const algorithm = parseMvsToJson(code);
   console.log(algorithm);
 
   const MAX_ITERATION = 10000;
+  const INSTRUCTIONS_PER_FRAME = 100;
+
   let iterationCounter = 0;
   let instructionPointer = 0;
   let register = algorithm[instructionPointer++];
   let memory = [];
   let stack = [];
   let isIteration = false;
+  
+  let animationFrameId = null;
+  let isRunning = true;
 
   const findIndexByLabel = (label) =>
     algorithm.findIndex((obj) => obj.label === label);
@@ -177,90 +182,57 @@ export const MVS = (code, output) => {
     ]);
   };
 
-  while (register.instruction !== "FIMP") {
-    isIteration = false;
-    switch (register.instruction) {
-      case "INPP": // Inicia programa
-        break;
-      case "FIMP":
-        break;
-      case "NADA": // Não faz nada
-        break;
+  const executeFrame = () => {
+    let instructionsThisFrame = 0;
 
-      /* Operações na memória */
-
-      case "AMEM": // Aloca memória
-        malloc(register.parameter);
-        break;
-      case "CRVG": // Carrega valor global
-        loadOnStack(getMemoryValue(register.parameter));
-        break;
-      case "CRCT": // Carrega valor na stack
-        loadOnStack(register.parameter);
-        break;
-      case "ARZG": // Armazena valor global
-        loadOnMemory(register.parameter);
-        break;
-
-      /* Operações de IO */
-
-      case "ESCR": // Escreva
-        executeEscr();
-        break;
-      case "LEIA":
-        break;
-
-      /* Operações matemáticas */
-
-      case "SOMA": // Executa soma nos dois valores da stack
-        executeSum();
-        break;
-      case "SUBT": // Executa subtração nos dois valores da stack
-        executeSubt();
-        break;
-      case "MULT": // Executa multiplicação nos dois valores da stack
-        executeMult();
-        break;
-      case "DIVI":
-        executeDivi();
-        break;
-
-      /* Operações de desvio */
-
-      case "DSVS": // Desvia incondicionalmente
-        executeDsvs();
-        break;
-      case "DSVF": // Desvia se falso
-        executeDsvf();
-        break;
-      case "CMME": // Compara se maior
-        executeCmme();
-        break;
-      case "CMMA": // Compara se menor
-        executeCmma();
-        break;
-
-      /* Operações boleanas */
-
-      case "NEGA": // Nega o valor na stack
-        executeNega();
-        break;
-      case "CONJ": // Realiza a operação "E"
-        executeConj();
-        break;
-      case "DISJ": // Realiza a operação "OU"
-        executeDisj();
-        break;
+    while (register && register.instruction !== "FIMP" && isRunning && instructionsThisFrame < INSTRUCTIONS_PER_FRAME) {
+      isIteration = false;
+      switch (register.instruction) {
+        case "INPP": break;
+        case "FIMP": break;
+        case "NADA": break;
+        case "AMEM": malloc(register.parameter); break;
+        case "CRVG": loadOnStack(getMemoryValue(register.parameter)); break;
+        case "CRCT": loadOnStack(register.parameter); break;
+        case "ARZG": loadOnMemory(register.parameter); break;
+        case "ESCR": executeEscr(); break;
+        case "LEIA": break;
+        case "SOMA": executeSum(); break;
+        case "SUBT": executeSubt(); break;
+        case "MULT": executeMult(); break;
+        case "DIVI": executeDivi(); break;
+        case "DSVS": executeDsvs(); break;
+        case "DSVF": executeDsvf(); break;
+        case "CMME": executeCmme(); break;
+        case "CMMA": executeCmma(); break;
+        case "NEGA": executeNega();break;
+        case "CONJ": executeConj();break;
+        case "DISJ": executeDisj(); break;
+      }
+  
+      if (!isIteration) instructionPointer++;
+      if (isIteration) iterationCounter++;
+  
+      if (iterationCounter === MAX_ITERATION) return;
+  
+      register = algorithm[instructionPointer];
+      instructionsThisFrame++;
     }
 
-    if (!isIteration) instructionPointer++;
-
-    if (isIteration) iterationCounter++;
-
-    if (iterationCounter === MAX_ITERATION) return;
-
-    register = algorithm[instructionPointer];
+    if (register && register.instruction !== "FIMP" && isRunning) {
+      animationFrameId = requestAnimationFrame(executeFrame);
+    } else if (onComplete) {
+      onComplete();
+    }
   }
 
-  return code;
+  const stop = () => {
+    isRunning = false;
+    if (animationFrameId) {
+      cancelAnimationFrame(animationFrameId);
+    }
+  }
+  
+  animationFrameId = requestAnimationFrame(executeFrame);
+  return { stop };
 };

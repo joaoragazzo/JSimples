@@ -7,6 +7,7 @@ const AppContext = createContext();
 export const AppContextProvider = ({ children }) => {
   const [code, setCode] = useState("programa teste\n\tinteiro a b\n\tlogico c d\ninicio\n\ta <- 1\n\ta <- a * 3\n\tescreva a\nfimprograma");
   const [logs, setLogs] = useState([]);
+  const [tab, setTab] = useState('terminal');
 
   const [completeSyntaxTree, setCompleteSyntaxTree] = useState({});
   const [simplifiedSyntaxTree, setSimplifiedSyntaxTree] = useState({});
@@ -82,7 +83,6 @@ export const AppContextProvider = ({ children }) => {
     MVS(response.mvsCode, setLogs);
   }
 
-
   return (
     <AppContext.Provider
       value={{
@@ -96,7 +96,10 @@ export const AppContextProvider = ({ children }) => {
         simplifiedSyntaxTree,
 
         logs,
-        runAlgorithm
+        runAlgorithm,
+        
+        tab, 
+        setTab
       }}
     >
       {children}
