@@ -8,7 +8,7 @@ import styled from "styled-components";
 import { JSButton } from "../components/atomic/JSButton";
 import { ViewsTab } from "../components/ViewsTab";
 import { SyntaxTree } from "./SyntaxTree";
-import logo from "../assets/logo.png";
+import logo from "../assets/Logo-JSimples.svg";
 
 const Container = styled.div`
   height: 100vh;
