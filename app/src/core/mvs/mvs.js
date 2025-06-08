@@ -178,7 +178,7 @@ export const MVS = (code, output, input, onComplete = null) => {
       {
         timestamp: Date.now(),
         type: "info",
-        message: tmp,
+        message: `${tmp}`,
       },
     ]);
   };

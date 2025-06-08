@@ -1,15 +1,17 @@
 import { createContext, useContext, useRef, useState } from "react";
 import simples from "../core/compiler/simples.js";
-import { MVS }  from "../core/mvs/mvs.js";
+import { MVS } from "../core/mvs/mvs.js";
 
 const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
-  const [code, setCode] = useState("programa teste\n\tinteiro a b\n\tlogico c d\ninicio\n\ta <- 1\n\ta <- a * 3\n\tescreva a\nfimprograma");
+  const [code, setCode] = useState(
+    "programa teste\n\tinteiro a b\n\tlogico c d\ninicio\n\ta <- 1\n\ta <- a * 3\n\tescreva a\nfimprograma"
+  );
   const [logs, setLogs] = useState([]);
   const [waitingInput, setWaitingInput] = useState(false);
   const inputCallbackRef = useRef(null);
-  const [tab, setTab] = useState('terminal');
+  const [tab, setTab] = useState("terminal");
   const [isRunning, setIsRunning] = useState(false);
   const mvsRef = useRef(null);
 
@@ -24,23 +26,23 @@ export const AppContextProvider = ({ children }) => {
     if (!node) {
       return null;
     }
-  
+
     if (node.name === "IGNORE") {
       return null;
     }
-  
+
     if (!node.children || node.children.length === 0) {
       return node;
     }
-  
+
     node.children = node.children
       .map((child) => removeIgnoreNodes(child))
       .filter((child) => child !== null);
-  
+
     if (node.children.length === 0) {
       delete node.children;
     }
-  
+
     return node;
   };
 
@@ -71,29 +73,53 @@ export const AppContextProvider = ({ children }) => {
   };
 
   const parse = () => {
-    const response = simples.parse(code);
-    setParserResponse(response);
-    
-    const syntaxTree = removeIgnoreNodes(response.syntaxTree);
-    setCompleteSyntaxTree(syntaxTree);
+    try {
+      const response = simples.parse(code);
+      setParserResponse(response);
 
-    const treeToCompress = JSON.parse(JSON.stringify(syntaxTree));
-    setSimplifiedSyntaxTree(compressSingleChildNodes(treeToCompress));
+      const syntaxTree = removeIgnoreNodes(response.syntaxTree);
+      setCompleteSyntaxTree(syntaxTree);
+
+      const treeToCompress = JSON.parse(JSON.stringify(syntaxTree));
+      setSimplifiedSyntaxTree(compressSingleChildNodes(treeToCompress));
+    } catch (e) {
+      setLogs((prevLogs) => [
+        ...prevLogs,
+        {
+          timestamp: Date.now(),
+          type: "error",
+          message: `${e.message}`,
+        },
+      ]);
+    }
   };
 
   const runAlgorithm = () => {
-    const response = simples.parse(code);
-    setParserResponse(response);
-    setIsRunning(true);
-    mvsRef.current = MVS(response.mvsCode, setLogs, requestInput, () => {setIsRunning(false)});
-  }
+    try {
+      const response = simples.parse(code);
+      setParserResponse(response);
+      setIsRunning(true);
+      mvsRef.current = MVS(response.mvsCode, setLogs, requestInput, () => {
+        setIsRunning(false);
+      });
+    } catch (e) {
+      setLogs((prevLogs) => [
+        ...prevLogs,
+        {
+          timestamp: Date.now(),
+          type: "error",
+          message: `${e.message}`,
+        },
+      ]);
+    }
+  };
 
   const stopAlgorithm = () => {
     if (mvsRef.current?.stop) {
       mvsRef.current.stop();
       setIsRunning(false);
     }
-  }
+  };
 
   const requestInput = () => {
     return new Promise((resolve) => {
@@ -118,11 +144,11 @@ export const AppContextProvider = ({ children }) => {
         simplifiedSyntaxTree,
 
         logs,
-        setLogs, 
+        setLogs,
 
         runAlgorithm,
-        
-        tab, 
+
+        tab,
         setTab,
 
         isRunning,
@@ -132,7 +158,7 @@ export const AppContextProvider = ({ children }) => {
         setWaitingInput,
 
         inputCallbackRef,
-        requestInput
+        requestInput,
       }}
     >
       {children}

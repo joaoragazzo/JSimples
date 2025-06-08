@@ -54,8 +54,8 @@ const addVariable = (v) => {
     const nameAlreadyExists = variableTable.some(variable => variable.name === v.name);
     
     if (nameAlreadyExists) {
-        throw new Error("Essa variavel já existe.");
         clearEverything();
+        throw new Error(`A variável ${v.name} já existe`);
     }
     
     variableTable.push(v);
@@ -79,7 +79,7 @@ const findVariable = (variableName) => {
         return variable;
     }
     clearEverything();
-    throw new Error("Essa variável não foi declarada!");
+    throw new Error(`A variável ${variableName} não foi declarada!`);
 }
 
 const findVariablePosition = (variableName) => {
@@ -88,7 +88,7 @@ const findVariablePosition = (variableName) => {
         return index;
     }
     clearEverything();
-    throw new Error("Essa variável não foi declarada!");
+    throw new Error(`A variável ${variableName} não foi declarada!`);
 }
 
 %}
