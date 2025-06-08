@@ -7,6 +7,8 @@ const AppContext = createContext();
 export const AppContextProvider = ({ children }) => {
   const [code, setCode] = useState("programa teste\n\tinteiro a b\n\tlogico c d\ninicio\n\ta <- 1\n\ta <- a * 3\n\tescreva a\nfimprograma");
   const [logs, setLogs] = useState([]);
+  const [waitingInput, setWaitingInput] = useState(false);
+  const inputCallbackRef = useRef(null);
   const [tab, setTab] = useState('terminal');
   const [isRunning, setIsRunning] = useState(false);
   const mvsRef = useRef(null);
@@ -83,7 +85,7 @@ export const AppContextProvider = ({ children }) => {
     const response = simples.parse(code);
     setParserResponse(response);
     setIsRunning(true);
-    mvsRef.current = MVS(response.mvsCode, setLogs, () => {setIsRunning(false)});
+    mvsRef.current = MVS(response.mvsCode, setLogs, requestInput, () => {setIsRunning(false)});
   }
 
   const stopAlgorithm = () => {
@@ -92,6 +94,16 @@ export const AppContextProvider = ({ children }) => {
       setIsRunning(false);
     }
   }
+
+  const requestInput = () => {
+    return new Promise((resolve) => {
+      setWaitingInput(true);
+      inputCallbackRef.current = (value) => {
+        resolve(parseInt(value));
+        setWaitingInput(false);
+      };
+    });
+  };
 
   return (
     <AppContext.Provider
@@ -106,13 +118,21 @@ export const AppContextProvider = ({ children }) => {
         simplifiedSyntaxTree,
 
         logs,
+        setLogs, 
+
         runAlgorithm,
         
         tab, 
         setTab,
 
         isRunning,
-        stopAlgorithm
+        stopAlgorithm,
+
+        waitingInput,
+        setWaitingInput,
+
+        inputCallbackRef,
+        requestInput
       }}
     >
       {children}

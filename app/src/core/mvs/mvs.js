@@ -56,7 +56,7 @@ const parseMvsToJson = (code) => {
   return parsed;
 };
 
-export const MVS = (code, output, onComplete = null) => {
+export const MVS = (code, output, input, onComplete = null) => {
   const algorithm = parseMvsToJson(code);
   console.log(algorithm);
 
@@ -69,6 +69,7 @@ export const MVS = (code, output, onComplete = null) => {
   let memory = [];
   let stack = [];
   let isIteration = false;
+  let isWaitingInput = false;
   
   let animationFrameId = null;
   let isRunning = true;
@@ -182,11 +183,29 @@ export const MVS = (code, output, onComplete = null) => {
     ]);
   };
 
-  const executeLeia = () => {
-
+  const executeLeia = async () => {
+    output((prevLogs) => [
+      ...prevLogs,
+      {
+        timestamp: Date.now(),
+        type: "info",
+        message: "Esperando entrada do usuário...",
+      },
+    ]);
+    isWaitingInput = true;
+    const value = await input();
+    loadOnStack(value);
+    isWaitingInput = false;
+    register = algorithm[++instructionPointer];
+    animationFrameId = requestAnimationFrame(executeFrame);
   }
 
   const executeFrame = () => {
+    if (isWaitingInput || !isRunning) {
+      animationFrameId = requestAnimationFrame(executeFrame);
+      return;
+    }
+
     let instructionsThisFrame = 0;
 
     while (register && register.instruction !== "FIMP" && isRunning && instructionsThisFrame < INSTRUCTIONS_PER_FRAME) {
@@ -200,7 +219,7 @@ export const MVS = (code, output, onComplete = null) => {
         case "CRCT": loadOnStack(register.parameter); break;
         case "ARZG": loadOnMemory(register.parameter); break;
         case "ESCR": executeEscr(); break;
-        case "LEIA": executeLeia(); break;
+        case "LEIA": executeLeia(); return;
         case "SOMA": executeSoma(); break;
         case "SUBT": executeSubt(); break;
         case "MULT": executeMult(); break;

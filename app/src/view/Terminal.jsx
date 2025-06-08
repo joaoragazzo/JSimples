@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAppData } from "../contexts/AppContext";
 import styled from "styled-components";
+import { AiOutlineRight } from "react-icons/ai";
 
 const LogLine = styled.div`
   margin-bottom: 8px;
@@ -52,9 +53,22 @@ const TerminalCard = styled.div`
   border-radius: 16px;
 `;
 
+const StyledInput = styled.input`
+  border: none;
+  width: 100%;
+  background-color: transparent;
+  color: white;
+
+  &:focus {
+    outline: none;
+    border: none;
+  }
+`;
+
 export const Terminal = () => {
-  const { logs } = useAppData();
+  const { logs, waitingInput, inputCallbackRef, setWaitingInput } = useAppData();
   const terminalRef = useRef(null);
+  const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
     if (terminalRef.current) {
@@ -99,6 +113,27 @@ export const Terminal = () => {
             <LogContent>{log.message}</LogContent>
           </LogLine>
         ))}
+
+      {waitingInput && (
+        <div style={{ display: "flex", gap: "8px", marginTop: "10px" }}>
+          <AiOutlineRight />
+          <StyledInput
+            type="text"
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                if (inputCallbackRef.current) {
+                  inputCallbackRef.current(inputValue);
+                  inputCallbackRef.current = null;
+                  setInputValue("");
+                  setWaitingInput(false);
+                }
+              }
+            }}
+            autoFocus
+          />
+        </div>
+      )}
     </TerminalCard>
   );
 };
