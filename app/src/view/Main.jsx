@@ -3,7 +3,7 @@ import { CodeInput } from "../components/CodeInput";
 import { Terminal } from "./Terminal";
 import { useAppData } from "../contexts/AppContext";
 import { TbBinaryTreeFilled } from "react-icons/tb";
-import { PlayCircleOutlined } from "@ant-design/icons";
+import { PlayCircleOutlined, StopOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { JSButton } from "../components/atomic/JSButton";
 import { ViewsTab } from "../components/ViewsTab";
@@ -14,16 +14,9 @@ const Container = styled.div`
   height: 100vh;
   box-sizing: border-box;
   padding: 20px;
-  background: #e0e0e0;
   display: flex;
-  flex-direction: column;
-`;
-
-const Content = styled.div`
-  flex: 1;
-  display: flex;
+  flex-direction: row;
   gap: 20px;
-  min-height: 0;
 `;
 
 const StyledCard = styled.div`
@@ -45,64 +38,43 @@ const InputSection = styled.div`
   height: 100%;
 `;
 
-const SectionTitle = styled.h2`
-  margin: 0;
-  color: #2c3e50;
-  font-size: 20px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
-
 export const Main = () => {
-  const { parse, runAlgorithm, tab } = useAppData();
+  const { parse, runAlgorithm, tab, isRunning, stopAlgorithm } = useAppData();
 
   return (
     <Container>
-      <Content>
-        <div style={{ flex: 1, maxWidth: "33%" }}>
-          <StyledCard>
-            <InputSection>
-              <SectionTitle><img src={logo} width={130}/></SectionTitle>
-
-              <CodeInput />
-              <Row gutter={24}>
-                <Col span={12}>
-                  <JSButton
-                    type="primary"
-                    onClick={parse}
-                    icon={<TbBinaryTreeFilled />}
-                    size="large"
-                  >
-                    Gerar Árvore Sintática
-                  </JSButton>
-                </Col>
-                <Col span={12}>
-                  <JSButton
-                    type="primary"
-                    onClick={runAlgorithm}
-                    icon={<PlayCircleOutlined />}
-                    size="large"
-                  >
-                    Executar código
-                  </JSButton>
-                </Col>
-              </Row>
-            </InputSection>
-          </StyledCard>
-        </div>
-
-        <div style={{ flex: 2, display: "flex", flexDirection: "column" }}>
-          <StyledCard>
-            <ViewsTab />
-            {(tab === "syntaxTree" || tab === "derivationTree") && (
-              <SyntaxTree />
-            )}
-            {tab === "terminal" && <Terminal />}
-          </StyledCard>
-        </div>
-      </Content>
+      <StyledCard>
+        <InputSection>
+          <img src={logo} width={130} />
+          <CodeInput />
+          <Row gutter={24}>
+            <Col span={12}>
+              <JSButton
+                onClick={isRunning ? stopAlgorithm : runAlgorithm}
+                icon={isRunning ? <StopOutlined /> : <PlayCircleOutlined />}
+                type="primary"
+                danger={isRunning ? true : false}
+              >
+                {isRunning ? "Parar execução" : "Executar código"}
+              </JSButton>
+            </Col>
+            <Col span={12}>
+              <JSButton
+                onClick={parse}
+                icon={<TbBinaryTreeFilled />}
+                type="default"
+              >
+                Gerar Árvore Sintática
+              </JSButton>
+            </Col>
+          </Row>
+        </InputSection>
+      </StyledCard>
+      <StyledCard>
+        <ViewsTab />
+        {(tab === "syntaxTree" || tab === "derivationTree") && <SyntaxTree />}
+        {tab === "terminal" && <Terminal />}
+      </StyledCard>
     </Container>
   );
 };

@@ -61,7 +61,7 @@ export const MVS = (code, output, onComplete = null) => {
   console.log(algorithm);
 
   const MAX_ITERATION = 10000;
-  const INSTRUCTIONS_PER_FRAME = 100;
+  const INSTRUCTIONS_PER_FRAME = 1;
 
   let iterationCounter = 0;
   let instructionPointer = 0;
@@ -100,7 +100,7 @@ export const MVS = (code, output, onComplete = null) => {
     memory[address] = popFromStack();
   };
 
-  const executeSum = () => {
+  const executeSoma = () => {
     /* Invertido devido a ordem que os valores são empilhados */
     let secondValue = popFromStack();
     let firstValue = popFromStack();
@@ -197,7 +197,7 @@ export const MVS = (code, output, onComplete = null) => {
         case "ARZG": loadOnMemory(register.parameter); break;
         case "ESCR": executeEscr(); break;
         case "LEIA": break;
-        case "SOMA": executeSum(); break;
+        case "SOMA": executeSoma(); break;
         case "SUBT": executeSubt(); break;
         case "MULT": executeMult(); break;
         case "DIVI": executeDivi(); break;
@@ -205,8 +205,8 @@ export const MVS = (code, output, onComplete = null) => {
         case "DSVF": executeDsvf(); break;
         case "CMME": executeCmme(); break;
         case "CMMA": executeCmma(); break;
-        case "NEGA": executeNega();break;
-        case "CONJ": executeConj();break;
+        case "NEGA": executeNega(); break;
+        case "CONJ": executeConj(); break;
         case "DISJ": executeDisj(); break;
       }
   

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useRef, useState } from "react";
 import simples from "../core/compiler/simples.js";
 import { MVS }  from "../core/mvs/mvs.js";
 
@@ -8,6 +8,8 @@ export const AppContextProvider = ({ children }) => {
   const [code, setCode] = useState("programa teste\n\tinteiro a b\n\tlogico c d\ninicio\n\ta <- 1\n\ta <- a * 3\n\tescreva a\nfimprograma");
   const [logs, setLogs] = useState([]);
   const [tab, setTab] = useState('terminal');
+  const [isRunning, setIsRunning] = useState(false);
+  const mvsRef = useRef(null);
 
   const [completeSyntaxTree, setCompleteSyntaxTree] = useState({});
   const [simplifiedSyntaxTree, setSimplifiedSyntaxTree] = useState({});
@@ -80,7 +82,15 @@ export const AppContextProvider = ({ children }) => {
   const runAlgorithm = () => {
     const response = simples.parse(code);
     setParserResponse(response);
-    MVS(response.mvsCode, setLogs);
+    setIsRunning(true);
+    mvsRef.current = MVS(response.mvsCode, setLogs, () => {setIsRunning(false)});
+  }
+
+  const stopAlgorithm = () => {
+    if (mvsRef.current?.stop) {
+      mvsRef.current.stop();
+      setIsRunning(false);
+    }
   }
 
   return (
@@ -99,7 +109,10 @@ export const AppContextProvider = ({ children }) => {
         runAlgorithm,
         
         tab, 
-        setTab
+        setTab,
+
+        isRunning,
+        stopAlgorithm
       }}
     >
       {children}

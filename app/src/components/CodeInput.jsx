@@ -117,6 +117,7 @@ export const CodeInput = () => {
         <CodeMirror
           value={code || ""}
           extensions={extensions}
+          height={size}
           onChange={(value) => setCode(value)}
           placeholder="Digite seu código aqui..."
           basicSetup={{

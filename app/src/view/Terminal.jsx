@@ -50,24 +50,6 @@ const TerminalCard = styled.div`
   padding: 20px;
   overflow-y: auto;
   border-radius: 16px;
-
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: #2d3748;
-    border-radius: 4px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: #4a5568;
-    border-radius: 4px;
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background: #667eea;
-  }
 `;
 
 export const Terminal = () => {
