@@ -182,6 +182,10 @@ export const MVS = (code, output, onComplete = null) => {
     ]);
   };
 
+  const executeLeia = () => {
+
+  }
+
   const executeFrame = () => {
     let instructionsThisFrame = 0;
 
@@ -196,7 +200,7 @@ export const MVS = (code, output, onComplete = null) => {
         case "CRCT": loadOnStack(register.parameter); break;
         case "ARZG": loadOnMemory(register.parameter); break;
         case "ESCR": executeEscr(); break;
-        case "LEIA": break;
+        case "LEIA": executeLeia(); break;
         case "SOMA": executeSoma(); break;
         case "SUBT": executeSubt(); break;
         case "MULT": executeMult(); break;
