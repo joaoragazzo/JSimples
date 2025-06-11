@@ -477,7 +477,7 @@ term
         }
     | T_NUMBER
         {
-            outputMvs.push({label: null, instruction: "CRCT", parameter: $1, to: null});
+            outputMvs.push({label: null, instruction: "CRCT", parameter: parseInt($1)   , to: null});
             typeStack.push(types.INTEGER);
             $$ = new SyntaxNode("Termo", [new SyntaxNode($1, [])]);
         }

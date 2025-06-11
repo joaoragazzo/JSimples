@@ -1,6 +1,6 @@
 export const MVS = (code, output, input, onComplete = null) => {
   const algorithm = code;
-
+  console.log(code);
   const MAX_ITERATION = 10000;
   const INSTRUCTIONS_PER_FRAME = 1;
 
@@ -18,48 +18,40 @@ export const MVS = (code, output, input, onComplete = null) => {
   const findIndexByLabel = (label) =>
     algorithm.findIndex((obj) => obj.label === label);
 
-  const malloc = (size) => {
-    memory = new Array(size).fill(0);
-  };
+  const executeAmem = () => {
+    memory = new Array(register.parameter).fill(0);
+  }
 
-  const loadOnStack = (value) => {
-    stack.push(value);
-  };
+  const executeCrvg = () => {
+    stack.push(memory[register.parameter])
+  }
 
-  const getMemoryValue = (address) => {
-    return memory[address];
-  };
+  const executeCrct = () => {
+    stack.push(register.parameter)
+  }
 
-  const popFromStack = () => {
-    return stack.pop();
-  };
-
-  const pushInStack = (value) => {
-    return stack.push(value);
-  };
-
-  const loadOnMemory = (address) => {
-    memory[address] = popFromStack();
-  };
+  const executeArzg = () => {
+    memory[register.parameter] = stack.pop();
+  }
 
   const executeSoma = () => {
     /* Invertido devido a ordem que os valores são empilhados */
-    let secondValue = popFromStack();
-    let firstValue = popFromStack();
-    loadOnStack(firstValue + secondValue);
+    let secondValue = stack.pop();
+    let firstValue = stack.pop();
+    stack.push(firstValue + secondValue);
   };
 
   const executeSubt = () => {
     /* Invertido devido a ordem que os valores são empilhados */
-    let secondValue = popFromStack();
-    let firstValue = popFromStack();
-    loadOnStack(firstValue - secondValue);
+    let secondValue = stack.pop();
+    let firstValue = stack.pop();
+    stack.push(firstValue - secondValue);
   };
 
   const executeMult = () => {
-    let secondValue = popFromStack();
-    let firstValue = popFromStack();
-    loadOnStack(firstValue * secondValue);
+    let secondValue = stack.pop();
+    let firstValue = stack.pop();
+    stack.push(firstValue * secondValue);
   };
 
   const executeDsvs = () => {
@@ -68,7 +60,7 @@ export const MVS = (code, output, input, onComplete = null) => {
   };
 
   const executeDsvf = () => {
-    let value = popFromStack();
+    let value = stack.pop();
     if (!value) {
       isIteration = true;
       instructionPointer = findIndexByLabel(register.to);
@@ -76,44 +68,44 @@ export const MVS = (code, output, input, onComplete = null) => {
   };
 
   const executeCmme = () => {
-    let secondValue = popFromStack();
-    let firstValue = popFromStack();
+    let secondValue = stack.pop();
+    let firstValue = stack.pop();
     let result = firstValue < secondValue;
-    pushInStack(result);
+    stack.push(result);
   };
 
   const executeCmma = () => {
-    let secondValue = popFromStack();
-    let firstValue = popFromStack();
+    let secondValue = stack.pop();
+    let firstValue = stack.pop();
     let result = firstValue > secondValue;
-    pushInStack(result);
+    stack.push(result);
   };
 
   const executeNega = () => {
-    let value = popFromStack();
-    pushInStack(!value);
+    let value = stack.pop();
+    stack.push(!value);
   };
 
   const executeConj = () => {
-    let firstValue = popFromStack();
-    let secondValue = popFromStack();
-    pushInStack(firstValue && secondValue);
+    let firstValue = stack.pop();
+    let secondValue = stack.pop();
+    stack.push(firstValue && secondValue);
   };
 
   const executeDisj = () => {
-    let firstValue = popFromStack();
-    let secondValue = popFromStack();
-    pushInStack(firstValue || secondValue);
+    let firstValue = stack.pop();
+    let secondValue = stack.pop();
+    stack.push(firstValue || secondValue);
   };
 
   const executeDivi = () => {
-    let secondValue = popFromStack();
-    let firstValue = popFromStack();
-    pushInStack(firstValue / secondValue);
+    let secondValue = stack.pop();
+    let firstValue = stack.pop();
+    stack.push(firstValue / secondValue);
   };
 
   const executeEscr = () => {
-    let tmp = popFromStack();
+    let tmp = stack.pop();
     output((prevLogs) => [
       ...prevLogs,
       {
@@ -135,7 +127,7 @@ export const MVS = (code, output, input, onComplete = null) => {
     ]);
     isWaitingInput = true;
     const value = await input();
-    loadOnStack(value);
+    stack.push(value);
     isWaitingInput = false;
     register = algorithm[++instructionPointer];
     animationFrameId = requestAnimationFrame(executeFrame);
@@ -155,10 +147,10 @@ export const MVS = (code, output, input, onComplete = null) => {
         case "INPP": break;
         case "FIMP": break;
         case "NADA": break;
-        case "AMEM": malloc(register.parameter); break;
-        case "CRVG": loadOnStack(getMemoryValue(register.parameter)); break;
-        case "CRCT": loadOnStack(register.parameter); break;
-        case "ARZG": loadOnMemory(register.parameter); break;
+        case "AMEM": executeAmem(); break;
+        case "CRVG": executeCrvg(); break;
+        case "CRCT": executeCrct(); break;
+        case "ARZG": executeArzg(); break;
         case "ESCR": executeEscr(); break;
         case "LEIA": executeLeia(); return;
         case "SOMA": executeSoma(); break;

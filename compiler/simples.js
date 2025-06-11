@@ -359,7 +359,7 @@ case 40:
 break;
 case 41:
 
-            outputMvs.push({label: null, instruction: "CRCT", parameter: $$[$0], to: null});
+            outputMvs.push({label: null, instruction: "CRCT", parameter: parseInt($$[$0]), to: null});
             typeStack.push(types.INTEGER);
             this.$ = new SyntaxNode("Termo", [new SyntaxNode($$[$0], [])]);
         
