@@ -3,7 +3,7 @@ import Tree from "react-d3-tree";
 import { useAppData } from "@/contexts/AppContext";
 import styled from "styled-components";
 import { ViewContainer } from "@/components/atomic/ViewContainer";
-import '../styles/Tree.css';
+import '@/styles/Tree.css';
 
 const TreeContainer = styled.div`
   flex: 1;
