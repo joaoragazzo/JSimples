@@ -12,20 +12,24 @@ import logo from "@/assets/Logo-JSimples.svg";
 
 const Container = styled.div`
   height: 100vh;
+  width: 100vw;
   box-sizing: border-box;
   padding: 20px;
-  display: flex;
-  flex-direction: row;
   gap: 20px;
+  overflow: hidden;
+`;
+
+const ExtendedRow = styled(Row)`
+  height: 100%;
+  box-sizing: border-box;
 `;
 
 const StyledCard = styled.div`
   padding: 24px;
   box-sizing: border-box;
-  flex: 1;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: calc(100vh - 40px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   border-radius: 16px;
   background: rgba(255, 255, 255);
@@ -43,38 +47,46 @@ export const Main = () => {
 
   return (
     <Container>
-      <StyledCard>
-        <InputSection>
-          <img src={logo} width={130} />
-          <CodeInput />
-          <Row gutter={24}>
-            <Col span={12}>
-              <JSButton
-                onClick={isRunning ? stopAlgorithm : runAlgorithm}
-                icon={isRunning ? <StopOutlined /> : <PlayCircleOutlined />}
-                type="primary"
-                danger={isRunning ? true : false}
-              >
-                {isRunning ? "Parar execução" : "Executar código"}
-              </JSButton>
-            </Col>
-            <Col span={12}>
-              <JSButton
-                onClick={parse}
-                icon={<TbBinaryTreeFilled />}
-                type="default"
-              >
-                Gerar Árvore Sintática
-              </JSButton>
-            </Col>
-          </Row>
-        </InputSection>
-      </StyledCard>
-      <StyledCard>
-        <ViewsTab />
-        {(tab === "syntaxTree" || tab === "derivationTree") && <SyntaxTree />}
-        {tab === "terminal" && <Terminal />}
-      </StyledCard>
+      <ExtendedRow gutter={12}>
+        <Col span={12}>
+          <StyledCard>
+            <InputSection>
+              <img src={logo} width={130} />
+              <CodeInput />
+              <Row gutter={24}>
+                <Col span={12}>
+                  <JSButton
+                    onClick={isRunning ? stopAlgorithm : runAlgorithm}
+                    icon={isRunning ? <StopOutlined /> : <PlayCircleOutlined />}
+                    type="primary"
+                    danger={isRunning ? true : false}
+                  >
+                    {isRunning ? "Parar execução" : "Executar código"}
+                  </JSButton>
+                </Col>
+                <Col span={12}>
+                  <JSButton
+                    onClick={parse}
+                    icon={<TbBinaryTreeFilled />}
+                    type="default"
+                  >
+                    Gerar Árvore Sintática
+                  </JSButton>
+                </Col>
+              </Row>
+            </InputSection>
+          </StyledCard>
+        </Col>
+        <Col span={12}>
+          <StyledCard>
+            <ViewsTab />
+            {(tab === "syntaxTree" || tab === "derivationTree") && (
+              <SyntaxTree />
+            )}
+            {tab === "terminal" && <Terminal />}
+          </StyledCard>
+        </Col>
+      </ExtendedRow>
     </Container>
   );
 };

@@ -3,6 +3,7 @@ import Tree from "react-d3-tree";
 import { useAppData } from "@/contexts/AppContext";
 import styled from "styled-components";
 import { ViewContainer } from "@/components/atomic/ViewContainer";
+import '../styles/Tree.css';
 
 const TreeContainer = styled.div`
   flex: 1;
@@ -39,7 +40,9 @@ export const SyntaxTree = () => {
           scaleExtent={{ min: 0.3, max: 4 }}
           zoom={0.8}
           nodeSize={{ x: 200, y: 100 }}
-          
+          rootNodeClassName="node__root"
+          branchNodeClassName="node__branch"
+          leafNodeClassName="node__leaf"
         />
       </TreeContainer>
     </ViewContainer>

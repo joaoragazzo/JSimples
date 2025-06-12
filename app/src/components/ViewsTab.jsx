@@ -18,6 +18,10 @@ const items = [
     {
         key: 'symbolTable',
         label: 'Tabela de Símbolos',
+    },
+    {
+        key: 'mvs',
+        label: 'MVS Passo a passo'
     }
 ]
 

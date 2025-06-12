@@ -1,0 +1,8 @@
+
+.node__root > circle {
+    fill: rgb(44, 58, 255);
+}
+
+.node__branch > circle {
+    fill: rgb(100, 123, 255);
+}
