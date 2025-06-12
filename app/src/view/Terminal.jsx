@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useAppData } from "@/contexts/AppContext";
 import styled from "styled-components";
 import { AiOutlineRight } from "react-icons/ai";
+import { PiBroomBold } from "react-icons/pi";
 
 const LogLine = styled.div`
   margin-bottom: 8px;
@@ -51,6 +52,7 @@ const TerminalCard = styled.div`
   padding: 20px;
   overflow-y: auto;
   border-radius: 16px;
+  position: relative;
 `;
 
 const StyledInput = styled.input`
@@ -65,8 +67,28 @@ const StyledInput = styled.input`
   }
 `;
 
+const ClearButton = styled.div`
+  border: 2px white solid;
+  border-radius: 7px;
+  width: fit-content;
+  padding: 10px;
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+`;
+
 export const Terminal = () => {
-  const { logs, waitingInput, inputCallbackRef, setWaitingInput } = useAppData();
+  const { logs, setLogs, waitingInput, inputCallbackRef, setWaitingInput } =
+    useAppData();
   const terminalRef = useRef(null);
   const [inputValue, setInputValue] = useState("");
 
@@ -134,6 +156,10 @@ export const Terminal = () => {
           />
         </div>
       )}
+
+      <ClearButton onClick={() => {setLogs([])}}>
+        <PiBroomBold size={20}/>
+      </ClearButton>
     </TerminalCard>
   );
 };
