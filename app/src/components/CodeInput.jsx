@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useAppData } from "../contexts/AppContext";
+import { useAppData } from "@/contexts/AppContext";
 import styled from "styled-components";
 import CodeMirror from "@uiw/react-codemirror";
 import { HighlightStyle, StreamLanguage } from "@codemirror/language";

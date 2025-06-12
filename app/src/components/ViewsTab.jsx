@@ -1,5 +1,5 @@
 import { Tabs } from "antd"
-import { useAppData } from "../contexts/AppContext"
+import { useAppData } from "@/contexts/AppContext"
 
 
 const items = [

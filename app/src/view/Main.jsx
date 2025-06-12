@@ -1,14 +1,14 @@
 import { Col, Row } from "antd";
-import { CodeInput } from "../components/CodeInput";
+import { CodeInput } from "@/components/CodeInput";
 import { Terminal } from "./Terminal";
-import { useAppData } from "../contexts/AppContext";
+import { useAppData } from "@/contexts/AppContext";
 import { TbBinaryTreeFilled } from "react-icons/tb";
 import { PlayCircleOutlined, StopOutlined } from "@ant-design/icons";
 import styled from "styled-components";
-import { JSButton } from "../components/atomic/JSButton";
-import { ViewsTab } from "../components/ViewsTab";
+import { JSButton } from "@/components/atomic/JSButton";
+import { ViewsTab } from "@/components/ViewsTab";
 import { SyntaxTree } from "./SyntaxTree";
-import logo from "../assets/Logo-JSimples.svg";
+import logo from "@/assets/Logo-JSimples.svg";
 
 const Container = styled.div`
   height: 100vh;

@@ -1,6 +1,6 @@
 import { createContext, useContext, useRef, useState } from "react";
-import simples from "../core/compiler/simples.js";
-import { MVS } from "../core/mvs/mvs.js";
+import simples from "@/core/compiler/simples.js";
+import { MVS } from "@/core/mvs/mvs.js";
 
 const AppContext = createContext();
 
@@ -99,7 +99,7 @@ export const AppContextProvider = ({ children }) => {
       const response = simples.parse(code);
       setParserResponse(response);
       setIsRunning(true);
-      mvsRef.current = MVS(response.mvsCode, setLogs, requestInput, () => {
+      mvsRef.current = MVS(response.mvs, setLogs, requestInput, () => {
         setIsRunning(false);
       });
     } catch (e) {

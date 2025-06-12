@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import Tree from "react-d3-tree";
-import { useAppData } from "../contexts/AppContext";
+import { useAppData } from "@/contexts/AppContext";
 import styled from "styled-components";
-import { ViewContainer } from "../components/atomic/ViewContainer";
+import { ViewContainer } from "@/components/atomic/ViewContainer";
 
 const TreeContainer = styled.div`
   flex: 1;
