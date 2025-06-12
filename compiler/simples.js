@@ -565,9 +565,8 @@ parser.parseError = function(str, hash) {
         recoverable: hash.recoverable || false
     };
     
-    const error = new Error(`Erro de síntaxe na linha ${errorInfo.line}, coluna ${errorInfo.column}: ${errorInfo.message}`);
+    const error = new Error(`ERROR [${errorInfo.line}:${errorInfo.column}]: ${errorInfo.message}`);
     clearEverything();
-    error.location = errorInfo;
     throw error;
 };
 
