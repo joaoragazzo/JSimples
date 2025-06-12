@@ -5,7 +5,8 @@ import { ViewsTab } from "@/components/ViewsTab";
 import { SyntaxTree } from "./tools/SyntaxTree";
 import { CodeEditor } from "./tools/CodeEditor";
 import styled from "styled-components";
-
+import { MVSViewer } from "./tools/MVSViewer";
+import { MachineStateViewer } from "./tools/MachineStateViewer";
 
 const ExtendedRow = styled(Row)`
   flex: 1;
@@ -37,7 +38,10 @@ export const Workspace = () => {
     <ExtendedRow gutter={12}>
       <Col span={12}>
         <StyledCard>
-          <CodeEditor />
+          {(tab === "terminal" ||
+            tab === "syntaxTree" ||
+            tab === "derivationTree") && <CodeEditor />}
+          {tab === "mvs" && <MVSViewer />}
         </StyledCard>
       </Col>
       <Col span={12}>
@@ -48,6 +52,7 @@ export const Workspace = () => {
               <SyntaxTree />
             )}
             {tab === "terminal" && <Terminal />}
+            {tab === "mvs" && <MachineStateViewer />}
           </ContentWrapper>
         </StyledCard>
       </Col>
