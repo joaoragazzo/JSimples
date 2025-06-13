@@ -34,7 +34,7 @@ export const Stack = ({data}) => {
     <StackFrame>
       {data.map((value, index) => (
         <StackItem key={index}>
-          {value}
+          {typeof value === "number" ? value : value ? "V" : "F" }
         </StackItem>
       ))}
     </StackFrame>

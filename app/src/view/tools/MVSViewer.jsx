@@ -20,7 +20,7 @@ export const MVSViewer = () => {
       dataIndex: "key",
       width: 30,
       render: (_, record, index) =>
-        index === mvsState.instructionPointer - 1 ? (
+        index === mvsState.instructionPointer ? (
           <ArrowCell>
             <FaArrowRight />
           </ArrowCell>

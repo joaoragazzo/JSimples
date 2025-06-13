@@ -24,8 +24,13 @@ export const MVS = (
   let waitingNextStep = false;
   let continueExecution = null;
 
-  const findIndexByLabel = (label) => 
-    algorithm.findIndex((obj) => obj.label === label);
+  const findIndexByLabel = (label) => {
+    let index = algorithm.findIndex((obj) => obj.label === label);
+    console.log(algorithm);
+    console.log(`To index: ${index}`);
+    return index;
+  }
+    
 
   const executeAmem = () => {
     memory = new Array(register.parameter).fill(0);
@@ -251,7 +256,8 @@ export const MVS = (
   const next = () => {
     if (stepByStep && waitingNextStep && !isWaitingInput) {
       executeFrame();
-    }    
+    }
+    console.log({instructionPointer: instructionPointer, stack: stack, memory: memory})  
     return {instructionPointer: instructionPointer, stack: stack, memory: memory};
   };
 
