@@ -7,6 +7,10 @@ const ArrowCell = styled.div`
   text-align: center;
 `;
 
+const StyledTable = styled(Table)`
+  overflow-y: auto;
+`
+
 export const MVSViewer = () => {
     let currentLine = 0;
     const { parserResponse, mvsState } = useAppData();
@@ -39,12 +43,14 @@ export const MVSViewer = () => {
   ];
 
   return (
-    <Table
+    <StyledTable
       columns={columns}
       dataSource={parserResponse.mvs}
       pagination={false}
       size="small"
       rowKey="key"
+      virtual
+      scroll={{y:600}}
       rowClassName={(_, index) =>
         index === currentLine ? "current-instruction-row" : ""
       }
