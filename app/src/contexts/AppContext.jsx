@@ -5,24 +5,40 @@ import { MVS } from "@/core/mvs/mvs.js";
 const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
+  
+  const vmRef = useRef(null);
+  const mvsRef = useRef(null);
+  const inputCallbackRef = useRef(null);
+  
   const [code, setCode] = useState(
     "programa teste\n\tinteiro a b\n\tlogico c d\ninicio\n\ta <- 1\n\ta <- a * 3\n\tescreva a\nfimprograma"
   );
   const [logs, setLogs] = useState([]);
   const [mvsState, setMvsState] = useState({stack:[], instructionPointer: 0});
   const [waitingInput, setWaitingInput] = useState(false);
-  const inputCallbackRef = useRef(null);
-  const vmRef = useRef(null);
+
   const [tab, setTab] = useState("terminal");
   const [isRunning, setIsRunning] = useState(false);
-  const mvsRef = useRef(null);
-
+  
   const [completeSyntaxTree, setCompleteSyntaxTree] = useState({});
   const [simplifiedSyntaxTree, setSimplifiedSyntaxTree] = useState({});
 
   const [parserResponse, setParserResponse] = useState({
     syntaxTree: {},
+    mvs: [],
+    finished: false,
   });
+
+  const output = (type, content) => {
+    setLogs((prevLogs) => [
+      ...prevLogs,
+      {
+        timestamp: Date.now(),
+        type: type,
+        message: `${content}`,
+      },
+    ]);
+  }
 
   const removeIgnoreNodes = (node) => {
     if (!node) {
@@ -74,49 +90,26 @@ export const AppContextProvider = ({ children }) => {
     return node;
   };
 
-  const parse = () => {
+  const compile = () => {
     try {
       const response = simples.parse(code);
+      response.finished = true;
       setParserResponse(response);
 
-      console.log(response);
-
-      const syntaxTree = removeIgnoreNodes(response.syntaxTree);
+      const syntaxTree = response.syntaxTree
       setCompleteSyntaxTree(syntaxTree);
-
       const treeToCompress = JSON.parse(JSON.stringify(syntaxTree));
       setSimplifiedSyntaxTree(compressSingleChildNodes(treeToCompress));
     } catch (e) {
-      setLogs((prevLogs) => [
-        ...prevLogs,
-        {
-          timestamp: Date.now(),
-          type: "error",
-          message: `${e.message}`,
-        },
-      ]);
+      output("error", e.message);
     }
-  };
+  }
 
   const runAlgorithm = () => {
-    try {
-      const response = simples.parse(code);
-      setParserResponse(response);
       setIsRunning(true);
-      mvsRef.current = MVS(response.mvs, setLogs, requestInput, () => {
+      mvsRef.current = MVS(parserResponse.mvs, output, requestInput, () => {
         setIsRunning(false);
       });
-    } catch (e) {
-      console.log(e);
-      setLogs((prevLogs) => [
-        ...prevLogs,
-        {
-          timestamp: Date.now(),
-          type: "error",
-          message: `${e.message}`,
-        },
-      ]);
-    }
   };
 
   const stopAlgorithm = () => {
@@ -137,17 +130,13 @@ export const AppContextProvider = ({ children }) => {
   };
 
   const runMvsStepByStep = () => {
-    const vm = MVS(parserResponse.mvs, setLogs, requestInput, () => {
+    const vm = MVS(parserResponse.mvs, output, requestInput, () => {
       setIsRunning(false);
     }, true);
     const data = vm.start();
     setMvsState(data);
     vmRef.current = vm;
   }
-  
-  useEffect(() => {
-    console.log(mvsState);
-  }, [mvsState])
 
   return (
     <AppContext.Provider
@@ -156,7 +145,7 @@ export const AppContextProvider = ({ children }) => {
         setCode,
 
         parserResponse,
-        parse,
+        compile,
 
         completeSyntaxTree,
         simplifiedSyntaxTree,

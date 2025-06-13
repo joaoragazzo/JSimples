@@ -14,9 +14,9 @@ const StyledButton = styled(Button)`
   }
 `;
 
-export const JSButton = ({ icon, onClick, children, type, danger }) => {
+export const JSButton = ({ icon, onClick, children, type, danger, disabled }) => {
   return (
-    <StyledButton type={type} onClick={onClick} icon={icon} size="large" danger={danger}>
+    <StyledButton type={type} onClick={onClick} icon={icon} size="large" danger={danger} disabled={disabled}>
       {children}
     </StyledButton>
   );

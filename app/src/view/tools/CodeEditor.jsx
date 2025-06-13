@@ -1,10 +1,10 @@
 import { Row, Col } from "antd";
-import { TbBinaryTreeFilled } from "react-icons/tb";
 import { PlayCircleOutlined, StopOutlined } from "@ant-design/icons";
 import { JSButton } from "@/components/atomic/JSButton";
 import { CodeInput } from "@/components/CodeInput";
 import { useAppData } from "../../contexts/AppContext";
 import styled from "styled-components";
+import { FaGear } from "react-icons/fa6";
 
 const InputSection = styled.div`
   display: flex;
@@ -26,8 +26,8 @@ const CodeInputWrapper = styled.div`
 `;
 
 export const CodeEditor = () => {
-  const { parse, runAlgorithm, isRunning, stopAlgorithm } = useAppData();
-  
+  const { compile, runAlgorithm, isRunning, stopAlgorithm, parserResponse } = useAppData();
+
   return (
     <InputSection>
       <CodeInputWrapper>
@@ -36,21 +36,21 @@ export const CodeEditor = () => {
       <ButtonRow gutter={24}>
         <Col span={12}>
           <JSButton
-            onClick={isRunning ? stopAlgorithm : runAlgorithm}
-            icon={isRunning ? <StopOutlined /> : <PlayCircleOutlined />}
+            onClick={compile}
+            icon={<FaGear />}
             type="primary"
-            danger={isRunning ? true : false}
           >
-            {isRunning ? "Parar execução" : "Executar código"}
+            Compilar
           </JSButton>
         </Col>
         <Col span={12}>
           <JSButton
-            onClick={parse}
-            icon={<TbBinaryTreeFilled />}
-            type="default"
+            onClick={isRunning ? stopAlgorithm : runAlgorithm}
+            icon={isRunning ? <StopOutlined /> : <PlayCircleOutlined />}
+            danger={isRunning ? true : false}
+            disabled={!parserResponse.finished}
           >
-            Gerar Árvore Sintática
+            {isRunning ? "Parar execução" : "Executar código"}
           </JSButton>
         </Col>
       </ButtonRow>

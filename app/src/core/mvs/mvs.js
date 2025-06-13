@@ -29,8 +29,6 @@ export const MVS = (
 
   const executeAmem = () => {
     memory = new Array(register.parameter).fill(0);
-    console.log("===================================");
-    console.log(memory);
   }
 
   const executeCrvg = () => {
@@ -115,25 +113,11 @@ export const MVS = (
 
   const executeEscr = () => {
     let tmp = stack.pop();
-    output((prevLogs) => [
-      ...prevLogs,
-      {
-        timestamp: Date.now(),
-        type: "info",
-        message: `${tmp}`,
-      },
-    ]);
+    output("info", tmp);
   };
 
   const executeLeia = async () => {
-    output((prevLogs) => [
-      ...prevLogs,
-      {
-        timestamp: Date.now(),
-        type: "info",
-        message: "Esperando entrada do usuário...",
-      },
-    ]);
+    output("info", "Esperando entrada do usuário...");
     isWaitingInput = true;
     const value = await input();
     stack.push(value);
