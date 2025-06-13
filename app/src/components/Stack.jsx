@@ -1,0 +1,42 @@
+import styled from "styled-components";
+
+const StackFrame = styled.div`
+  display: flex;
+  flex-direction: column-reverse;
+  border: 2px solid #333;
+  box-sizing: border-box;
+  width: 100px;
+  height: 100%;
+  max-height: 330px;
+  overflow-y: auto;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 1px;
+  border-top: none;
+  background-color: #f9f9f9;
+`;
+
+const StackItem = styled.div`
+  width: 90%;
+  margin: 2px 0;
+  padding: 10px 0;
+  text-align: center;
+  background-color:rgb(24, 143, 255);
+  color: white;
+  border-radius: 4px;
+  font-weight: bold;
+  position: relative;
+`;
+
+export const Stack = ({data}) => {
+
+  return (
+    <StackFrame>
+      {data.map((value, index) => (
+        <StackItem key={index}>
+          {value}
+        </StackItem>
+      ))}
+    </StackFrame>
+  );
+};

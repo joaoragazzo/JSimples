@@ -1,48 +1,57 @@
-export const MVS = (code, output, input, onComplete = null) => {
+export const MVS = (
+  code,
+  output,
+  input,
+  onComplete = null,
+  stepByStep = false
+) => {
   const algorithm = code;
   console.log(code);
   const MAX_ITERATION = 10000;
-  const INSTRUCTIONS_PER_FRAME = 1;
+  const INSTRUCTIONS_PER_FRAME = stepByStep ? 1 : 1;
 
   let iterationCounter = 0;
   let instructionPointer = 0;
-  let register = algorithm[instructionPointer++];
+  let register = algorithm[instructionPointer];
   let memory = [];
   let stack = [];
   let isIteration = false;
   let isWaitingInput = false;
-  
+
   let animationFrameId = null;
   let isRunning = true;
 
-  const findIndexByLabel = (label) =>
+  let waitingNextStep = false;
+  let continueExecution = null;
+
+  const findIndexByLabel = (label) => 
     algorithm.findIndex((obj) => obj.label === label);
 
   const executeAmem = () => {
     memory = new Array(register.parameter).fill(0);
+    console.log("===================================");
+    console.log(memory);
   }
 
   const executeCrvg = () => {
-    stack.push(memory[register.parameter])
-  }
+    stack.push(memory[register.parameter]);
+  };
 
   const executeCrct = () => {
-    stack.push(register.parameter)
-  }
+    stack.push(register.parameter);
+  };
 
   const executeArzg = () => {
     memory[register.parameter] = stack.pop();
-  }
+  };
 
   const executeSoma = () => {
-    /* Invertido devido a ordem que os valores são empilhados */
     let secondValue = stack.pop();
     let firstValue = stack.pop();
     stack.push(firstValue + secondValue);
   };
 
   const executeSubt = () => {
-    /* Invertido devido a ordem que os valores são empilhados */
     let secondValue = stack.pop();
     let firstValue = stack.pop();
     stack.push(firstValue - secondValue);
@@ -56,14 +65,14 @@ export const MVS = (code, output, input, onComplete = null) => {
 
   const executeDsvs = () => {
     isIteration = true;
-    instructionPointer = findIndexByLabel(register.to);
+    instructionPointer = findIndexByLabel(register.parameter);
   };
 
   const executeDsvf = () => {
     let value = stack.pop();
     if (!value) {
       isIteration = true;
-      instructionPointer = findIndexByLabel(register.to);
+      instructionPointer = findIndexByLabel(register.parameter);
     }
   };
 
@@ -130,65 +139,154 @@ export const MVS = (code, output, input, onComplete = null) => {
     stack.push(value);
     isWaitingInput = false;
     register = algorithm[++instructionPointer];
-    animationFrameId = requestAnimationFrame(executeFrame);
+    
+    if (stepByStep) {
+      return;
+    } else {
+      animationFrameId = requestAnimationFrame(executeFrame);
+    }
+  };
+
+  const executeDmem = () => {
+    memory = [];
   }
 
-  const executeFrame = () => {
+  const executeFrame = async () => {
     if (isWaitingInput || !isRunning) {
-      animationFrameId = requestAnimationFrame(executeFrame);
+      if (!stepByStep) {
+        animationFrameId = requestAnimationFrame(executeFrame);
+      }
       return;
     }
 
     let instructionsThisFrame = 0;
-
-    while (register && register.instruction !== "FIMP" && isRunning && instructionsThisFrame < INSTRUCTIONS_PER_FRAME) {
+    while (
+      register &&
+      register.instruction !== "FIMP" &&
+      isRunning &&
+      instructionsThisFrame < INSTRUCTIONS_PER_FRAME
+    ) {
       isIteration = false;
       switch (register.instruction) {
-        case "INPP": break;
-        case "FIMP": break;
-        case "NADA": break;
-        case "AMEM": executeAmem(); break;
-        case "CRVG": executeCrvg(); break;
-        case "CRCT": executeCrct(); break;
-        case "ARZG": executeArzg(); break;
-        case "ESCR": executeEscr(); break;
-        case "LEIA": executeLeia(); return;
-        case "SOMA": executeSoma(); break;
-        case "SUBT": executeSubt(); break;
-        case "MULT": executeMult(); break;
-        case "DIVI": executeDivi(); break;
-        case "DSVS": executeDsvs(); break;
-        case "DSVF": executeDsvf(); break;
-        case "CMME": executeCmme(); break;
-        case "CMMA": executeCmma(); break;
-        case "NEGA": executeNega(); break;
-        case "CONJ": executeConj(); break;
-        case "DISJ": executeDisj(); break;
+        case "INPP":
+          break;
+        case "FIMP":
+          break;
+        case "NADA":
+          break;
+        case "AMEM":
+          executeAmem();
+          break;
+        case "CRVG":
+          executeCrvg();
+          break;
+        case "CRCT":
+          executeCrct();
+          break;
+        case "ARZG":
+          executeArzg();
+          break;
+        case "ESCR":
+          executeEscr();
+          break;
+        case "LEIA":
+          await executeLeia();
+          if (stepByStep) return; 
+          return;
+        case "SOMA":
+          executeSoma();
+          break;
+        case "SUBT":
+          executeSubt();
+          break;
+        case "MULT":
+          executeMult();
+          break;
+        case "DIVI":
+          executeDivi();
+          break;
+        case "DSVS":
+          executeDsvs();
+          break;
+        case "DSVF":
+          executeDsvf();
+          break;
+        case "CMME":
+          executeCmme();
+          break;
+        case "CMMA":
+          executeCmma();
+          break;
+        case "NEGA":
+          executeNega();
+          break;
+        case "CONJ":
+          executeConj();
+          break;
+        case "DISJ":
+          executeDisj();
+          break;
+        case "DMEM":
+          executeDmem();
+          break;
       }
-  
       if (!isIteration) instructionPointer++;
       if (isIteration) iterationCounter++;
-  
+
       if (iterationCounter === MAX_ITERATION) return;
-  
+
       register = algorithm[instructionPointer];
       instructionsThisFrame++;
+
+      
+      if (stepByStep) {
+        waitingNextStep = true;
+      }
     }
 
     if (register && register.instruction !== "FIMP" && isRunning) {
-      animationFrameId = requestAnimationFrame(executeFrame);
+      if (!stepByStep) {
+        animationFrameId = requestAnimationFrame(executeFrame);
+      }
     } else if (onComplete) {
       onComplete();
     }
-  }
+  };
 
   const stop = () => {
     isRunning = false;
     if (animationFrameId) {
       cancelAnimationFrame(animationFrameId);
     }
+
+    if (waitingNextStep && continueExecution) {
+      continueExecution();
+    }
+  };
+
+  const next = () => {
+    if (stepByStep && waitingNextStep && !isWaitingInput) {
+      executeFrame();
+    }    
+    return {instructionPointer: instructionPointer, stack: stack, memory: memory};
+  };
+
+  const start = () => {
+    if (stepByStep) {
+      executeFrame();
+    } else {
+      animationFrameId = requestAnimationFrame(executeFrame);
+    }
+    return {instructionPointer: instructionPointer, stack: stack, memory: memory};
+  };
+
+  if (!stepByStep) {
+    animationFrameId = requestAnimationFrame(executeFrame);
   }
-  
-  animationFrameId = requestAnimationFrame(executeFrame);
-  return { stop };
+
+  return {
+    stop,
+    next,
+    start
+  };
 };

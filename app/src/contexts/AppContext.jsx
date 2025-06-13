@@ -1,4 +1,4 @@
-import { createContext, useContext, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import simples from "@/core/compiler/simples.js";
 import { MVS } from "@/core/mvs/mvs.js";
 
@@ -9,8 +9,10 @@ export const AppContextProvider = ({ children }) => {
     "programa teste\n\tinteiro a b\n\tlogico c d\ninicio\n\ta <- 1\n\ta <- a * 3\n\tescreva a\nfimprograma"
   );
   const [logs, setLogs] = useState([]);
+  const [mvsState, setMvsState] = useState({stack:[], instructionPointer: 0});
   const [waitingInput, setWaitingInput] = useState(false);
   const inputCallbackRef = useRef(null);
+  const vmRef = useRef(null);
   const [tab, setTab] = useState("terminal");
   const [isRunning, setIsRunning] = useState(false);
   const mvsRef = useRef(null);
@@ -77,6 +79,8 @@ export const AppContextProvider = ({ children }) => {
       const response = simples.parse(code);
       setParserResponse(response);
 
+      console.log(response);
+
       const syntaxTree = removeIgnoreNodes(response.syntaxTree);
       setCompleteSyntaxTree(syntaxTree);
 
@@ -103,6 +107,7 @@ export const AppContextProvider = ({ children }) => {
         setIsRunning(false);
       });
     } catch (e) {
+      console.log(e);
       setLogs((prevLogs) => [
         ...prevLogs,
         {
@@ -130,6 +135,19 @@ export const AppContextProvider = ({ children }) => {
       };
     });
   };
+
+  const runMvsStepByStep = () => {
+    const vm = MVS(parserResponse.mvs, setLogs, requestInput, () => {
+      setIsRunning(false);
+    }, true);
+    const data = vm.start();
+    setMvsState(data);
+    vmRef.current = vm;
+  }
+  
+  useEffect(() => {
+    console.log(mvsState);
+  }, [mvsState])
 
   return (
     <AppContext.Provider
@@ -159,6 +177,12 @@ export const AppContextProvider = ({ children }) => {
 
         inputCallbackRef,
         requestInput,
+
+        vmRef,
+        runMvsStepByStep,
+
+        setMvsState,
+        mvsState
       }}
     >
       {children}

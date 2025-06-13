@@ -42,8 +42,9 @@ const types = Object.freeze({
     INTEGER: "INTEGER"
 });
 
-let mvs = [],
-    variableType = null,
+let mvs = [];
+
+let variableType = null,
     variableCount = 0;
 
 const variableTable = [],
@@ -204,7 +205,7 @@ algorithm
 start_block 
     : T_START
         {
-            mvs.push({label: null, instruction: "AMEM", parameter: variableCount, to: null}); 
+            mvs.push({label: null, instruction: "AMEM", parameter: variableCount}); 
             $$ = new SyntaxNode($1, []);
         }
     ;
@@ -212,7 +213,8 @@ start_block
 header
     : T_PROGRAM T_IDENTIFIER
         {
-            mvs.push({label: null, instruction: "INPP", parameter: variableCount, to: null});
+            console.log(typeof mvs);
+            mvs.push({label: null, instruction: "INPP", parameter: variableCount});
             $$ = new SyntaxNode("Cabeçalho", [
                 new SyntaxNode($1, []), 
                 new SyntaxNode($2, [])
@@ -223,7 +225,7 @@ header
 variables
     : /* blank */
         {
-            $$ = new SyntaxNode("IGNORE", [])
+            $$ = new SyntaxNode("IGNORE", []);
         }
     | variable_declaration 
         {
@@ -234,11 +236,11 @@ variables
 variable_declaration
     : type variable_list variable_declaration 
         {
-            $$ = new SyntaxNode("Declaração de variáveis", [$1, $2, $3])
+            $$ = new SyntaxNode("Declaração de variáveis", [$1, $2, $3]);
         }
     | type variable_list
         {
-            $$ = new SyntaxNode("Declaração de variáveis", [$1, $2])
+            $$ = new SyntaxNode("Declaração de variáveis", [$1, $2]);
         }
     ;
 
@@ -246,29 +248,27 @@ type
     : T_LOGIC
         {
             variableType = types.LOGIC;
-            $$ = new SyntaxNode("Tipo", [new SyntaxNode($1,[])])
+            $$ = new SyntaxNode("Tipo", [new SyntaxNode($1,[])]);
         }
     | T_INTEGER
         {
             variableType = types.INTEGER;
-            $$ = new SyntaxNode("Tipo", [new SyntaxNode($1, [])])
+            $$ = new SyntaxNode("Tipo", [new SyntaxNode($1, [])]);
         }
     ;
 
 variable_list
     : variable_list T_IDENTIFIER
         {
-            success = addVariable({type: variableType, name: $2, address: variableCount});
-            if (!success) {error(@1, "Nome de variável já declarada.")}
-            variableCount++; 
-            $$ = new SyntaxNode("Lista de variáveis", [$1, new SyntaxNode($2,[])])
+            success = addVariable({type: variableType, name: $2, address: variableCount++});
+            if (!success) error(@1, "Nome de variável já declarada.");
+            $$ = new SyntaxNode("Lista de variáveis", [$1, new SyntaxNode($2,[])]);
         }
     | T_IDENTIFIER
         {
-            success = addVariable({type: variableType, name: $1, address: variableCount});
-            if (!success) {error(@1, "Nome de variável já declarada.")}
-            variableCount++;
-            $$ = new SyntaxNode("Lista de variáveis", [new SyntaxNode($1, [])])
+            success = addVariable({type: variableType, name: $1, address: variableCount++});
+            if (!success) error(@1, "Nome de variável já declarada.");
+            $$ = new SyntaxNode("Lista de variáveis", [new SyntaxNode($1, [])]);
         }
     ;
 
@@ -306,7 +306,7 @@ conditional
     : T_IF expression then_token command_list else_token command_list T_ENDIF
         {
             tmpLabel = labelStack.pop();
-            mvs.push({label: `L${tmpLabel}`, instruction: "NADA", parameter: null, to: null});
+            mvs.push({label: `L${tmpLabel}`, instruction: "NADA", parameter: null});
             $$ = new SyntaxNode("Condicional", [new SyntaxNode($1, []),$2,$3,$4,$5,$6,new SyntaxNode($7,[])]);
         }
     ;
@@ -320,7 +320,7 @@ then_token
                 error(@1, "Incompatibilidade de tipo.");
             
 
-            mvs.push({label: null, instruction: "DSVF", parameter: null, to: `L${++label}`});
+            mvs.push({label: null, instruction: "DSVF", parameter: `L${++label}`});
             labelStack.push(label);
             $$ = new SyntaxNode("Token então", [new SyntaxNode($1,[])]);
         }
@@ -329,9 +329,9 @@ then_token
 else_token
     : T_ELSE
         {
-            mvs.push({label: null, instruction: "DSVS", parameter: null, to: `L${++label}`});
+            mvs.push({label: null, instruction: "DSVS", parameter: `L${++label}`});
             tmpLabel = labelStack.pop();
-            mvs.push({label: `L${tmpLabel}`, instruction: "NADA", parameter: null, to: null});
+            mvs.push({label: `L${tmpLabel}`, instruction: "NADA", parameter: null});
             labelStack.push(label);
             $$ = new SyntaxNode("Token Senão", [new SyntaxNode($1,[])]);
         }
@@ -348,7 +348,8 @@ assignment
             if (variableTable[tmpPos].type != tmpType) 
                 error(@3, "Incompatibilidade de tipo.");
             
-            mvs.push({label: null, instruction: "ARZG", parameter: variableTable[tmpPos].address, to: null});
+            console.log(typeof mvs);
+            mvs.push({label: null, instruction: "ARZG", parameter: variableTable[tmpPos].address});
             $$ = new SyntaxNode("Atribuição", [$1, new SyntaxNode($2,[]), $3]);
         }
     ;
@@ -377,8 +378,8 @@ input
     : T_READ T_IDENTIFIER 
         {
             let variable = findVariable($2);
-            mvs.push({label: null, instruction: "LEIA", parameter: null, to: null});
-            mvs.push({label: null, instruction: "ARZG", parameter: variable.address, to: null});
+            mvs.push({label: null, instruction: "LEIA", parameter: null});
+            mvs.push({label: null, instruction: "ARZG", parameter: variable.address});
             $$ = new SyntaxNode("Entrada", [new SyntaxNode($1,[]), new SyntaxNode($2,[])]);
         }
     ;
@@ -387,7 +388,7 @@ output
     : T_PRINT expression
         {
             tmpType = typeStack.pop();
-            mvs.push({label: null, instruction: "ESCR", parameter: null, to: null});
+            mvs.push({label: null, instruction: "ESCR", parameter: null});
             $$ = new SyntaxNode("Saída", [new SyntaxNode($1,[]), $2]);
         }
     ;
@@ -397,8 +398,8 @@ repeat_loop
         {
             let firstLabel = labelStack.pop();
             let secondLabel = labelStack.pop();
-            mvs.push({label: null, instruction: "DSVS", to: `L${secondLabel}`, parameter: null});
-            mvs.push({label: `L${firstLabel}`, instruction: "NADA", parameter: null, to: null});
+            mvs.push({label: null, instruction: "DSVS", parameter: `L${secondLabel}`});
+            mvs.push({label: `L${firstLabel}`, instruction: "NADA", parameter: null});
             $$ = new SyntaxNode("Loop de repetição", [$1, $2, $3, $4, new SyntaxNode($5, [])]);
         }
     ;
@@ -406,7 +407,7 @@ repeat_loop
 while_token
     : T_WHILE
         {
-            mvs.push({label: `L${++label}`, instruction: "NADA", parameter: null, to: null});
+            mvs.push({label: `L${++label}`, instruction: "NADA", parameter: null});
             labelStack.push(label);
             $$ = new SyntaxNode("Token enquanto", [new SyntaxNode($1,[])]);
         }
@@ -418,7 +419,7 @@ do_token
             tmpType = typeStack.pop();
             if (tmpType !== types.LOGIC) 
                 error(@1, "Incompatibilidade de tipo.")
-            mvs.push({label: null, instruction: "DSVF", parameter: null, to: `L${++label}`});
+            mvs.push({label: null, instruction: "DSVF", parameter: `L${++label}`});
             labelStack.push(label);
             $$ = new SyntaxNode("Faça Token", [new SyntaxNode($1,[])]);
         }
@@ -428,55 +429,55 @@ expression
     : expression T_TIMES   expression
         {
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
-            mvs.push({label: null, instruction: "MULT", parameter: null, to: null});
+            mvs.push({label: null, instruction: "MULT", parameter: null});
             $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         }
     | expression T_DIV     expression
         {
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
-            mvs.push({label: null, instruction: "DIVI", parameter: null, to: null});
+            mvs.push({label: null, instruction: "DIVI", parameter: null});
             $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         }
     | expression T_PLUS    expression
         {
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
-            mvs.push({label: null, instruction: "SOMA", parameter: null, to: null});
+            mvs.push({label: null, instruction: "SOMA", parameter: null});
             $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         }
     | expression T_MINUS   expression
         {
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
-            mvs += `\tSUBT\t\n`;
+            mvs.push({label: null, instruction: "SUBT", parameter: null});
             $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         } 
     | expression T_GREATER expression
         {
             typeCheck(types.INTEGER, types.INTEGER, types.LOGIC);
-            mvs.push({label: null, instruction: "CMMA", parameter: null, to: null});
+            mvs.push({label: null, instruction: "CMMA", parameter: null});
             $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         } 
     | expression T_LESS    expression
         {
             typeCheck(types.INTEGER, types.INTEGER, types.LOGIC);
-            mvs.push({label: null, instruction: "CMME", parameter: null, to: null});
+            mvs.push({label: null, instruction: "CMME", parameter: null});
             $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         } 
     | expression T_EQUAL   expression
         {
             typeCheck(types.INTEGER, types.INTEGER, types.LOGIC);
-            mvs.push({label: null, instruction: "CMIG", parameter: null, to: null});
+            mvs.push({label: null, instruction: "CMIG", parameter: null});
             $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         } 
     | expression T_AND     expression
         {
             typeCheck(types.LOGIC, types.LOGIC, types.LOGIC);
-            mvs.push({label: null, instruction: "CONJ", parameter: null, to: null});
+            mvs.push({label: null, instruction: "CONJ", parameter: null});
             $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         } 
     | expression T_OR      expression
         {
             typeCheck(types.LOGIC, types.LOGIC, types.LOGIC);
-            mvs.push({label: null, instruction: "DISJ", parameter: null, to: null});
+            mvs.push({label: null, instruction: "DISJ", parameter: null});
             $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         }
     | term
@@ -491,25 +492,25 @@ term
         {
             tmpVariableName = $1;
             tmpVariable = findVariable(tmpVariableName);
-            mvs.push({label: null, instruction: "CRVG", parameter: tmpVariable.address, to: null});
+            mvs.push({label: null, instruction: "CRVG", parameter: tmpVariable.address});
             typeStack.push(tmpVariable.type); 
             $$ = new SyntaxNode("Termo", [new SyntaxNode($1, [])]);
         }
     | T_NUMBER
         {
-            mvs.push({label: null, instruction: "CRCT", parameter: parseInt($1)   , to: null});
+            mvs.push({label: null, instruction: "CRCT", parameter: parseInt($1)   });
             typeStack.push(types.INTEGER);
             $$ = new SyntaxNode("Termo", [new SyntaxNode($1, [])]);
         }
     | T_T
         {
-            mvs.push({label: null, instruction: "CRCT", parameter: 1, to: null});
+            mvs.push({label: null, instruction: "CRCT", parameter: 1});
             typeStack.push(types.LOGIC);
             $$ = new SyntaxNode("Termo", [new SyntaxNode($1, [])]);
         }
     | T_F
         {
-            mvs.push({label: null, instruction: "CRCT", parameter: 0, to: null});
+            mvs.push({label: null, instruction: "CRCT", parameter: 0});
             typeStack.push(types.LOGIC);
             $$ = new SyntaxNode("Termo", [new SyntaxNode($1, [])]);
         }
@@ -518,7 +519,7 @@ term
             tmpType = typeStack.pop();
             if (tmpType !== types.LOGIC) 
                 error(@2, "Incompatibilidade de tipo.");
-            mvs.push({label: null, instruction: "NEGA", parameter: null, to: null});
+            mvs.push({label: null, instruction: "NEGA", parameter: null});
             typeStack.push(types.LOGIC);
             $$ = new SyntaxNode("Termo", [new SyntaxNode($1, []), $2]);
         }
@@ -531,8 +532,8 @@ term
 footer
     : T_END EOF
         {   
-            mvs.push({label: null, instruction: "DMEM", parameter: variableCount, to: null});
-            mvs.push({label: null, instruction: "FIMP", parameter: null, to: null});
+            mvs.push({label: null, instruction: "DMEM", parameter: variableCount});
+            mvs.push({label: null, instruction: "FIMP", parameter: null});
 
             $$ = new SyntaxNode("Rodapé", [new SyntaxNode($1,[])]);
         }

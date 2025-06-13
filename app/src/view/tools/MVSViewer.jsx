@@ -1,5 +1,5 @@
 import { Table } from "antd";
-import { FaArrowRight } from "react-icons/fa"; // ícone de seta
+import { FaArrowRight } from "react-icons/fa";
 import styled from "styled-components";
 import { useAppData } from "../../contexts/AppContext";
 
@@ -7,15 +7,16 @@ const ArrowCell = styled.div`
   text-align: center;
 `;
 
-export const MVSViewer = ({ currentLine = 1 }) => {
-    const { parserResponse } = useAppData();
+export const MVSViewer = () => {
+    let currentLine = 0;
+    const { parserResponse, mvsState } = useAppData();
     const columns = [
     {
       title: "",
       dataIndex: "key",
-      width: 40,
+      width: 30,
       render: (_, record, index) =>
-        index === currentLine ? (
+        index === mvsState.instructionPointer - 1 ? (
           <ArrowCell>
             <FaArrowRight />
           </ArrowCell>
