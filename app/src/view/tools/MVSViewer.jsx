@@ -73,7 +73,7 @@ export const MVSViewer = () => {
           case `CRCT`:
             return `Carrega o valor ${record.parameter} na pilha`
           case `CRVG`:
-            return `Carrega uma variável global do endereço ${record.parameter}`
+            return `Carrega a variável global do endereço ${record.parameter}`
           case `ARZG`:
             return `Armazena uma variável global no endereço ${record.parameter}`
           case `DSVS`:
