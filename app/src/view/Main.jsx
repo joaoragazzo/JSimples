@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Header } from "../components/Header";
 import { Workspace } from "./Workspace";
+import { Intro } from "./Intro";
 
 const MainWrapper = styled.div`
   height: 100vh;
@@ -27,11 +28,11 @@ const Container = styled.div`
   @media (max-width: 768px) {
     padding: 12px;
     flex: none;
-    min-height: calc(100vh - 64px); 
+    min-height: calc(100vh - 64px);
     overflow-y: auto;
     display: block;
   }
-  
+
   @media (max-width: 480px) {
     padding: 8px;
     min-height: calc(100vh - 56px);
@@ -40,13 +41,14 @@ const Container = styled.div`
 `;
 
 export const Main = () => {
-  
   return (
-    <MainWrapper>
-      <Header />
-      <Container>
-        <Workspace />
-      </Container>
-    </MainWrapper>
+    <Intro>
+      <MainWrapper>
+        <Header />
+        <Container>
+          <Workspace />
+        </Container>
+      </MainWrapper>
+    </Intro>
   );
 };
