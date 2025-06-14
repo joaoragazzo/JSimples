@@ -10,7 +10,7 @@ const CellTitle = styled.div`
 `;
 
 export const MachineStateViewer = () => {
-  const { vmRef, runMvsStepByStep, setMvsState, mvsState } = useAppData();
+  const { mvsState } = useAppData();
 
   const columns = [
     {
@@ -44,14 +44,6 @@ export const MachineStateViewer = () => {
         <CellTitle>Pilha (Stack)</CellTitle>
         <Stack data={mvsState?.stack} />
       </Col>
-      <Button onClick={runMvsStepByStep}>Começar</Button>
-      <Button
-        onClick={() => {
-          setMvsState(vmRef.current?.next());
-        }}
-      >
-        Próximo
-      </Button>
     </Row>
   );
 };

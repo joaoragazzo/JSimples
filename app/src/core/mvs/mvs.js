@@ -21,17 +21,14 @@ export const MVS = (
   let animationFrameId = null;
   let isRunning = true;
 
-  let waitingNextStep = false;
+  let waitingNextStep = stepByStep;
   let continueExecution = null;
 
   const findIndexByLabel = (label) => {
     let index = algorithm.findIndex((obj) => obj.label === label);
-    console.log(algorithm);
-    console.log(`To index: ${index}`);
     return index;
   }
     
-
   const executeAmem = () => {
     memory = new Array(register.parameter).fill(0);
   }
@@ -257,16 +254,15 @@ export const MVS = (
     if (stepByStep && waitingNextStep && !isWaitingInput) {
       executeFrame();
     }
-    console.log({instructionPointer: instructionPointer, stack: stack, memory: memory})  
     return {instructionPointer: instructionPointer, stack: stack, memory: memory};
   };
 
   const start = () => {
     if (stepByStep) {
-      executeFrame();
-    } else {
-      animationFrameId = requestAnimationFrame(executeFrame);
-    }
+      return {instructionPointer: instructionPointer, stack: stack, memory: memory};
+    } 
+
+    animationFrameId = requestAnimationFrame(executeFrame);
     return {instructionPointer: instructionPointer, stack: stack, memory: memory};
   };
 

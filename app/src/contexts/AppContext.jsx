@@ -100,6 +100,17 @@ export const AppContextProvider = ({ children }) => {
       setCompleteSyntaxTree(syntaxTree);
       const treeToCompress = JSON.parse(JSON.stringify(syntaxTree));
       setSimplifiedSyntaxTree(compressSingleChildNodes(treeToCompress));
+
+      setTimeout(() => {
+        if (response.mvs && response.mvs.length > 0) {
+          const vm = MVS(response.mvs, output, requestInput, () => {
+            setIsRunning(false);
+          }, true);
+          const data = vm.start();
+          setMvsState(data);
+          vmRef.current = vm;
+        }
+      }, 0);
     } catch (e) {
       output("error", e.message);
     }
@@ -129,7 +140,7 @@ export const AppContextProvider = ({ children }) => {
     });
   };
 
-  const runMvsStepByStep = () => {
+  const resetVm = () => {
     const vm = MVS(parserResponse.mvs, output, requestInput, () => {
       setIsRunning(false);
     }, true);
@@ -168,7 +179,7 @@ export const AppContextProvider = ({ children }) => {
         requestInput,
 
         vmRef,
-        runMvsStepByStep,
+        resetVm,
 
         setMvsState,
         mvsState
