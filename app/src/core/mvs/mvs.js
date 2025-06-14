@@ -107,6 +107,12 @@ export const MVS = (
     stack.push(firstValue || secondValue);
   };
 
+  const executeCmig = () => {
+    let firstValue = stack.pop();
+    let secondValue = stack.pop();
+    stack.push(firstValue == secondValue);
+  };
+
   const executeDivi = () => {
     let secondValue = stack.pop();
     let firstValue = stack.pop();
@@ -214,6 +220,9 @@ export const MVS = (
           break;
         case "DMEM":
           executeDmem();
+          break;
+        case "CMIG":
+          executeCmig();
           break;
       }
       if (!isIteration) instructionPointer++;
