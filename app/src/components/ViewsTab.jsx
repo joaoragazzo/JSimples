@@ -16,10 +16,6 @@ const items = [
         label: 'Árvore de Derivação',
     },
     {
-        key: 'symbolTable',
-        label: 'Tabela de Símbolos',
-    },
-    {
         key: 'mvs',
         label: 'MVS Passo a passo'
     }

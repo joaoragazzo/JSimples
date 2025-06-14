@@ -118,7 +118,7 @@ break;
 case 3:
 
             console.log(typeof mvs);
-            mvs.push({label: null, instruction: "INPP", parameter: variableCount});
+            mvs.push({label: null, instruction: "INPP", parameter: null});
             this.$ = new SyntaxNode("Cabeçalho", [
                 new SyntaxNode($$[$0-1], []), 
                 new SyntaxNode($$[$0], [])

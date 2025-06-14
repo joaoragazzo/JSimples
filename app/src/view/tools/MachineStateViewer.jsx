@@ -13,12 +13,15 @@ const SectionCard = styled.div`
   border: 1px solid #e8e8e8;
   border-radius: 8px;
   padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const SectionTitle = styled.div`
   font-size: 16px;
   font-weight: 500;
-  margin-bottom: 16px;
+  margin-bottom: 32px;
   color: #262626;
 `;
 
