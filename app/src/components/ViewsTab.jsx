@@ -1,27 +1,27 @@
-import { Tabs } from "antd"
+import { Badge, Tabs } from "antd"
 import { useAppData } from "@/contexts/AppContext"
 
-
-const items = [
-    {
-        key: 'terminal',
-        label: 'Terminal',
-    },
-    {
-        key: 'syntaxTree',
-        label: 'Árvore Sintática',
-    },
-    {
-        key: 'derivationTree',
-        label: 'Árvore de Derivação',
-    },
-    {
-        key: 'mvs',
-        label: 'MVS Passo a passo'
-    }
-]
-
 export const ViewsTab = () => {
-    const { setTab } = useAppData(); 
+    const { setTab, terminalNotification } = useAppData(); 
+    
+    const items = [
+        {
+            key: 'terminal',
+            label: <><Badge dot={terminalNotification}>Terminal</Badge></>,
+        },
+        {
+            key: 'syntaxTree',
+            label: 'Árvore Sintática',
+        },
+        {
+            key: 'derivationTree',
+            label: 'Árvore de Derivação',
+        },
+        {
+            key: 'mvs',
+            label: 'MVS Passo a passo'
+        }
+    ]
+
     return <Tabs items={items} onChange={setTab} defaultActiveKey="terminal"/>
 }

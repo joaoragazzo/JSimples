@@ -1,15 +1,18 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import simples from "@/core/compiler/simples.js";
 import { MVS } from "@/core/mvs/mvs.js";
+import { notification } from "antd";
 
 const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
+  const [api, contextHolder] = notification.useNotification();
   
   const vmRef = useRef(null);
   const mvsRef = useRef(null);
   const inputCallbackRef = useRef(null);
   
+
   const [code, setCode] = useState(
     "programa teste\n\tinteiro a b\n\tlogico c d\ninicio\n\ta <- 1\n\ta <- a * 3\n\tescreva a\nfimprograma"
   );
@@ -22,6 +25,7 @@ export const AppContextProvider = ({ children }) => {
   
   const [completeSyntaxTree, setCompleteSyntaxTree] = useState({});
   const [simplifiedSyntaxTree, setSimplifiedSyntaxTree] = useState({});
+  const [terminalNotification, setTerminalNotification] = useState(false);
 
   const [parserResponse, setParserResponse] = useState({
     syntaxTree: {},
@@ -131,6 +135,13 @@ export const AppContextProvider = ({ children }) => {
   };
 
   const requestInput = () => {
+    api.warning({
+      message: "Preencha o input necessário no seu terminal",
+      description: "Clique aqui para verificar o seu terminal",
+      placement: "bottomRight",
+      onClick:() => {setTab('terminal')}
+    })
+    
     return new Promise((resolve) => {
       setWaitingInput(true);
       inputCallbackRef.current = (value) => {
@@ -148,6 +159,25 @@ export const AppContextProvider = ({ children }) => {
     setMvsState(data);
     vmRef.current = vm;
   }
+
+  useEffect(() => {
+    if (tab !== 'terminal') {
+      setTerminalNotification(true);
+      api.info({
+        message: "Existe uma nova saída no terminal!",
+        description: "Clique aqui para verificar o seu terminal",
+        placement: "bottomRight",
+        onClick:() => {setTab('terminal')}
+      })
+    }
+  }, [logs]);
+
+  useEffect(() => {
+    if (tab === 'terminal') {
+      setTerminalNotification(false);
+      
+    }
+  }, [tab]);
 
   return (
     <AppContext.Provider
@@ -182,9 +212,12 @@ export const AppContextProvider = ({ children }) => {
         resetVm,
 
         setMvsState,
-        mvsState
+        mvsState,
+
+        terminalNotification,
       }}
     >
+      {contextHolder}
       {children}
     </AppContext.Provider>
   );

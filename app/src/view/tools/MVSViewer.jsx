@@ -120,7 +120,6 @@ export const MVSViewer = () => {
         size="small"
         rowKey="key"
         scroll={{ y: 450 }}
-        virtual
       />
 
       <ControlBar ref={controlBarRef}>
