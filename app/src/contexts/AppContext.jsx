@@ -12,7 +12,6 @@ export const AppContextProvider = ({ children }) => {
   const mvsRef = useRef(null);
   const inputCallbackRef = useRef(null);
   
-
   const [code, setCode] = useState(
     "programa teste\n\tinteiro a b\n\tlogico c d\ninicio\n\ta <- 1\n\ta <- a * 3\n\tescreva a\nfimprograma"
   );
@@ -100,7 +99,7 @@ export const AppContextProvider = ({ children }) => {
       response.finished = true;
       setParserResponse(response);
 
-      const syntaxTree = response.syntaxTree
+      const syntaxTree = removeIgnoreNodes(response.syntaxTree);
       setCompleteSyntaxTree(syntaxTree);
       const treeToCompress = JSON.parse(JSON.stringify(syntaxTree));
       setSimplifiedSyntaxTree(compressSingleChildNodes(treeToCompress));
