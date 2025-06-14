@@ -107,8 +107,12 @@ export const CodeInput = () => {
 
   useEffect(() => {
     if (codeCanvaRef.current) {
-      const { offsetWidth, offsetHeight } = codeCanvaRef.current;
-      setSize(offsetHeight + 'px')
+      const { offsetHeight } = codeCanvaRef.current;
+      if (offsetHeight >= 600) 
+        setSize(offsetHeight + 'px')
+      else
+        setSize("700px")
+      console.log(offsetHeight)
     }
   }, [])
 

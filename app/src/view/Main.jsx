@@ -8,6 +8,12 @@ const MainWrapper = styled.div`
   display: flex;
   flex-direction: column;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
 `;
 
 const Container = styled.div`
@@ -16,7 +22,21 @@ const Container = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 0; 
+  min-height: 0;
+
+  @media (max-width: 768px) {
+    padding: 12px;
+    flex: none;
+    min-height: calc(100vh - 64px); 
+    overflow-y: auto;
+    display: block;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 8px;
+    min-height: calc(100vh - 56px);
+    display: block;
+  }
 `;
 
 export const Main = () => {

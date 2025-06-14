@@ -6,7 +6,7 @@ import { ViewContainer } from "@/components/atomic/ViewContainer";
 import '@/styles/Tree.css';
 
 const TreeContainer = styled.div`
-  flex: 1;
+  flex-grow: 1;
   border: 2px solid #e1e8ed;
   border-radius: 16px;
   position: relative;

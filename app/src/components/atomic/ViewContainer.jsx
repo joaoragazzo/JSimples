@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-  height: 100%;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   background-color: ${props => props.backgroundColor || 'transparent'}

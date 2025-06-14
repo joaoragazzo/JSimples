@@ -11,6 +11,11 @@ import { MachineStateViewer } from "./tools/MachineStateViewer";
 const ExtendedRow = styled(Row)`
   flex: 1;
   min-height: 0;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    height: auto;
+  }
 `;
 
 const StyledCard = styled.div`
@@ -23,6 +28,18 @@ const StyledCard = styled.div`
   background: rgba(255, 255, 255);
   height: 100%;
   min-height: 0;
+  
+  @media (max-width: 768px) {
+    padding: 16px;
+    margin-bottom: 12px;
+    height: auto;
+    min-height: 700px;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
 `;
 
 const ContentWrapper = styled.div`
@@ -30,21 +47,35 @@ const ContentWrapper = styled.div`
   min-height: 0;
   display: flex;
   flex-direction: column;
+  
+  @media (max-width: 768px) {
+    min-height: 200px;
+  }
+`;
+
+const ResponsiveCol = styled(Col)`
+  @media (max-width: 768px) {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 0 0 100% !important;
+  }
 `;
 
 export const Workspace = () => {
   const { tab } = useAppData();
+
   return (
-    <ExtendedRow gutter={12}>
-      <Col span={12}>
+    <ExtendedRow gutter={[12, 12]}>
+      <ResponsiveCol xs={24} sm={24} md={12} lg={12} xl={12}>
         <StyledCard>
           {(tab === "terminal" ||
             tab === "syntaxTree" ||
             tab === "derivationTree") && <CodeEditor />}
           {tab === "mvs" && <MVSViewer />}
         </StyledCard>
-      </Col>
-      <Col span={12}>
+      </ResponsiveCol>
+      
+      <ResponsiveCol xs={24} sm={24} md={12} lg={12} xl={12}>
         <StyledCard>
           <ViewsTab />
           <ContentWrapper>
@@ -55,7 +86,7 @@ export const Workspace = () => {
             {tab === "mvs" && <MachineStateViewer />}
           </ContentWrapper>
         </StyledCard>
-      </Col>
+      </ResponsiveCol>
     </ExtendedRow>
   );
 };
