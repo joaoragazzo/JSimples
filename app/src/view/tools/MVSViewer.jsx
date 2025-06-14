@@ -52,11 +52,62 @@ export const MVSViewer = () => {
     {
       title: "Instrução",
       dataIndex: "instruction",
-      width: 120,
+      width: 100,
     },
     {
       title: "Parâmetro",
       dataIndex: "parameter",
+      width: 100
+    },
+    {
+      title: "Descrição",
+      dataIndex: "description",
+      render: (_, record, index) => {
+        switch (record.instruction) {
+          case 'INPP':
+            return 'Inicia o programa principal'
+          case 'FIMP':
+            return 'Fim do programa'
+          case 'AMEM':
+            return 'Aloca memória'
+          case 'CRCT':
+            return 'Carrega uma constante'
+          case 'CRVG':
+            return 'Carrega uma variável global'
+          case 'ARZG':
+            return 'Armazena uma variável global'
+          case 'DSVS':
+            return 'Desvia sempre'
+          case 'DSVF':
+            return 'Desvia se falso'
+          case 'LEIA':
+            return 'Leitura'
+          case 'ESCR':
+            return 'Escrita'
+          case 'CMMA':
+            return 'Compara se maior'
+          case 'CMME':
+            return 'Compara se menor'
+          case 'CMIG':
+            return 'Compara se igual'
+          case 'DISJ':
+            return 'Disjunção'
+          case 'CONJ': 
+            return 'Conjução'
+          case 'NEGA':
+            return 'Negação'
+          case 'SOMA':
+            return 'Soma'
+          case 'SUBT':
+            return 'Subtração'
+          case 'MULT':
+            return 'Multiplicação'
+          case 'NADA':
+            return 'Não faz nada'
+          case 'DMEM':
+            return 'Desaloca memória'
+        }
+      }
     },
   ];
 
