@@ -42,7 +42,7 @@ const WelcomeMessage = styled.div`
 `;
 
 const TerminalCard = styled.div`
-  flex-grow: 1;
+  height: 708px;
   box-sizing: border-box;
   background: #1a202c;
   color: #e2e8f0;
@@ -72,9 +72,9 @@ const ClearButton = styled.div`
   border-radius: 7px;
   width: fit-content;
   padding: 10px;
-  position: absolute;
-  bottom: 30px;
-  right: 30px;
+  position: fixed;
+  bottom: 70px;
+  right: 70px;
   cursor: pointer;
   transition: background-color 0.2s;
   display: flex;
