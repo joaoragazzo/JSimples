@@ -1,0 +1,57 @@
+name: Deploy Frontend
+
+on:
+  push:
+    paths:
+      - 'app/**'
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install and build frontend
+        working-directory: app
+        run: |
+          npm install
+          npm run build
+      - name: Verificar arquivos gerados
+        run: ls -la app/dist
+
+      - name: Criar pacote de deploy
+        run: |
+          cd app/dist
+          tar --ignore-failed-read --warning=no-file-changed -zcf deploy.tar.gz .
+      - name: Upload do pacote via SCP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_IP }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "app/dist/deploy.tar.gz"
+          target: "/var/www/jsimples"
+          overwrite: true
+          debug: true
+          strip_components: 2
+
+      - name: Extrair pacote remotamente
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_IP }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            tar --no-same-owner --no-same-permissions -zxvf /var/www/jsimples/deploy.tar.gz -C /var/www/jsimples
+            rm -f /var/www/jsimples/deploy.tar.gz
