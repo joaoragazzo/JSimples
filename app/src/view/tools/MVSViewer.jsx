@@ -1,8 +1,8 @@
-import { Button, Col, Row, Slider, Table } from "antd";
+import { Button, Col, List, Row, Table } from "antd";
 import { FaArrowRight } from "react-icons/fa";
 import styled from "styled-components";
 import { useAppData } from "../../contexts/AppContext";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AiFillCaretRight } from "react-icons/ai";
 import { VscDebugRestart } from "react-icons/vsc";
 
@@ -28,36 +28,64 @@ const ControlBar = styled.div`
   flex-direction: column;
 `;
 
+const TableWrapper = styled.div`
+  display:flex;
+  flex-direction: column;
+  gap: 30px;
+`
+
+const JustExecutedArrow = styled(FaArrowRight)`
+  fill: rgb(30, 95, 214);
+`
+
+const MarginRightArrow = styled(FaArrowRight)`
+  margin-right: 30px;
+`
+
+const MarginRightArrowExecuted = styled(JustExecutedArrow)`
+  margin-right: 30px;
+`
+
 export const MVSViewer = () => {
   const containerRef = useRef(null);
   const controlBarRef = useRef(null);
+  const [lastExecuted, setLastExecuted] = useState(-1);
+  const [executed, setExecuted] = useState(0);
   const { parserResponse, mvsState, vmRef, resetVm, setMvsState } = useAppData();
+  
+  useEffect(() => {
+    setLastExecuted(executed);
+    setExecuted(mvsState.instructionPointer);
+  }, [mvsState.instructionPointer])
+  
   const columns = [
     {
       title: "",
       dataIndex: "key",
       width: 30,
       render: (_, record, index) =>
-        index === mvsState.instructionPointer ? (
+        index === executed ? (
           <ArrowCell>
             <FaArrowRight />
           </ArrowCell>
-        ) : null,
+        ) : index === lastExecuted ? <ArrowCell>
+          <JustExecutedArrow />
+        </ArrowCell> : null
     },
     {
       title: "Rótulo",
       dataIndex: "label",
-      width: 100,
+      width: 65,
     },
     {
       title: "Instrução",
       dataIndex: "instruction",
-      width: 100,
+      width: 85,
     },
     {
       title: "Parâmetro",
       dataIndex: "parameter",
-      width: 100
+      width: 93
     },
     {
       title: "Descrição",
@@ -111,16 +139,27 @@ export const MVSViewer = () => {
     },
   ];
 
+  const caption = [
+    <div><MarginRightArrow /> Ponteiro para a próxima instrução</div>,
+    <div><MarginRightArrowExecuted /> Última instrução executada</div>
+  ]
+
   return (
     <Container ref={containerRef}>
-      <StyledTable
-        columns={columns}
-        dataSource={parserResponse.mvs}
-        pagination={false}
-        size="small"
-        rowKey="key"
-        scroll={{ y: 450 }}
-      />
+      <TableWrapper>
+        <StyledTable
+          columns={columns}
+          dataSource={parserResponse.mvs}
+          pagination={false}
+          size="small"
+          rowKey="key"
+          scroll={{ y: 450 }}
+        />
+          
+      </TableWrapper>
+
+      <List header={<strong>Legenda</strong>} dataSource={caption} bordered renderItem={(item) => <List.Item>{item}</List.Item>} size="small" />
+
 
       <ControlBar ref={controlBarRef}>
         <Row gutter={24} align={"center"}>

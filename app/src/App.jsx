@@ -1,10 +1,8 @@
 import { ConfigProvider } from "antd";
 import { Main } from "./view/Main";
 
-
 function App() {
   
-
   return (
       <ConfigProvider 
         theme={{
