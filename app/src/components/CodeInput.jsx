@@ -104,12 +104,18 @@ export const CodeInput = ({ codeWrapperRef }) => {
   const { setCode, code } = useAppData();
   const extensions = [JSimples, syntaxHighlighting(JSimplesHighlightStyle)];
   const [editorHeight, setEditorHeight] = useState('300px'); 
+  const { height, width } = useWindowSize();
 
   useEffect(() => {
-    if (codeWrapperRef?.current) {
-      const altura = codeWrapperRef.current.offsetHeight;
-      setEditorHeight(`${altura}px`);
+    if (width > 768) {
+      if (codeWrapperRef?.current) {
+        const height = codeWrapperRef.current.offsetHeight;
+        setEditorHeight(`${height}px`);
+      }
+    } else{
+      setEditorHeight(`600px`)
     }
+    
   }, [codeWrapperRef?.current]); 
 
   return (

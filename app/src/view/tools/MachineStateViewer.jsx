@@ -16,6 +16,7 @@ const SectionCard = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 100%;
 `;
 
 const SectionTitle = styled.div`
