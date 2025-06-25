@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { AiFillCaretRight } from "react-icons/ai";
 import { VscDebugRestart } from "react-icons/vsc";
 import { IoWarning } from "react-icons/io5";
+import { useWindowSize } from "../../utils/useWindowSize";
 
 const ArrowCell = styled.div`
   text-align: center;
@@ -56,15 +57,40 @@ const Warning = styled.div`
 export const MVSViewer = () => {
   const containerRef = useRef(null);
   const controlBarRef = useRef(null);
+  const legendRef = useRef(null);
   const [lastExecuted, setLastExecuted] = useState(-1);
   const [executed, setExecuted] = useState(0);
+  const [tableHeight, setTableHeight] = useState();
   const { parserResponse, mvsState, vmRef, resetVm, setMvsState } = useAppData();
-  
+  const { height, width } = useWindowSize();
+
+
+
   useEffect(() => {
     setLastExecuted(executed);
     setExecuted(mvsState.instructionPointer);
   }, [mvsState.instructionPointer])
+
+  useEffect(() => {
+    const updateTableHeight = () => {
+      if (!containerRef.current || !controlBarRef.current || !legendRef.current) return;
+      if (width > 768) {
+        const containerHeight = containerRef.current.offsetHeight;
+        const controlHeight = controlBarRef.current.offsetHeight;
+        const legendHeight = legendRef.current.offsetHeight;
+        
+        const calculatedHeight = containerHeight - controlHeight - legendHeight - 200; // 40px de margem extra
+        setTableHeight(calculatedHeight);
+      } else {
+        setTableHeight(800)
+      }
+    };
+    updateTableHeight();
+    window.addEventListener('resize', updateTableHeight);
+    return () => window.removeEventListener('resize', updateTableHeight);
+  }, [height, width]);
   
+
   const columns = [
     {
       title: "",
@@ -160,14 +186,12 @@ export const MVSViewer = () => {
           pagination={false}
           size="small"
           rowKey="key"
-          scroll={{ y: 450 }}
+          scroll={{ y: tableHeight }}
         />
           
       </TableWrapper>
       
-      <List header={<strong>Legenda</strong>} dataSource={caption} bordered renderItem={(item) => <List.Item>{item}</List.Item>} size="small" />
-
-      
+      <List ref={legendRef} header={<strong>Legenda</strong>} dataSource={caption} bordered renderItem={(item) => <List.Item>{item}</List.Item>} size="small" />
 
       <ControlBar ref={controlBarRef}>
         {!parserResponse?.mvs?.length && <Warning><IoWarning size={30}/><strong>Atenção: </strong>Não existe nenhum código MVS para ser executado. É necessário compilar o algoritmo primeiro.</Warning>}
