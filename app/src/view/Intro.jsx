@@ -75,10 +75,11 @@ const JSimplesIntro = ({ onAnimationComplete }) => {
         }
 
         .js {
-            display: block;
+          display: block;
           opacity: 0;
           transform: scale(0.5);
           transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+          z-index: 2;
         }
 
         .js.show {
@@ -87,10 +88,11 @@ const JSimplesIntro = ({ onAnimationComplete }) => {
         }
 
         .imples {
-          transform: translateX(-100px);
+          transform: translateX(-70px);
           opacity: 0;
           transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           margin-left: -0.2rem;
+          z-index: 1;
         }
 
         .imples.slide-in {
