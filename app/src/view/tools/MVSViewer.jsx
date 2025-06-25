@@ -5,6 +5,7 @@ import { useAppData } from "../../contexts/AppContext";
 import { useEffect, useRef, useState } from "react";
 import { AiFillCaretRight } from "react-icons/ai";
 import { VscDebugRestart } from "react-icons/vsc";
+import { IoWarning } from "react-icons/io5";
 
 const ArrowCell = styled.div`
   text-align: center;
@@ -43,6 +44,13 @@ const JustExecutedArrow = styled(MarginRightArrow)`
 
 const NextToExecuteArrow = styled(MarginRightArrow)`
   fill: rgb(233, 39, 39);
+`
+
+const Warning = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
 `
 
 export const MVSViewer = () => {
@@ -156,14 +164,16 @@ export const MVSViewer = () => {
         />
           
       </TableWrapper>
-
+      
       <List header={<strong>Legenda</strong>} dataSource={caption} bordered renderItem={(item) => <List.Item>{item}</List.Item>} size="small" />
 
+      
 
       <ControlBar ref={controlBarRef}>
+        {!parserResponse?.mvs?.length && <Warning><IoWarning size={30}/><strong>Atenção: </strong>Não existe nenhum código MVS para ser executado. É necessário compilar o algoritmo primeiro.</Warning>}
         <Row gutter={24} align={"center"}>
           <Col>
-            <Button onClick={resetVm}>
+            <Button onClick={resetVm} disabled={!parserResponse?.mvs?.length}>
               <VscDebugRestart />
               Reiniciar
             </Button>
@@ -173,6 +183,7 @@ export const MVSViewer = () => {
               onClick={() => {
                 setMvsState(vmRef.current?.next());
               }}
+              disabled={!parserResponse?.mvs?.length}
             >
               Próxima instrução
               <AiFillCaretRight />
