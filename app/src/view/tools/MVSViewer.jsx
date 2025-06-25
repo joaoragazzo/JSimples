@@ -191,10 +191,10 @@ export const MVSViewer = () => {
           
       </TableWrapper>
       
-      <List ref={legendRef} header={<strong>Legenda</strong>} dataSource={caption} bordered renderItem={(item) => <List.Item>{item}</List.Item>} size="small" />
 
       <ControlBar ref={controlBarRef}>
         {!parserResponse?.mvs?.length && <Warning><IoWarning size={30}/><strong>Atenção: </strong>Não existe nenhum código MVS para ser executado. É necessário compilar o algoritmo primeiro.</Warning>}
+        <List ref={legendRef} header={<strong>Legenda</strong>} dataSource={caption} bordered renderItem={(item) => <List.Item>{item}</List.Item>} size="small" />
         <Row gutter={24} align={"center"}>
           <Col>
             <Button onClick={resetVm} disabled={!parserResponse?.mvs?.length}>
