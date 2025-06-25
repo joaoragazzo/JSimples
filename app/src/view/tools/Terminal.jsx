@@ -42,7 +42,7 @@ const WelcomeMessage = styled.div`
 `;
 
 const TerminalCard = styled.div`
-  height: 708px;
+  flex: 1;
   box-sizing: border-box;
   background: #1a202c;
   color: #e2e8f0;

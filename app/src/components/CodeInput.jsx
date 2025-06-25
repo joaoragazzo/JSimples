@@ -5,6 +5,7 @@ import CodeMirror from "@uiw/react-codemirror";
 import { HighlightStyle, StreamLanguage } from "@codemirror/language";
 import { syntaxHighlighting } from '@codemirror/language';
 import { tags} from '@lezer/highlight';
+import { useWindowSize } from "../utils/useWindowSize";
 
 const JSimplesHighlightStyle = HighlightStyle.define([
   { tag: tags.keyword, color: '#0000FF' },
@@ -104,6 +105,9 @@ export const CodeInput = () => {
   const codeCanvaRef = useRef(null);
   const [ size, setSize ] = useState();
   const extensions = [JSimples, syntaxHighlighting(JSimplesHighlightStyle)];
+  const { width, height } = useWindowSize();
+  
+
 
   useEffect(() => {
     if (codeCanvaRef.current) {
@@ -121,7 +125,7 @@ export const CodeInput = () => {
         <CodeMirror
           value={code || ""}
           extensions={extensions}
-          height={size}
+          height={width === 1366 ? "528px" : size}
           onChange={(value) => setCode(value)}
           placeholder="Digite seu código aqui..."
           basicSetup={{
