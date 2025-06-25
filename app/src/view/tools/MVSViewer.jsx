@@ -54,6 +54,14 @@ const Warning = styled.div`
   align-items: center;
 `
 
+const WarningWrapper = styled.div`
+  padding: 15px;
+  background-color: oklch(95.4% 0.038 75.164);
+  color: oklch(55.3% 0.195 38.402);
+  border-radius: 10px;
+  border: 1px solid oklch(55.3% 0.195 38.402);
+`
+
 export const MVSViewer = () => {
   const containerRef = useRef(null);
   const controlBarRef = useRef(null);
@@ -193,7 +201,9 @@ export const MVSViewer = () => {
       
 
       <ControlBar ref={controlBarRef}>
-        {!parserResponse?.mvs?.length && <Warning><IoWarning size={30}/><strong>Atenção: </strong>Não existe nenhum código MVS para ser executado. É necessário compilar o algoritmo primeiro.</Warning>}
+        <WarningWrapper>
+          {!parserResponse?.mvs?.length && <Warning><IoWarning size={30}/><strong>Atenção: </strong>Não existe nenhum código MVS para ser executado. É necessário compilar o algoritmo primeiro.</Warning>}
+        </WarningWrapper>
         <List ref={legendRef} header={<strong>Legenda</strong>} dataSource={caption} bordered renderItem={(item) => <List.Item>{item}</List.Item>} size="small" />
         <Row gutter={24} align={"center"}>
           <Col>
