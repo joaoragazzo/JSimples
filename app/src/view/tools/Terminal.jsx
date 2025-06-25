@@ -72,9 +72,9 @@ const ClearButton = styled.div`
   border-radius: 7px;
   width: fit-content;
   padding: 10px;
-  position: fixed;
-  bottom: 70px;
-  right: 70px;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
   cursor: pointer;
   transition: background-color 0.2s;
   display: flex;
