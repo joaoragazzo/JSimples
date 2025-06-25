@@ -199,11 +199,8 @@ export const MVSViewer = () => {
           
       </TableWrapper>
       
-
       <ControlBar ref={controlBarRef}>
-        <WarningWrapper>
-          {!parserResponse?.mvs?.length && <Warning><IoWarning size={30}/><strong>Atenção: </strong>Não existe nenhum código MVS para ser executado. É necessário compilar o algoritmo primeiro.</Warning>}
-        </WarningWrapper>
+        {!parserResponse?.mvs?.length && <WarningWrapper><Warning><IoWarning size={30}/><strong>Atenção: </strong>Não existe nenhum código MVS para ser executado. É necessário compilar o algoritmo primeiro.</Warning></WarningWrapper>}
         <List ref={legendRef} header={<strong>Legenda</strong>} dataSource={caption} bordered renderItem={(item) => <List.Item>{item}</List.Item>} size="small" />
         <Row gutter={24} align={"center"}>
           <Col>
