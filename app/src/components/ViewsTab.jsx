@@ -2,7 +2,7 @@ import { Badge, Tabs } from "antd"
 import { useAppData } from "@/contexts/AppContext"
 
 export const ViewsTab = () => {
-    const { setTab, terminalNotification } = useAppData(); 
+    const { tab, setTab, terminalNotification } = useAppData(); 
     
     const items = [
         {
@@ -23,5 +23,5 @@ export const ViewsTab = () => {
         }
     ]
 
-    return <Tabs items={items} onChange={setTab} defaultActiveKey="terminal"/>
+    return <Tabs items={items} activeKey={tab} onChange={setTab} defaultActiveKey="terminal"/>
 }

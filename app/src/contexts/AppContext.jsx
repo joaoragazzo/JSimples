@@ -136,9 +136,10 @@ export const AppContextProvider = ({ children }) => {
   const requestInput = () => {
     api.warning({
       message: "Preencha o input necessário no seu terminal",
-      description: "Clique aqui para verificar o seu terminal",
+      description: <><strong>Clique aqui</strong> para verificar o seu terminal</>,
       placement: "bottomRight",
-      onClick:() => {setTab('terminal')}
+      onClick:() => {setTab('terminal')},
+      style: { cursor: "pointer" }
     })
     
     return new Promise((resolve) => {
@@ -164,9 +165,10 @@ export const AppContextProvider = ({ children }) => {
       setTerminalNotification(true);
       api.info({
         message: "Existe uma nova saída no terminal!",
-        description: "Clique aqui para verificar o seu terminal",
+        description: <><strong>Clique aqui</strong> para verificar o seu terminal</>,
         placement: "bottomRight",
-        onClick:() => {setTab('terminal')}
+        onClick:() => {setTab('terminal')},
+        style: { cursor: "pointer" }
       })
     }
   }, [logs]);

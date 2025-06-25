@@ -33,17 +33,16 @@ const TableWrapper = styled.div`
   flex-direction: column;
   gap: 30px;
 `
-
-const JustExecutedArrow = styled(FaArrowRight)`
-  fill: rgb(30, 95, 214);
-`
-
 const MarginRightArrow = styled(FaArrowRight)`
   margin-right: 30px;
 `
 
-const MarginRightArrowExecuted = styled(JustExecutedArrow)`
-  margin-right: 30px;
+const JustExecutedArrow = styled(MarginRightArrow)`
+  fill: rgb(30, 95, 214);
+`
+
+const NextToExecuteArrow = styled(MarginRightArrow)`
+  fill: rgb(233, 39, 39);
 `
 
 export const MVSViewer = () => {
@@ -66,7 +65,7 @@ export const MVSViewer = () => {
       render: (_, record, index) =>
         index === executed ? (
           <ArrowCell>
-            <FaArrowRight />
+            <NextToExecuteArrow />
           </ArrowCell>
         ) : index === lastExecuted ? <ArrowCell>
           <JustExecutedArrow />
@@ -140,8 +139,8 @@ export const MVSViewer = () => {
   ];
 
   const caption = [
-    <div><MarginRightArrow /> Ponteiro para a próxima instrução</div>,
-    <div><MarginRightArrowExecuted /> Última instrução executada</div>
+    <div><NextToExecuteArrow /> Ponteiro para a próxima instrução</div>,
+    <div><JustExecutedArrow /> Última instrução executada</div>
   ]
 
   return (

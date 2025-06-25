@@ -5,6 +5,7 @@ import { CodeInput } from "@/components/CodeInput";
 import { useAppData } from "../../contexts/AppContext";
 import styled from "styled-components";
 import { FaGear } from "react-icons/fa6";
+import { useRef } from "react";
 
 const InputSection = styled.div`
   display: flex;
@@ -27,11 +28,12 @@ const CodeInputWrapper = styled.div`
 
 export const CodeEditor = () => {
   const { compile, runAlgorithm, isRunning, stopAlgorithm, parserResponse } = useAppData();
+  const codeCanvaRef = useRef(null);
 
   return (
     <InputSection>
-      <CodeInputWrapper>
-        <CodeInput />
+      <CodeInputWrapper ref={codeCanvaRef}>
+        <CodeInput codeWrapperRef={codeCanvaRef} />
       </CodeInputWrapper>
       <ButtonRow gutter={24}>
         <Col span={12}>

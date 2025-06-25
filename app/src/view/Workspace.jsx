@@ -7,6 +7,7 @@ import { CodeEditor } from "./tools/CodeEditor";
 import styled from "styled-components";
 import { MVSViewer } from "./tools/MVSViewer";
 import { MachineStateViewer } from "./tools/MachineStateViewer";
+import { useRef } from "react";
 
 const ExtendedRow = styled(Row)`
   flex: 1;
@@ -71,7 +72,7 @@ export const Workspace = () => {
           {(tab === "terminal" ||
             tab === "syntaxTree" ||
             tab === "derivationTree") && <CodeEditor />}
-          {tab === "mvs" && <MVSViewer />}
+          {tab === "mvs" && <MVSViewer/>}
         </StyledCard>
       </ResponsiveCol>
       

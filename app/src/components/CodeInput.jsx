@@ -100,32 +100,24 @@ const JSimples = StreamLanguage.define({
   },
 });
 
-export const CodeInput = () => {
+export const CodeInput = ({ codeWrapperRef }) => {
   const { setCode, code } = useAppData();
-  const codeCanvaRef = useRef(null);
-  const [ size, setSize ] = useState();
   const extensions = [JSimples, syntaxHighlighting(JSimplesHighlightStyle)];
-  const { width, height } = useWindowSize();
-  
-
+  const [editorHeight, setEditorHeight] = useState('300px'); 
 
   useEffect(() => {
-    if (codeCanvaRef.current) {
-      const { offsetHeight } = codeCanvaRef.current;
-      if (offsetHeight >= 600) 
-        setSize(offsetHeight + 'px')
-      else
-        setSize("700px")
-      console.log(offsetHeight)
+    if (codeWrapperRef?.current) {
+      const altura = codeWrapperRef.current.offsetHeight;
+      setEditorHeight(`${altura}px`);
     }
-  }, [])
+  }, [codeWrapperRef?.current]); 
 
   return (
-      <StyledCodeMirror ref={codeCanvaRef}>
+      <StyledCodeMirror>
         <CodeMirror
           value={code || ""}
           extensions={extensions}
-          height={width === 1366 ? "528px" : size}
+          height={editorHeight}
           onChange={(value) => setCode(value)}
           placeholder="Digite seu código aqui..."
           basicSetup={{
