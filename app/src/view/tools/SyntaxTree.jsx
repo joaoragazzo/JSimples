@@ -8,11 +8,11 @@ import '@/styles/Tree.css';
 
 const TreeContainer = styled.div`
   flex-grow: 1;
-  border: 2px solid #e1e8ed;
-  border-radius: 16px;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
   position: relative;
   overflow: hidden;
-  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 -10px 10px -10px rgba(0,0,0,0.1), inset 0 10px 10px -10px rgba(0,0,0,0.1);
 `;
 
 const TreeViewSettings = styled.div`
