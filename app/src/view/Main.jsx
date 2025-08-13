@@ -8,7 +8,6 @@ const MainWrapper = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 
   @media (max-width: 768px) {
     height: 100vh;
