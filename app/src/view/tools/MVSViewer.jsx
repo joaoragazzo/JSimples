@@ -191,7 +191,7 @@ export const MVSViewer = () => {
               }}
               disabled={!parserResponse?.mvs?.length}
             >
-              Próxima instrução
+              Executar Instrução
               <AiFillCaretRight />
             </Button>
           </Col>

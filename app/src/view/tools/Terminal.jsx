@@ -41,18 +41,23 @@ const WelcomeMessage = styled.div`
   font-weight: 600;
 `;
 
+const TerminalWrapper = styled.div`
+  position: relative;
+  color: #e2e8f0;
+  height: 710px;
+`
+
 const TerminalCard = styled.div`
   flex: 1;
+  height: 710px;
   box-sizing: border-box;
   background: #1a202c;
-  color: #e2e8f0;
   font-family: "Courier New", monospace;
   font-size: 14px;
   line-height: 1.6;
   padding: 20px;
   overflow-y: auto;
   border-radius: 16px;
-  position: relative;
 `;
 
 const StyledInput = styled.input`
@@ -122,7 +127,8 @@ export const Terminal = () => {
   };
 
   return (
-    <TerminalCard ref={terminalRef}>
+    <TerminalWrapper>
+      <TerminalCard ref={terminalRef}>
       <WelcomeMessage>
         [JSimples@UNIFAL-MG terminal]$ Terminal JSimples
       </WelcomeMessage>
@@ -156,10 +162,11 @@ export const Terminal = () => {
           />
         </div>
       )}
-
+      </TerminalCard>
       <ClearButton onClick={() => {setLogs([])}}>
         <PiBroomBold size={20}/>
       </ClearButton>
-    </TerminalCard>
+    </TerminalWrapper>
+    
   );
 };
