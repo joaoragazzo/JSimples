@@ -5,6 +5,8 @@ import { useAppData } from "@/contexts/AppContext";
 import styled from "styled-components";
 import { ViewContainer } from "@/components/atomic/ViewContainer";
 import '@/styles/Tree.css';
+import { IoWarning } from "react-icons/io5";
+import { FaGear } from "react-icons/fa6";
 
 const TreeContainer = styled.div`
   flex-grow: 1;
@@ -13,6 +15,7 @@ const TreeContainer = styled.div`
   position: relative;
   overflow: hidden;
   box-shadow: inset 0 -10px 10px -10px rgba(0,0,0,0.1), inset 0 10px 10px -10px rgba(0,0,0,0.1);
+  display> ${({ hidden }) => (hidden ? "none" : "block")}
 `;
 
 const TreeViewSettings = styled.div`
@@ -44,8 +47,21 @@ const DirectoryView = styled.div`
   box-shadow: inset 0 -10px 10px -10px rgba(0,0,0,0.1), inset 0 10px 10px -10px rgba(0,0,0,0.1);
 `
 
+const NothingCompiledWarning = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+`
+
+const WarningText = styled.div`
+  max-width: 300px;
+  text-align: center;
+`
+
 export const SyntaxTree = () => {
-  const { completeSyntaxTree, simplifiedSyntaxTree, tab } = useAppData();
+  const { completeSyntaxTree, simplifiedSyntaxTree, tab  } = useAppData();
   const [ treeVisualiation, setTreeVisualization ] = useState(true);
   const containerRef = useRef(null);
   const [translate, setTranslate] = useState({ x: 0, y: 0 });
@@ -78,28 +94,30 @@ export const SyntaxTree = () => {
         y: height / 6,
       });
     }
+
   }, []);
 
-  console.log(completeSyntaxTree)
+  const nothingCompiled = Object.keys(completeSyntaxTree).length === 0;
 
   return (
     <ViewContainer id="viewContainer">
       <TreeViewSettings>
         <ViewLabel active={treeVisualiation}>Visualização em árvore</ViewLabel> 
-        <Switch onChange={() => {setTreeVisualization(!treeVisualiation)}} active={!treeVisualiation}/> 
+        <Switch disabled={nothingCompiled} onChange={() => {setTreeVisualization(!treeVisualiation)}} active={!treeVisualiation}/> 
         <ViewLabel active={!treeVisualiation}>Visualização em diretório</ViewLabel>
       </TreeViewSettings>
-      {!treeVisualiation && 
+      {(!treeVisualiation) &&
         <DirectoryView>
           <DirectoryTree 
             treeData={convertToAntdTree(tab === 'syntaxTree' ? simplifiedSyntaxTree : completeSyntaxTree)}
-            showLine  
+            showLine
+            
           />
         </DirectoryView>
       }
       
-      {treeVisualiation && 
-        <TreeContainer ref={containerRef}>
+      {(treeVisualiation) && 
+        <TreeContainer ref={containerRef} hidden={nothingCompiled}>
           <Tree
             orientation="vertical"
             pathFunc="straight"
@@ -113,6 +131,18 @@ export const SyntaxTree = () => {
             leafNodeClassName="node__leaf"
           />
         </TreeContainer> 
+      }
+
+      {nothingCompiled && 
+        <NothingCompiledWarning>
+          <IoWarning size={32}/>
+          <WarningText>
+            Não existe nada compilado no momento! <br/>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+              Clique em <FaGear style={{ marginLeft: "7px", marginRight: "2px"}} /> Compilar
+            </div>
+          </WarningText>
+        </NothingCompiledWarning>
       }
     </ViewContainer>
   );

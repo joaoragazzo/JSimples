@@ -13,6 +13,7 @@ const InputSection = styled.div`
   gap: 16px;
   height: 100%;
   min-height: 0;
+  width: 100%;
 `;
 
 const ButtonRow = styled(Row)`
@@ -26,15 +27,16 @@ const CodeInputWrapper = styled.div`
   flex-direction: column;
 `;
 
-export const CodeEditor = () => {
+export const CodeEditor = ({stepByStep = false}) => {
   const { compile, runAlgorithm, isRunning, stopAlgorithm, parserResponse } = useAppData();
   const codeCanvaRef = useRef(null);
 
   return (
     <InputSection>
       <CodeInputWrapper ref={codeCanvaRef}>
-        <CodeInput codeWrapperRef={codeCanvaRef} />
+        <CodeInput codeWrapperRef={codeCanvaRef} stepByStep={stepByStep}/>
       </CodeInputWrapper>
+      {!stepByStep && 
       <ButtonRow gutter={24}>
         <Col span={12}>
           <JSButton
@@ -56,6 +58,8 @@ export const CodeEditor = () => {
           </JSButton>
         </Col>
       </ButtonRow>
+      }
+      
     </InputSection>
   );
 };

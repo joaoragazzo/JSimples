@@ -6,7 +6,7 @@ const StackFrame = styled.div`
   border: 2px solid #333;
   box-sizing: border-box;
   width: 100px;
-  min-height: 100px;
+  min-height: 230px;
   max-height: 330px;
   overflow-y: auto;
   justify-content: flex-start;

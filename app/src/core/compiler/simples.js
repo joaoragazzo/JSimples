@@ -111,14 +111,14 @@ case 1:
 break;
 case 2:
 
-            mvs.push({label: null, instruction: "AMEM", parameter: variableCount}); 
+            mvs.push({label: null, instruction: "AMEM", parameter: variableCount, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column}); 
             this.$ = new SyntaxNode($$[$0], []);
         
 break;
 case 3:
 
             console.log(typeof mvs);
-            mvs.push({label: null, instruction: "INPP", parameter: null});
+            mvs.push({label: null, instruction: "INPP", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0].last_column});
             this.$ = new SyntaxNode("Cabeçalho", [
                 new SyntaxNode($$[$0-1], []), 
                 new SyntaxNode($$[$0], [])
@@ -189,8 +189,8 @@ break;
 case 18:
 
             tmpLabel = labelStack.pop();
-            mvs.push({label: `L${tmpLabel}`, instruction: "NADA", parameter: null});
-            this.$ = new SyntaxNode("Condicional", [new SyntaxNode($$[$0-6], []),$$[$0-5],$$[$0-4],$$[$0-3],$$[$0-2],$$[$0-1],new SyntaxNode($$[$0],[])]);
+            mvs.push({label: `L${tmpLabel}`, instruction: "NADA", parameter: null, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
+            this.$ = new SyntaxNode("Condicional", [new SyntaxNode($$[$0-6], []),$$[$0-5],$$[$0-4],$$[$0-3],$$[$0-2],$$[$0-1], new SyntaxNode($$[$0],[])]);
         
 break;
 case 19:
@@ -201,16 +201,16 @@ case 19:
                 error(_$[$0], "Incompatibilidade de tipo.");
             
 
-            mvs.push({label: null, instruction: "DSVF", parameter: `L${++label}`});
+            mvs.push({label: null, instruction: "DSVF", parameter: `L${++label}`, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
             labelStack.push(label);
             this.$ = new SyntaxNode("Token então", [new SyntaxNode($$[$0],[])]);
         
 break;
 case 20:
 
-            mvs.push({label: null, instruction: "DSVS", parameter: `L${++label}`});
+            mvs.push({label: null, instruction: "DSVS", parameter: `L${++label}`, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
             tmpLabel = labelStack.pop();
-            mvs.push({label: `L${tmpLabel}`, instruction: "NADA", parameter: null});
+            mvs.push({label: `L${tmpLabel}`, instruction: "NADA", parameter: null, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
             labelStack.push(label);
             this.$ = new SyntaxNode("Token Senão", [new SyntaxNode($$[$0],[])]);
         
@@ -224,7 +224,7 @@ case 21:
                 error(_$[$0], "Incompatibilidade de tipo.");
             
             console.log(typeof mvs);
-            mvs.push({label: null, instruction: "ARZG", parameter: variableTable[tmpPos].address});
+            mvs.push({label: null, instruction: "ARZG", parameter: variableTable[tmpPos].address, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             this.$ = new SyntaxNode("Atribuição", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
@@ -243,15 +243,15 @@ break;
 case 25:
 
             let variable = findVariable($$[$0]);
-            mvs.push({label: null, instruction: "LEIA", parameter: null});
-            mvs.push({label: null, instruction: "ARZG", parameter: variable.address});
+            mvs.push({label: null, instruction: "LEIA", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
+            mvs.push({label: null, instruction: "ARZG", parameter: variable.address, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
             this.$ = new SyntaxNode("Entrada", [new SyntaxNode($$[$0-1],[]), new SyntaxNode($$[$0],[])]);
         
 break;
 case 26:
 
             tmpType = typeStack.pop();
-            mvs.push({label: null, instruction: "ESCR", parameter: null});
+            mvs.push({label: null, instruction: "ESCR", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             this.$ = new SyntaxNode("Saída", [new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
@@ -259,14 +259,14 @@ case 27:
 
             let firstLabel = labelStack.pop();
             let secondLabel = labelStack.pop();
-            mvs.push({label: null, instruction: "DSVS", parameter: `L${secondLabel}`});
-            mvs.push({label: `L${firstLabel}`, instruction: "NADA", parameter: null});
+            mvs.push({label: null, instruction: "DSVS", parameter: `L${secondLabel}`, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
+            mvs.push({label: `L${firstLabel}`, instruction: "NADA", parameter: null, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
             this.$ = new SyntaxNode("Loop de repetição", [$$[$0-4], $$[$0-3], $$[$0-2], $$[$0-1], new SyntaxNode($$[$0], [])]);
         
 break;
 case 28:
 
-            mvs.push({label: `L${++label}`, instruction: "NADA", parameter: null});
+            mvs.push({label: `L${++label}`, instruction: "NADA", parameter: null, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
             labelStack.push(label);
             this.$ = new SyntaxNode("Token enquanto", [new SyntaxNode($$[$0],[])]);
         
@@ -276,7 +276,7 @@ case 29:
             tmpType = typeStack.pop();
             if (tmpType !== types.LOGIC) 
                 error(_$[$0], "Incompatibilidade de tipo.")
-            mvs.push({label: null, instruction: "DSVF", parameter: `L${++label}`});
+            mvs.push({label: null, instruction: "DSVF", parameter: `L${++label}`, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
             labelStack.push(label);
             this.$ = new SyntaxNode("Faça Token", [new SyntaxNode($$[$0],[])]);
         
@@ -284,63 +284,63 @@ break;
 case 30:
 
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
-            mvs.push({label: null, instruction: "MULT", parameter: null});
+            mvs.push({label: null, instruction: "MULT", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
 case 31:
 
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
-            mvs.push({label: null, instruction: "DIVI", parameter: null});
+            mvs.push({label: null, instruction: "DIVI", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
 case 32:
 
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
-            mvs.push({label: null, instruction: "SOMA", parameter: null});
+            mvs.push({label: null, instruction: "SOMA", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
 case 33:
 
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
-            mvs.push({label: null, instruction: "SUBT", parameter: null});
+            mvs.push({label: null, instruction: "SUBT", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
 case 34:
 
             typeCheck(types.INTEGER, types.INTEGER, types.LOGIC);
-            mvs.push({label: null, instruction: "CMMA", parameter: null});
+            mvs.push({label: null, instruction: "CMMA", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
 case 35:
 
             typeCheck(types.INTEGER, types.INTEGER, types.LOGIC);
-            mvs.push({label: null, instruction: "CMME", parameter: null});
+            mvs.push({label: null, instruction: "CMME", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
 case 36:
 
             typeCheck(types.INTEGER, types.INTEGER, types.LOGIC);
-            mvs.push({label: null, instruction: "CMIG", parameter: null});
+            mvs.push({label: null, instruction: "CMIG", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
 case 37:
 
             typeCheck(types.LOGIC, types.LOGIC, types.LOGIC);
-            mvs.push({label: null, instruction: "CONJ", parameter: null});
+            mvs.push({label: null, instruction: "CONJ", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
 case 38:
 
             typeCheck(types.LOGIC, types.LOGIC, types.LOGIC);
-            mvs.push({label: null, instruction: "DISJ", parameter: null});
+            mvs.push({label: null, instruction: "DISJ", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
@@ -353,28 +353,28 @@ case 40:
 
             tmpVariableName = $$[$0];
             tmpVariable = findVariable(tmpVariableName);
-            mvs.push({label: null, instruction: "CRVG", parameter: tmpVariable.address});
+            mvs.push({label: null, instruction: "CRVG", parameter: tmpVariable.address, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
             typeStack.push(tmpVariable.type); 
             this.$ = new SyntaxNode("Termo", [new SyntaxNode($$[$0], [])]);
         
 break;
 case 41:
 
-            mvs.push({label: null, instruction: "CRCT", parameter: parseInt($$[$0])   });
+            mvs.push({label: null, instruction: "CRCT", parameter: parseInt($$[$0]), first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
             typeStack.push(types.INTEGER);
             this.$ = new SyntaxNode("Termo", [new SyntaxNode($$[$0], [])]);
         
 break;
 case 42:
 
-            mvs.push({label: null, instruction: "CRCT", parameter: 1});
+            mvs.push({label: null, instruction: "CRCT", parameter: 1, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
             typeStack.push(types.LOGIC);
             this.$ = new SyntaxNode("Termo", [new SyntaxNode($$[$0], [])]);
         
 break;
 case 43:
 
-            mvs.push({label: null, instruction: "CRCT", parameter: 0});
+            mvs.push({label: null, instruction: "CRCT", parameter: 0, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
             typeStack.push(types.LOGIC);
             this.$ = new SyntaxNode("Termo", [new SyntaxNode($$[$0], [])]);
         
@@ -384,7 +384,7 @@ case 44:
             tmpType = typeStack.pop();
             if (tmpType !== types.LOGIC) 
                 error(_$[$0], "Incompatibilidade de tipo.");
-            mvs.push({label: null, instruction: "NEGA", parameter: null});
+            mvs.push({label: null, instruction: "NEGA", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             typeStack.push(types.LOGIC);
             this.$ = new SyntaxNode("Termo", [new SyntaxNode($$[$0-1], []), $$[$0]]);
         
@@ -396,8 +396,8 @@ case 45:
 break;
 case 46:
    
-            mvs.push({label: null, instruction: "DMEM", parameter: variableCount});
-            mvs.push({label: null, instruction: "FIMP", parameter: null});
+            mvs.push({label: null, instruction: "DMEM", parameter: variableCount, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
+            mvs.push({label: null, instruction: "FIMP", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
 
             this.$ = new SyntaxNode("Rodapé", [new SyntaxNode($$[$0-1],[])]);
         
@@ -589,7 +589,6 @@ class SyntaxNode {
         return `${this.name}`;
     }
 }
-
 
 const types = Object.freeze({
     LOGIC: "LOGIC",

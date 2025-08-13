@@ -3,6 +3,7 @@ import { useAppData } from "@/contexts/AppContext";
 import styled from "styled-components";
 import { Stack } from "@/components/Stack";
 import "@/styles/Table.css";
+import { CodeEditor } from "./CodeEditor";
 
 const Container = styled.div`
   padding: 20px;
@@ -12,11 +13,11 @@ const SectionCard = styled.div`
   background: #fff;
   border: 1px solid #e8e8e8;
   border-radius: 8px;
-  padding: 16px;
+  padding: 8px 10px;
   display: flex;
+  height: 300px;
   flex-direction: column;
   align-items: center;
-  height: 100%;
 `;
 
 const SectionTitle = styled.div`
@@ -27,6 +28,8 @@ const SectionTitle = styled.div`
 `;
 
 const StyledTable = styled(Table)`
+  width: 250px;
+
   .ant-table-thead > tr > th {
     background: #fafafa;
     font-weight: 500;
@@ -50,6 +53,17 @@ const MemoryInfo = styled.div`
   color: #8c8c8c;
   margin-top: 8px;
 `;
+
+const SecondarySection = styled.div`
+  background: #fff;
+  margin-top: 16px;
+  border-radius: 8px;
+  display: flex;
+  height: 310px;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+`
 
 export const MachineStateViewer = () => {
   const { mvsState } = useAppData();
@@ -75,37 +89,46 @@ export const MachineStateViewer = () => {
 
   return (
     <Container>
-      <Row gutter={16}>
-        <Col span={14}>
-          <SectionCard>
-            <SectionTitle>Tabela de variáveis</SectionTitle>
-            {memoryData.length > 0 ? (
-              <>
-                <StyledTable
-                  dataSource={memoryData}
-                  columns={columns}
-                  pagination={false}
-                  size="small"
-                />
-                <MemoryInfo>
-                  {memoryData.length} posições alocadas
-                </MemoryInfo>
-              </>
-            ) : (
-              <EmptyState>
-                Nenhuma variável alocada
-              </EmptyState>
-            )}
-          </SectionCard>
-        </Col>
-        
-        <Col span={10}>
-          <SectionCard>
-            <SectionTitle>Pilha (Stack)</SectionTitle>
-            <Stack data={mvsState?.stack} />
-          </SectionCard>
-        </Col>
-      </Row>
+        <Row gutter={16}>
+          <Col span={14}>
+            <SectionCard>
+              <SectionTitle>Tabela de variáveis</SectionTitle>
+              {memoryData.length > 0 ? (
+                <>
+                  <StyledTable
+                    dataSource={memoryData}
+                    columns={columns}
+                    pagination={false}
+                    size="small"
+                    scroll={{y: 150}}
+                    
+                  />
+                  <MemoryInfo>
+                    {memoryData.length} posições alocadas
+                  </MemoryInfo>
+                </>
+              ) : (
+                <EmptyState>
+                  Nenhuma variável alocada
+                </EmptyState>
+              )}
+            </SectionCard>
+          </Col>
+          
+          <Col span={10}>
+            <SectionCard>
+              <SectionTitle>Pilha (Stack)</SectionTitle>
+              <Stack data={mvsState?.stack} />
+            </SectionCard>
+          </Col>
+        </Row>
+
+        <Row>
+          <SecondarySection>
+            <CodeEditor stepByStep={true}/>
+          </SecondarySection>
+        </Row>
+
     </Container>
   );
 };

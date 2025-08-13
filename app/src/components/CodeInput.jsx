@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useAppData } from "@/contexts/AppContext";
 import styled from "styled-components";
-import CodeMirror from "@uiw/react-codemirror";
+import CodeMirror, { Decoration, EditorState, EditorView } from "@uiw/react-codemirror";
 import { HighlightStyle, StreamLanguage } from "@codemirror/language";
 import { syntaxHighlighting } from '@codemirror/language';
 import { tags} from '@lezer/highlight';
@@ -100,11 +100,43 @@ const JSimples = StreamLanguage.define({
   },
 });
 
-export const CodeInput = ({ codeWrapperRef }) => {
-  const { setCode, code } = useAppData();
-  const extensions = [JSimples, syntaxHighlighting(JSimplesHighlightStyle)];
+const createHightlightExtension = (first_line, first_column, last_line, last_column, doc) => {
+  if (!first_line || !first_column || !last_line || !last_column) {
+    const deco = Decoration.mark({ class: "none" }).range(0, 1);
+    return EditorView.decorations.of(Decoration.set([deco]));
+  };
+  
+  const getPos = (line, col) => {
+    const lineInfo = doc.line(line);
+    return lineInfo.from + col;
+  }
+
+  const start = getPos(first_line, first_column);
+  const end = getPos(last_line, last_column);
+
+  const deco = Decoration.mark({ class: "custom-highlight" }).range(start, end);
+  return EditorView.decorations.of(Decoration.set([deco]));
+}
+
+
+export const CodeInput = ({ codeWrapperRef, stepByStep=false }) => {
+  const { setCode, code, mvsState, parserResponse } = useAppData();
   const [editorHeight, setEditorHeight] = useState('300px'); 
   const { height, width } = useWindowSize();
+
+  const highlightExtension = stepByStep ? useMemo(() => {
+    const doc = EditorState.create({ doc: code || "" }).doc;
+
+    return createHightlightExtension(
+      parserResponse.mvs[mvsState.instructionPointer]?.first_line, 
+      parserResponse.mvs[mvsState.instructionPointer]?.first_column, 
+      parserResponse.mvs[mvsState.instructionPointer]?.last_line, 
+      parserResponse.mvs[mvsState.instructionPointer]?.last_column, doc);
+  }, [code, mvsState, parserResponse]) : null;
+
+  const extensions = stepByStep ? 
+    [JSimples, syntaxHighlighting(JSimplesHighlightStyle), highlightExtension] : 
+    [JSimples, syntaxHighlighting(JSimplesHighlightStyle)];
 
   useEffect(() => {
     if (width > 768) {
@@ -120,6 +152,13 @@ export const CodeInput = ({ codeWrapperRef }) => {
 
   return (
       <StyledCodeMirror>
+        <style>
+          {`
+            .custom-highlight {
+              background-color: yellow;
+            }
+          `}
+        </style>
         <CodeMirror
           value={code || ""}
           extensions={extensions}
@@ -138,6 +177,7 @@ export const CodeInput = ({ codeWrapperRef }) => {
             highlightSelectionMatches: false,
             searchKeymap: true,
           }}
+          readOnly={stepByStep}
         />
       </StyledCodeMirror>
   );

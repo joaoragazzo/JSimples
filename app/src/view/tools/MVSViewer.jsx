@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from "react";
 import { AiFillCaretRight } from "react-icons/ai";
 import { VscDebugRestart } from "react-icons/vsc";
 import { IoWarning } from "react-icons/io5";
-import { useWindowSize } from "../../utils/useWindowSize";
 
 const ArrowCell = styled.div`
   text-align: center;
@@ -68,35 +67,12 @@ export const MVSViewer = () => {
   const legendRef = useRef(null);
   const [lastExecuted, setLastExecuted] = useState(-1);
   const [executed, setExecuted] = useState(0);
-  const [tableHeight, setTableHeight] = useState();
   const { parserResponse, mvsState, vmRef, resetVm, setMvsState } = useAppData();
-  const { height, width } = useWindowSize();
-
-
 
   useEffect(() => {
     setLastExecuted(executed);
     setExecuted(mvsState.instructionPointer);
   }, [mvsState.instructionPointer])
-
-  useEffect(() => {
-    const updateTableHeight = () => {
-      if (!containerRef.current || !controlBarRef.current || !legendRef.current) return;
-      if (width > 768) {
-        const containerHeight = containerRef.current.offsetHeight;
-        const controlHeight = controlBarRef.current.offsetHeight;
-        const legendHeight = legendRef.current.offsetHeight;
-        
-        const calculatedHeight = containerHeight - controlHeight - legendHeight - 200; // 40px de margem extra
-        setTableHeight(calculatedHeight);
-      } else {
-        setTableHeight(800)
-      }
-    };
-    updateTableHeight();
-    window.addEventListener('resize', updateTableHeight);
-    return () => window.removeEventListener('resize', updateTableHeight);
-  }, [height, width]);
   
 
   const columns = [
@@ -194,9 +170,8 @@ export const MVSViewer = () => {
           pagination={false}
           size="small"
           rowKey="key"
-          scroll={{ y: tableHeight }}
-        />
-          
+          scroll={{ y: 510 }}
+        />   
       </TableWrapper>
       
       <ControlBar ref={controlBarRef}>
