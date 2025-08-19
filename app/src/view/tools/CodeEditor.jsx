@@ -36,7 +36,6 @@ export const CodeEditor = ({stepByStep = false}) => {
       <CodeInputWrapper ref={codeCanvaRef}>
         <CodeInput codeWrapperRef={codeCanvaRef} stepByStep={stepByStep}/>
       </CodeInputWrapper>
-      {!stepByStep && 
       <ButtonRow gutter={24}>
         <Col span={12}>
           <JSButton
@@ -58,8 +57,6 @@ export const CodeEditor = ({stepByStep = false}) => {
           </JSButton>
         </Col>
       </ButtonRow>
-      }
-      
     </InputSection>
   );
 };
