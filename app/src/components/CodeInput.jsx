@@ -1,11 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo } from "react";
 import { useAppData } from "@/contexts/AppContext";
 import styled from "styled-components";
 import CodeMirror, { Decoration, EditorState, EditorView } from "@uiw/react-codemirror";
 import { HighlightStyle, StreamLanguage } from "@codemirror/language";
 import { syntaxHighlighting } from '@codemirror/language';
 import { tags} from '@lezer/highlight';
-import { useWindowSize } from "../utils/useWindowSize";
 
 const JSimplesHighlightStyle = HighlightStyle.define([
   { tag: tags.keyword, color: '#0000FF' },
@@ -119,10 +118,8 @@ const createHightlightExtension = (first_line, first_column, last_line, last_col
 }
 
 
-export const CodeInput = ({ codeWrapperRef, stepByStep=false }) => {
-  const { setCode, code, mvsState, parserResponse } = useAppData();
-  const [editorHeight, setEditorHeight] = useState('300px'); 
-  const { height, width } = useWindowSize();
+export const CodeInput = ({ stepByStep=false }) => {
+  const { setCode, code, mvsState, parserResponse } = useAppData(); 
 
   const highlightExtension = stepByStep ? useMemo(() => {
     const doc = EditorState.create({ doc: code || "" }).doc;
@@ -138,18 +135,6 @@ export const CodeInput = ({ codeWrapperRef, stepByStep=false }) => {
     [JSimples, syntaxHighlighting(JSimplesHighlightStyle), highlightExtension] : 
     [JSimples, syntaxHighlighting(JSimplesHighlightStyle)];
 
-  useEffect(() => {
-    if (width > 768) {
-      if (codeWrapperRef?.current) {
-        const height = codeWrapperRef.current.offsetHeight;
-        setEditorHeight(`${height}px`);
-      }
-    } else{
-      setEditorHeight(`600px`)
-    }
-    
-  }, [codeWrapperRef?.current]); 
-
   return (
       <StyledCodeMirror>
         <style>
@@ -162,7 +147,7 @@ export const CodeInput = ({ codeWrapperRef, stepByStep=false }) => {
         <CodeMirror
           value={code || ""}
           extensions={extensions}
-          height={editorHeight}
+          height={'750px'}
           onChange={(value) => setCode(value)}
           placeholder="Digite seu código aqui..."
           basicSetup={{

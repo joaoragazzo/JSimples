@@ -4,7 +4,6 @@ import { Workspace } from "./Workspace";
 import { Intro } from "./Intro";
 
 const MainWrapper = styled.div`
-  height: 100vh;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

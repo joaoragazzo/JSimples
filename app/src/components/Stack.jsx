@@ -29,15 +29,36 @@ const StackItem = styled.div`
   position: relative;
 `;
 
-export const Stack = ({data}) => {
+const StackVariable= styled.div`
+  width: 90%;
+  margin: 2px 0;
+  padding: 10px 0;
+  text-align: center;
+  background-color:rgb(255, 147, 24);
+  color: white;
+  border-radius: 4px;
+  font-weight: bold;
+  position: relative;
+`;
+
+export const Stack = ({data, variables}) => {
 
   return (
     <StackFrame>
+      {variables.map((value, index) => (
+        <StackVariable key={index}>
+          {typeof value === "number" ? value : value ? "V" : "F" }
+        </StackVariable>
+      ))}
+      <div>
+        Variáveis
+      </div>
       {data.map((value, index) => (
         <StackItem key={index}>
           {typeof value === "number" ? value : value ? "V" : "F" }
         </StackItem>
       ))}
+      
     </StackFrame>
   );
 };

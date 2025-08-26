@@ -8,21 +8,43 @@ import { useEffect, useRef, useState } from "react";
 import { IoWarning } from "react-icons/io5";
 import { AiFillCaretRight } from "react-icons/ai";
 import { VscDebugRestart } from "react-icons/vsc";
+import { Pointer } from "../../components/Pointer";
 
 const Container = styled.div`
-  padding: 5px 10px;
 `;
 
 const SectionCard = styled.div`
-  background: #fff;
-  border: 1px solid #e8e8e8;
   border-radius: 8px;
-  padding: 8px 10px;
   display: flex;
-  height: 200px;
   flex-direction: column;
   align-items: center;
 `;
+
+const BigSectionCard = styled(SectionCard)`
+  padding: 8px 10px;
+  border: 1px solid #e8e8e8;
+  height: 200px;
+`
+
+const PointersCard = styled(SectionCard)`
+  padding: 8px 0px;
+  height: max-content;
+  width: 100%;
+  margin-bottom: 10px;
+  flex-direction: row; 
+  
+  align-items: center;
+  justify-content: center;
+  display: flex;
+`
+
+const PointersTitle = styled.div`
+  font-size: 16px;
+  font-weight: 500;
+  color: #262626;
+  margin-right: 25px;
+`
+
 
 const SectionTitle = styled.div`
   font-size: 16px;
@@ -115,6 +137,14 @@ const WarningWrapper = styled.div`
   color: oklch(55.3% 0.195 38.402);
   border-radius: 10px;
   border: 1px solid oklch(55.3% 0.195 38.402);
+`
+
+const PointersContainer = styled.div`
+  display: flex;
+  flex-grow: 1;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
 `
 
 export const MachineStateViewer = () => {
@@ -235,11 +265,22 @@ export const MachineStateViewer = () => {
     value,
   })) || [];
 
+
   return (
     <Container>
+        <Row>
+          <PointersCard>
+            <PointersTitle>Ponteiros:</PointersTitle>
+            <PointersContainer >
+              <Pointer value={mvsState?.instructionPointer} label={"I"}/>
+              <Pointer value={mvsState?.stack.length + (mvsState?.memory?.length || 0)} label={"S"}/>
+              <Pointer value={-1} label={"D"}/>
+            </PointersContainer>
+          </PointersCard>
+        </Row>
         <Row gutter={16}>
           <Col span={14}>
-            <SectionCard>
+            <BigSectionCard>
               <SectionTitle>Tabela de variáveis</SectionTitle>
               {memoryData.length > 0 ? (
                 <>
@@ -260,14 +301,14 @@ export const MachineStateViewer = () => {
                   Nenhuma variável alocada
                 </EmptyState>
               )}
-            </SectionCard>
+            </BigSectionCard>
           </Col>
           
           <Col span={10}>
-            <SectionCard>
+            <BigSectionCard>
               <SectionTitle>Pilha (Stack)</SectionTitle>
-              <Stack data={mvsState?.stack} />
-            </SectionCard>
+              <Stack variables={mvsState?.memory || []} data={mvsState?.stack} />
+            </BigSectionCard>
           </Col>
         </Row>
 
