@@ -44,7 +44,7 @@ export const Header = () => {
   return (
     <HeaderBar>
       <img src={logo} height={40} />
-        <Tabs items={items}/>
+        {/* <Tabs items={items}/> */}
     </HeaderBar>
   );
 };

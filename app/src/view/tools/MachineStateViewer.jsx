@@ -11,6 +11,7 @@ import { VscDebugRestart } from "react-icons/vsc";
 import { Pointer } from "../../components/Pointer";
 
 const Container = styled.div`
+
 `;
 
 const SectionCard = styled.div`
@@ -314,7 +315,7 @@ export const MachineStateViewer = () => {
 
         <Row>
           <SecondarySection>
-            {parserResponse?.mvs?.length && 
+            {parserResponse?.mvs?.length > 0 && 
               <TableWrapper>
                 <StyledTableInstructions
                   columns={columnsInstructions}
@@ -328,8 +329,26 @@ export const MachineStateViewer = () => {
             
         
           <ControlBar ref={controlBarRef}>
-            {!parserResponse?.mvs?.length && <WarningWrapper><Warning><IoWarning size={30}/><strong>Atenção: </strong>Não existe nenhum código MVS para ser executado. É necessário compilar o algoritmo primeiro.</Warning></WarningWrapper>}
-            <List ref={legendRef} header={<strong>Legenda</strong>} dataSource={caption} bordered renderItem={(item) => <List.Item>{item}</List.Item>} size="small" />
+            {
+              !parserResponse?.mvs?.length && 
+              <WarningWrapper>
+                <Warning>
+                  <IoWarning size={30}/>
+                  <strong>Atenção: </strong>Não existe nenhum código MVS para ser executado. É necessário compilar o algoritmo primeiro.
+                </Warning>
+              </WarningWrapper>
+            }
+            {
+              parserResponse?.mvs?.length > 0 && 
+              <List 
+                ref={legendRef} 
+                header={<strong>Legenda</strong>} 
+                dataSource={caption} 
+                bordered 
+                renderItem={(item) => <List.Item>{item}</List.Item>} 
+                size="small" 
+              />
+            }
             <Row gutter={24} align={"center"}>
               <Col>
                 <Button onClick={resetVm} disabled={!parserResponse?.mvs?.length}>
