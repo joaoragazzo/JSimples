@@ -97,6 +97,8 @@ const ArrowCell = styled.div`
 
 const StyledTableInstructions = styled(Table)`
   overflow-y: auto;
+  max-width: 100%;
+  width: 100%;
 `;
 
 const ControlBar = styled.div`
@@ -111,6 +113,7 @@ const TableWrapper = styled.div`
   display:flex;
   flex-direction: column;
   gap: 30px;
+  overflow: hidden;
 `
 const MarginRightArrow = styled(FaArrowRight)`
   margin-right: 30px;
