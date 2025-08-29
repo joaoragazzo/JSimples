@@ -165,6 +165,7 @@ export const MachineStateViewer = () => {
         title: "",
         dataIndex: "key",
         width: 30,
+        ellipsis: true, 
         render: (_, record, index) =>
           index === executed ? (
             <ArrowCell>
@@ -178,16 +179,19 @@ export const MachineStateViewer = () => {
         title: "Rótulo",
         dataIndex: "label",
         width: 65,
+        ellipsis: true, 
       },
       {
         title: "Instrução",
         dataIndex: "instruction",
         width: 85,
+        ellipsis: true, 
       },
       {
         title: "Parâmetro",
         dataIndex: "parameter",
-        width: 93
+        width: 93,
+        ellipsis: true, 
       },
       {
         title: "Descrição",
