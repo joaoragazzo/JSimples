@@ -165,7 +165,6 @@ export const MachineStateViewer = () => {
         title: "",
         dataIndex: "key",
         width: 30,
-        ellipsis: true, 
         render: (_, record, index) =>
           index === executed ? (
             <ArrowCell>
@@ -179,25 +178,20 @@ export const MachineStateViewer = () => {
         title: "Rótulo",
         dataIndex: "label",
         width: 65,
-        ellipsis: true, 
       },
       {
         title: "Instrução",
         dataIndex: "instruction",
         width: 85,
-        ellipsis: true, 
       },
       {
         title: "Parâmetro",
         dataIndex: "parameter",
-        width: 93,
-        ellipsis: true, 
+        width: 93
       },
       {
         title: "Descrição",
         dataIndex: "description",
-        width: 250,       
-        ellipsis: true,  
         render: (_, record, index) => {
           switch (record.instruction) {
             case `INPP`:
@@ -320,16 +314,18 @@ export const MachineStateViewer = () => {
 
         <Row>
           <SecondarySection>
-            <TableWrapper>
-              <StyledTableInstructions
-                columns={columnsInstructions}
-                dataSource={parserResponse.mvs}
-                pagination={false}
-                size="small"
-                rowKey="key"
-                scroll={{ y: 230 }}
-              />   
-          </TableWrapper>
+            {parserResponse?.mvs?.length && 
+              <TableWrapper>
+                <StyledTableInstructions
+                  columns={columnsInstructions}
+                  dataSource={parserResponse.mvs}
+                  pagination={false}
+                  size="small"
+                  rowKey="key"
+                  scroll={{ y: 230 }}
+                />   
+            </TableWrapper>}
+            
         
           <ControlBar ref={controlBarRef}>
             {!parserResponse?.mvs?.length && <WarningWrapper><Warning><IoWarning size={30}/><strong>Atenção: </strong>Não existe nenhum código MVS para ser executado. É necessário compilar o algoritmo primeiro.</Warning></WarningWrapper>}
