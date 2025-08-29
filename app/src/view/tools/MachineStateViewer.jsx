@@ -97,8 +97,6 @@ const ArrowCell = styled.div`
 
 const StyledTableInstructions = styled(Table)`
   overflow-y: auto;
-  max-width: 100%;
-  width: 100%;
 `;
 
 const ControlBar = styled.div`
@@ -113,7 +111,6 @@ const TableWrapper = styled.div`
   display:flex;
   flex-direction: column;
   gap: 30px;
-  overflow: hidden;
 `
 const MarginRightArrow = styled(FaArrowRight)`
   margin-right: 30px;
@@ -195,6 +192,8 @@ export const MachineStateViewer = () => {
       {
         title: "Descrição",
         dataIndex: "description",
+        width: 250,       
+        ellipsis: true,  
         render: (_, record, index) => {
           switch (record.instruction) {
             case `INPP`:
