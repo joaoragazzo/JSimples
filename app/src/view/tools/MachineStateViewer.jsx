@@ -1,4 +1,4 @@
-import { Button, Col, List, Row, Table } from "antd";
+import { Button, Col, List, Row, Switch, Table } from "antd";
 import { useAppData } from "@/contexts/AppContext";
 import styled from "styled-components";
 import { Stack } from "@/components/Stack";
@@ -11,10 +11,11 @@ import { VscDebugRestart } from "react-icons/vsc";
 import { Pointer } from "../../components/Pointer";
 
 const Container = styled.div`
-
+  height: 740px;
 `;
 
 const SectionCard = styled.div`
+
   border-radius: 8px;
   display: flex;
   flex-direction: column;
@@ -189,57 +190,7 @@ export const MachineStateViewer = () => {
         title: "Parâmetro",
         dataIndex: "parameter",
         width: 93
-      },
-      {
-        title: "Descrição",
-        dataIndex: "description",
-        render: (_, record, index) => {
-          switch (record.instruction) {
-            case `INPP`:
-              return `Inicia o programa principal`
-            case `FIMP`:
-              return `Fim do programa`
-            case `AMEM`:
-              return `Aloca ${record.parameter} espaços na memória`
-            case `CRCT`:
-              return `Carrega o valor ${record.parameter} na pilha`
-            case `CRVG`:
-              return `Carrega a variável global do endereço ${record.parameter}`
-            case `ARZG`:
-              return `Armazena uma variável global no endereço ${record.parameter}`
-            case `DSVS`:
-              return `Desvia para ${record.parameter} sempre`
-            case `DSVF`:
-              return `Desvia para ${record.parameter} se falso`
-            case `LEIA`:
-              return `Leitura`
-            case `ESCR`:
-              return `Escrita`
-            case `CMMA`:
-              return `Compara se maior`
-            case `CMME`:
-              return `Compara se menor`
-            case `CMIG`:
-              return `Compara se igual`
-            case `DISJ`:
-              return `Disjunção`
-            case `CONJ`: 
-              return `Conjução`
-            case `NEGA`:
-              return `Negação`
-            case `SOMA`:
-              return `Soma`
-            case `SUBT`:
-              return `Subtração`
-            case `MULT`:
-              return `Multiplicação`
-            case `NADA`:
-              return `Não faz nada`
-            case `DMEM`:
-              return `Desaloca ${record.parameter} espaços na memória`
-          }
-        }
-      },
+      },      
     ];
   
     const caption = [
@@ -271,11 +222,12 @@ export const MachineStateViewer = () => {
     <Container>
         <Row>
           <PointersCard>
-            <PointersTitle>Ponteiros:</PointersTitle>
+            <PointersTitle>Registradores:</PointersTitle>
             <PointersContainer >
               <Pointer value={mvsState?.instructionPointer} label={"I"}/>
               <Pointer value={mvsState?.stack.length + (mvsState?.memory?.length || 0)} label={"S"}/>
               <Pointer value={-1} label={"D"}/>
+              
             </PointersContainer>
           </PointersCard>
         </Row>
@@ -315,6 +267,7 @@ export const MachineStateViewer = () => {
 
         <Row>
           <SecondarySection>
+
             {parserResponse?.mvs?.length > 0 && 
               <TableWrapper>
                 <StyledTableInstructions

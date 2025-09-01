@@ -1,5 +1,5 @@
 import logo from "@/assets/Logo-JSimples.svg";
-import { Col, Row, Tabs } from "antd";
+import { Row } from "antd";
 import styled from "styled-components";
 
 const HeaderBar = styled(Row)`
