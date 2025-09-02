@@ -46,7 +46,7 @@ let mvs = [];
 let variableType = null,
     variableCount = 0;
 
-const variableTable = [],
+const symbolTable = [],
     typeStack = [],
     labelStack = [];
 
@@ -54,12 +54,12 @@ let label = 0,
     tmpLabel,
     tmpType,
     tmpPos,
-    tmpVariableName,
+    tmpVariableId,
     tmpVariable,
     success;
 
 const clearEverything = () => {
-    variableTable.length = 0;
+    symbolTable.length = 0;
     typeStack.length = 0;
     labelStack.length = 0;
     mvs = [];
@@ -67,13 +67,13 @@ const clearEverything = () => {
     label = 0;
 }
 
-const addVariable = (v) => {
-    const nameAlreadyExists = variableTable.some(variable => variable.name === v.name);
+const addSymbol = (v) => {
+    const symbolNameAlreadyExists = symbolTable.some(variable => variable.name === v.name);
     
-    if (nameAlreadyExists) 
+    if (symbolNameAlreadyExists) 
         return false;    
     
-    variableTable.push(v);
+    symbolTable.push(v);
     return true;
 }
 
@@ -90,7 +90,7 @@ const typeCheck = (type1, type2, resultType) => {
 }
 
 const findVariable = (variableName) => {
-    const variable = variableTable.find(variable => variable.name === variableName);
+    const variable = symbolTable.find(variable => variable.name === variableName);
     if (variable) {
         return variable;
     }
@@ -98,7 +98,7 @@ const findVariable = (variableName) => {
 }
 
 const findVariablePosition = (variableName) => {
-    const index = variableTable.findIndex(variable => variable.name === variableName);
+    const index = symbolTable.findIndex(variable => variable.name === variableName);
     if (index != -1) {
         return index;
     }
@@ -156,10 +156,14 @@ const error = (token, message) => {
 "V"             return "T_T";
 "F"             return "T_F";
 
+"proc"          return "T_PROC";
+"fimproc"       return "T_ENDPROC";
+"ref"           return "T_REF";
+
 <<EOF>>         return 'EOF';
 
 [a-zA-Z][a-zA-Z0-9]*    return 'T_IDENTIFIER';
-[0-9]*                  return 'T_NUMBER';
+[0-9]+                  return 'T_NUMBER';
 
 /lex 
 
@@ -169,12 +173,15 @@ const error = (token, message) => {
 %left T_PLUS T_MINUS
 %left T_TIMES T_DIV 
 
+%left T_OPEN
+%nonassoc T_IDENTIFIER
+
 %start algorithm
 %%
 
 
 algorithm
-    : header variables start_block command_list footer
+    : header variables routines start_block command_list footer
         {
             const headerNode = $1;
             const variablesNode = $2;
@@ -192,13 +199,46 @@ algorithm
             let result = { 
                 syntaxTree: syntaxTree, 
                 mvs: mvs, 
-                variableTable: [...variableTable] 
+                symbolTable: [...symbolTable] 
             }
 
             clearEverything();
 
             return result;            
         }
+    ;
+
+routines
+    : /* blank */
+    | routines_list
+    ;
+
+routines_list
+    : routines_list routine
+    | routine
+    ;
+
+routine
+    : procedure
+    // | function
+    ;
+
+procedure
+    : T_PROC T_IDENTIFIER T_OPEN parameter_list T_CLOSE variables T_START command_list T_ENDPROC
+    ;
+
+parameter_list
+    : /* blank */
+    | parameter_list parameter
+    ;
+
+parameter
+    : mechanism type T_IDENTIFIER
+    ;
+
+mechanism
+    : /* blank */
+    |  T_REF
     ;
 
 start_block 
@@ -259,13 +299,33 @@ type
 variable_list
     : variable_list T_IDENTIFIER
         {
-            success = addVariable({type: variableType, name: $2, address: variableCount++});
+            success = addSymbol({
+                type: variableType, 
+                name: $2, 
+                address: variableCount++,
+                scope: "GLOBAL",
+                label: null,
+                category: "VARIABLE",
+                mechanism: null,
+                parameter: null,
+            });
+
             if (!success) error(@1, "Nome de variável já declarada.");
             $$ = new SyntaxNode("Lista de variáveis", [$1, new SyntaxNode($2,[])]);
         }
     | T_IDENTIFIER
         {
-            success = addVariable({type: variableType, name: $1, address: variableCount++});
+            success = addSymbol({
+                type: variableType, 
+                name: $1, 
+                address: variableCount++,
+                scope: "GLOBAL",
+                label: null,
+                category: "VARIABLE",
+                mechanism: null,
+                parameter: null,
+            });
+
             if (!success) error(@1, "Nome de variável já declarada.");
             $$ = new SyntaxNode("Lista de variáveis", [new SyntaxNode($1, [])]);
         }
@@ -299,6 +359,10 @@ command
         {
             $$ = new SyntaxNode("Comando", [$1]);
         }
+    // | procedure_call
+    //     {
+    //         // add a syntax node for procedure call
+    //     }
     ;
 
 conditional
@@ -344,11 +408,11 @@ assignment
             tmpType = typeStack.pop();
             tmpPos = labelStack.pop(); 
 
-            if (variableTable[tmpPos].type != tmpType) 
+            if (symbolTable[tmpPos].type != tmpType) 
                 error(@3, "Incompatibilidade de tipo.");
             
             console.log(typeof mvs);
-            mvs.push({label: null, instruction: "ARZG", parameter: variableTable[tmpPos].address, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
+            mvs.push({label: null, instruction: "ARZG", parameter: symbolTable[tmpPos].address, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
             $$ = new SyntaxNode("Atribuição", [$1, new SyntaxNode($2,[]), $3]);
         }
     ;
@@ -483,17 +547,34 @@ expression
         {
             $$ = new SyntaxNode("Expressão", [$1]);
         }
-    
+    ;
+
+arguments 
+    : /* blank */
+    | argument_list
+    ;
+
+argument_list 
+    : argument_list argument
+    | argument
+    ;
+
+argument
+    : expression
     ;
 
 term
-    : T_IDENTIFIER
+    : T_IDENTIFIER 
         {
-            tmpVariableName = $1;
-            tmpVariable = findVariable(tmpVariableName);
+            tmpVariableId = $1;
+            tmpVariable = findVariable(tmpVariableId);
             mvs.push({label: null, instruction: "CRVG", parameter: tmpVariable.address, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
             typeStack.push(tmpVariable.type); 
             $$ = new SyntaxNode("Termo", [new SyntaxNode($1, [])]);
+        }
+    |   T_IDENTIFIER T_OPEN arguments T_CLOSE
+        {
+
         }
     | T_NUMBER
         {
