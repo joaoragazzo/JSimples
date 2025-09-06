@@ -746,12 +746,15 @@ procedure_call_header
         {
             tmpVariableId = $1;
             tmpVariable = findVariable(tmpVariableId);
-            mvs.push({label: null, instruction: "DSVS", parameter: `L${tmpVariable.label}`, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column})    
+            $$ = @1;
         }
     ;
 
 procedure_call
     : procedure_call_header arguments T_CLOSE
+        {
+            mvs.push({label: null, instruction: "DSVS", parameter: `L${tmpVariable.label}`, first_line: $1.first_line, last_line: @3.last_line, first_column: $1.first_column, last_column: @3.last_column})    
+        }
     ;
 
 

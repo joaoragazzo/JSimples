@@ -524,7 +524,12 @@ case 60:
 
             tmpVariableId = $$[$0-1];
             tmpVariable = findVariable(tmpVariableId);
-            mvs.push({label: null, instruction: "DSVS", parameter: `L${tmpVariable.label}`, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column})    
+            this.$ = _$[$0-1];
+        
+break;
+case 61:
+
+            mvs.push({label: null, instruction: "DSVS", parameter: `L${tmpVariable.label}`, first_line: $$[$0-2].first_line, last_line: _$[$0].last_line, first_column: $$[$0-2].first_column, last_column: _$[$0].last_column})    
         
 break;
 case 62:
