@@ -43,11 +43,14 @@ const types = Object.freeze({
 
 let mvs = [];
 
-let variableType = null,
-    variableCount = 0;
+let tmptmp = 0;
 
-const symbolTable = [],
-    typeStack = [],
+let variableType = null,
+    variableCount = 0,
+    procAndFuncStarted = false,
+    insideFunctionDeclaration = true;
+
+const typeStack = [],
     labelStack = [];
 
 let label = 0,
@@ -56,19 +59,48 @@ let label = 0,
     tmpPos,
     tmpVariableId,
     tmpVariable,
-    success;
+    globalSymbolTable = [], // This is to save the global symbol table temporarly
+    parameterStack = [],
+    symbolTable = [],
+    success,
+    lastProcedure,
+    procedureAndFunctionCount = 0;
 
-const clearEverything = () => {
-    symbolTable.length = 0;
+const clearEverything = () => { // Clean all variable in an error case
+    symbolTable = [];
     typeStack.length = 0;
     labelStack.length = 0;
     mvs = [];
     variableCount = 0;
     label = 0;
+    procAndFuncStarted = false;
+    parameterStack = [];
+    insideFunctionDeclaration = true;
+    globalSymbolTable = [];
+    lastProcedure = null;
+    procedureAndFunctionCount = 0;
 }
 
+/**
+    Add a symbol to the current symbol table.
+    @param {
+                type: "LOGIC" | "INTEGER", 
+                name: string, 
+                address: number,
+                scope: "LOCAL" | "GLOBAL",
+                label: string,
+                category: "VARIABLE" | "PROCEDURE",
+                mechanism: null | "REF",
+                parameter: string,
+            } v 
+    @returns {boolean} The status of the insert
+*/
 const addSymbol = (v) => {
-    const symbolNameAlreadyExists = symbolTable.some(variable => variable.name === v.name);
+    
+    /* If the variable is on the same scope and with the same ID */
+    const symbolNameAlreadyExists = symbolTable.some(
+        variable => (variable.name === v.name && variable.scope === v.scope)
+    );
     
     if (symbolNameAlreadyExists) 
         return false;    
@@ -90,12 +122,11 @@ const typeCheck = (type1, type2, resultType) => {
 }
 
 const findVariable = (variableName) => {
-    const variable = symbolTable.find(variable => variable.name === variableName);
-    if (variable) {
-        return variable;
-    }
-    return false;
-}
+    return symbolTable
+        .slice() // used to make a copy and dont alter the original symbol table
+        .reverse()
+        .find(variable => variable.name === variableName) || false;
+};
 
 const findVariablePosition = (variableName) => {
     const index = symbolTable.findIndex(variable => variable.name === variableName);
@@ -211,6 +242,9 @@ algorithm
 routines
     : /* blank */
     | routines_list
+        {   
+            mvs.push({label: "L0", instruction: "NADA", parameter: null, first_line: 0, last_line: 0, first_column: 0, last_column: 0})    
+        }
     ;
 
 routines_list
@@ -224,8 +258,58 @@ routine
     ;
 
 procedure
-    : T_PROC T_IDENTIFIER T_OPEN parameter_list T_CLOSE variables T_START command_list T_ENDPROC
+    : procedure_header T_OPEN parameter_list routine_header_closed variables T_START command_list T_ENDPROC
+        {
+            mvs.push({label: null, instruction: "RTSP", parameter: parameterStack.length, first_line: @8, last_line: @8, first_column: @8, last_column: @8})    
+            lastProcedure = globalSymbolTable.at(-1);
+
+            lastProcedure.subSymbolTree = symbolTable.slice(variableCount + ++procedureAndFunctionCount);
+            symbolTable = [...globalSymbolTable]
+        }
     ;
+
+routine_header_closed 
+    : T_CLOSE 
+        {
+            console.log(parameterStack)
+            parameterStack.reverse();
+            for (let i = 0; i < parameterStack.length; i++) {
+                parameterStack.at(i).address = -3 -i;
+            }
+            parameterStack.reverse();
+            for (let i = 0; i < parameterStack.length; i++) {
+                success = addSymbol(parameterStack.at(i))
+                if(!success)
+                    error("Parâmetro em duplicidade")
+            }
+        }
+    ;
+
+procedure_header
+    : T_PROC T_IDENTIFIER
+        {
+            if (!procAndFuncStarted) {
+                procAndFuncStarted = true;
+                mvs.push({label: null, instruction: "DSVS", parameter: "L0", first_line: 0, last_line: 0, first_column: 0, last_column: 0})    
+            }
+
+            addSymbol({
+                type: null, 
+                name: $2, 
+                address: null,
+                scope: "GLOBAL",
+                label: ++label,
+                category: "PROCEDURE",
+                mechanism: null,
+                parameter: [],
+                subSymbolTree: null
+            })
+
+            mvs.push({label: `L${label}`, instruction: "ENSP", parameter: null, first_line: 0, last_line: 0, first_column: 0, last_column: 0})    
+            globalSymbolTable = [...symbolTable];
+        }
+    ;
+
 
 parameter_list
     : /* blank */
@@ -234,25 +318,53 @@ parameter_list
 
 parameter
     : mechanism type T_IDENTIFIER
+        {
+            parameterStack.push({
+                type: variableType, 
+                name: $3, 
+                address: null, // como lidar com o endereço?
+                scope: "LOCAL",
+                label: null,
+                category: "VARIABLE",
+                mechanism: $1,
+                parameter: null,
+                subSymbolTree: null
+            })
+
+            lastProcedure = globalSymbolTable.at(-1);
+            lastProcedure.parameter.push({type: variableType, mechanism: $1});
+        }
     ;
 
 mechanism
     : /* blank */
-    |  T_REF
+        {
+            $$ = "VALUE"
+        }
+    |  T_REF 
+        {
+            $$ = "REFERENCE"
+        }
     ;
 
 start_block 
     : T_START
         {
             mvs.push({label: null, instruction: "AMEM", parameter: variableCount, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column}); 
+            insideFunctionDeclaration = false;
             $$ = new SyntaxNode($1, []);
+
+            if (globalSymbolTable.length) {
+                symbolTable = [...globalSymbolTable]
+            }
+
+            console.log(symbolTable)
         }
     ;
 
 header
     : T_PROGRAM T_IDENTIFIER
         {
-            console.log(typeof mvs);
             mvs.push({label: null, instruction: "INPP", parameter: null, first_line: @1.first_line, last_line: @2.last_line, first_column: @1.first_column, last_column: @2.last_column});
             $$ = new SyntaxNode("Cabeçalho", [
                 new SyntaxNode($1, []), 
@@ -308,6 +420,7 @@ variable_list
                 category: "VARIABLE",
                 mechanism: null,
                 parameter: null,
+                subSymbolTree: null
             });
 
             if (!success) error(@1, "Nome de variável já declarada.");
@@ -324,6 +437,7 @@ variable_list
                 category: "VARIABLE",
                 mechanism: null,
                 parameter: null,
+                subSymbolTree: null
             });
 
             if (!success) error(@1, "Nome de variável já declarada.");
@@ -359,10 +473,10 @@ command
         {
             $$ = new SyntaxNode("Comando", [$1]);
         }
-    // | procedure_call
-    //     {
-    //         // add a syntax node for procedure call
-    //     }
+    | procedure_call
+        {
+            // add a syntax node for procedure call
+        }
     ;
 
 conditional
@@ -382,7 +496,6 @@ then_token
             if (tmpType !== types.LOGIC) 
                 error(@1, "Incompatibilidade de tipo.");
             
-
             mvs.push({label: null, instruction: "DSVF", parameter: `L${++label}`, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
             labelStack.push(label);
             $$ = new SyntaxNode("Token então", [new SyntaxNode($1,[])]);
@@ -411,7 +524,6 @@ assignment
             if (symbolTable[tmpPos].type != tmpType) 
                 error(@3, "Incompatibilidade de tipo.");
             
-            console.log(typeof mvs);
             mvs.push({label: null, instruction: "ARZG", parameter: symbolTable[tmpPos].address, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
             $$ = new SyntaxNode("Atribuição", [$1, new SyntaxNode($2,[]), $3]);
         }
@@ -563,19 +675,40 @@ argument
     : expression
     ;
 
-term
-    : T_IDENTIFIER 
+procedure_call_header
+    : T_IDENTIFIER T_OPEN
         {
             tmpVariableId = $1;
             tmpVariable = findVariable(tmpVariableId);
-            mvs.push({label: null, instruction: "CRVG", parameter: tmpVariable.address, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
-            typeStack.push(tmpVariable.type); 
+            mvs.push({label: null, instruction: "DSVS", parameter: `L${tmpVariable.label}`, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column})    
+        }
+    ;
+
+procedure_call
+    : procedure_call_header arguments T_CLOSE
+    ;
+
+
+term
+    : T_IDENTIFIER 
+        {
+            if (insideFunctionDeclaration) {
+                
+            }
+            
+            if (!insideFunctionDeclaration) {
+                tmpVariableId = $1;
+                tmpVariable = findVariable(tmpVariableId);
+                mvs.push({label: null, instruction: "CRVG", parameter: tmpVariable.address, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
+                typeStack.push(tmpVariable.type); 
+            }
+            
             $$ = new SyntaxNode("Termo", [new SyntaxNode($1, [])]);
         }
-    |   T_IDENTIFIER T_OPEN arguments T_CLOSE
-        {
-
-        }
+    // |  T_IDENTIFIER T_OPEN arguments T_CLOSE
+    //     {
+    //         // Isso aqui é para função (apenas)
+    //     }
     | T_NUMBER
         {
             mvs.push({label: null, instruction: "CRCT", parameter: parseInt($1), first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});

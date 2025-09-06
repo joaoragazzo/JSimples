@@ -3,10 +3,12 @@ import JS from '@/assets/JS.svg';
 import IMPLES from '@/assets/Imples.svg';
 
 const JSimplesIntro = ({ onAnimationComplete }) => {
+
   const [showJS, setShowJS] = useState(false);
   const [showImples, setShowImples] = useState(false);
   const [showSubtitle, setShowSubtitle] = useState(false);
   const [fadeOut, setFadeOut] = useState(false);
+
 
   useEffect(() => {
     const timeline = async () => {
@@ -164,7 +166,7 @@ const JSimplesIntro = ({ onAnimationComplete }) => {
 };
 
 export const Intro = ({children}) => {
-  const [showApp, setShowApp] = useState(false);
+  const [showApp, setShowApp] = useState(true); // if its true, disable the intro
 
   const handleAnimationComplete = () => {
     setShowApp(true);

@@ -72,12 +72,12 @@
   }
 */
 var simples = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[13,18],$V1=[2,15],$V2=[1,7],$V3=[1,8],$V4=[1,14],$V5=[13,14,18,27,28],$V6=[1,37],$V7=[1,32],$V8=[1,34],$V9=[1,35],$Va=[1,36],$Vb=[2,23],$Vc=[19,38,40,49,69],$Vd=[14,19,34,38,40,45,46,49,50,69],$Ve=[1,44],$Vf=[1,49],$Vg=[1,45],$Vh=[1,46],$Vi=[1,47],$Vj=[1,48],$Vk=[17,23,27,28],$Vl=[1,57],$Vm=[1,58],$Vn=[1,59],$Vo=[1,60],$Vp=[1,61],$Vq=[1,62],$Vr=[1,63],$Vs=[1,64],$Vt=[1,65],$Vu=[14,15,17,19,34,38,39,40,45,46,49,50,51,52,53,54,55,56,57,58,59,60,65,66,67,68,69],$Vv=[27,28],$Vw=[14,15,17,19,34,38,39,40,45,46,49,50,51,54,55,56,57,58,59,60,65,66,67,68,69],$Vx=[14,15,17,19,34,38,39,40,45,46,49,50,51,56,57,58,59,60,65,66,67,68,69],$Vy=[14,15,17,19,34,38,39,40,45,46,49,50,51,59,60,65,66,67,68,69],$Vz=[14,15,17,65,66,67,68];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[17,20],$V1=[2,17],$V2=[1,7],$V3=[1,8],$V4=[1,15],$V5=[17,20,21,29,30],$V6=[1,41],$V7=[1,35],$V8=[1,38],$V9=[1,39],$Va=[1,40],$Vb=[2,25],$Vc=[19,25,29,30],$Vd=[18,41,43,52,73],$Ve=[18,21,37,41,43,48,49,52,53,73],$Vf=[1,53],$Vg=[1,48],$Vh=[1,49],$Vi=[1,50],$Vj=[1,51],$Vk=[1,52],$Vl=[29,30],$Vm=[1,70],$Vn=[1,71],$Vo=[1,72],$Vp=[1,73],$Vq=[1,74],$Vr=[1,75],$Vs=[1,76],$Vt=[1,77],$Vu=[1,78],$Vv=[14,18,19,21,37,41,42,43,48,49,52,53,54,55,56,57,58,59,60,61,62,63,69,70,71,72,73],$Vw=[14,19,21,69,70,71,72],$Vx=[14,18,19,21,37,41,42,43,48,49,52,53,54,57,58,59,60,61,62,63,69,70,71,72,73],$Vy=[14,18,19,21,37,41,42,43,48,49,52,53,54,59,60,61,62,63,69,70,71,72,73],$Vz=[14,18,19,21,37,41,42,43,48,49,52,53,54,62,63,69,70,71,72,73];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"algorithm":3,"header":4,"variables":5,"routines":6,"start_block":7,"command_list":8,"footer":9,"routines_list":10,"routine":11,"procedure":12,"T_PROC":13,"T_IDENTIFIER":14,"T_OPEN":15,"parameter_list":16,"T_CLOSE":17,"T_START":18,"T_ENDPROC":19,"parameter":20,"mechanism":21,"type":22,"T_REF":23,"T_PROGRAM":24,"variable_declaration":25,"variable_list":26,"T_LOGIC":27,"T_INTEGER":28,"command":29,"input_output":30,"repeat_loop":31,"conditional":32,"assignment":33,"T_IF":34,"expression":35,"then_token":36,"else_token":37,"T_ENDIF":38,"T_THEN":39,"T_ELSE":40,"assignment_identifier":41,"T_ATRIB":42,"input":43,"output":44,"T_READ":45,"T_PRINT":46,"while_token":47,"do_token":48,"T_ENDWHILE":49,"T_WHILE":50,"T_DO":51,"T_TIMES":52,"T_DIV":53,"T_PLUS":54,"T_MINUS":55,"T_GREATER":56,"T_LESS":57,"T_EQUAL":58,"T_AND":59,"T_OR":60,"term":61,"arguments":62,"argument_list":63,"argument":64,"T_NUMBER":65,"T_T":66,"T_F":67,"T_NOT":68,"T_END":69,"EOF":70,"$accept":0,"$end":1},
-terminals_: {2:"error",13:"T_PROC",14:"T_IDENTIFIER",15:"T_OPEN",17:"T_CLOSE",18:"T_START",19:"T_ENDPROC",23:"T_REF",24:"T_PROGRAM",27:"T_LOGIC",28:"T_INTEGER",34:"T_IF",38:"T_ENDIF",39:"T_THEN",40:"T_ELSE",42:"T_ATRIB",45:"T_READ",46:"T_PRINT",49:"T_ENDWHILE",50:"T_WHILE",51:"T_DO",52:"T_TIMES",53:"T_DIV",54:"T_PLUS",55:"T_MINUS",56:"T_GREATER",57:"T_LESS",58:"T_EQUAL",59:"T_AND",60:"T_OR",65:"T_NUMBER",66:"T_T",67:"T_F",68:"T_NOT",69:"T_END",70:"EOF"},
-productions_: [0,[3,6],[6,0],[6,1],[10,2],[10,1],[11,1],[12,9],[16,0],[16,2],[20,3],[21,0],[21,1],[7,1],[4,2],[5,0],[5,1],[25,3],[25,2],[22,1],[22,1],[26,2],[26,1],[8,0],[8,2],[29,1],[29,1],[29,1],[29,1],[32,7],[36,1],[37,1],[33,3],[41,1],[30,1],[30,1],[43,2],[44,2],[31,5],[47,1],[48,1],[35,3],[35,3],[35,3],[35,3],[35,3],[35,3],[35,3],[35,3],[35,3],[35,1],[62,0],[62,1],[63,2],[63,1],[64,1],[61,1],[61,4],[61,1],[61,1],[61,1],[61,2],[61,3],[9,2]],
+symbols_: {"error":2,"algorithm":3,"header":4,"variables":5,"routines":6,"start_block":7,"command_list":8,"footer":9,"routines_list":10,"routine":11,"procedure":12,"procedure_header":13,"T_OPEN":14,"parameter_list":15,"routine_header_closed":16,"T_START":17,"T_ENDPROC":18,"T_CLOSE":19,"T_PROC":20,"T_IDENTIFIER":21,"parameter":22,"mechanism":23,"type":24,"T_REF":25,"T_PROGRAM":26,"variable_declaration":27,"variable_list":28,"T_LOGIC":29,"T_INTEGER":30,"command":31,"input_output":32,"repeat_loop":33,"conditional":34,"assignment":35,"procedure_call":36,"T_IF":37,"expression":38,"then_token":39,"else_token":40,"T_ENDIF":41,"T_THEN":42,"T_ELSE":43,"assignment_identifier":44,"T_ATRIB":45,"input":46,"output":47,"T_READ":48,"T_PRINT":49,"while_token":50,"do_token":51,"T_ENDWHILE":52,"T_WHILE":53,"T_DO":54,"T_TIMES":55,"T_DIV":56,"T_PLUS":57,"T_MINUS":58,"T_GREATER":59,"T_LESS":60,"T_EQUAL":61,"T_AND":62,"T_OR":63,"term":64,"arguments":65,"argument_list":66,"argument":67,"procedure_call_header":68,"T_NUMBER":69,"T_T":70,"T_F":71,"T_NOT":72,"T_END":73,"EOF":74,"$accept":0,"$end":1},
+terminals_: {2:"error",14:"T_OPEN",17:"T_START",18:"T_ENDPROC",19:"T_CLOSE",20:"T_PROC",21:"T_IDENTIFIER",25:"T_REF",26:"T_PROGRAM",29:"T_LOGIC",30:"T_INTEGER",37:"T_IF",41:"T_ENDIF",42:"T_THEN",43:"T_ELSE",45:"T_ATRIB",48:"T_READ",49:"T_PRINT",52:"T_ENDWHILE",53:"T_WHILE",54:"T_DO",55:"T_TIMES",56:"T_DIV",57:"T_PLUS",58:"T_MINUS",59:"T_GREATER",60:"T_LESS",61:"T_EQUAL",62:"T_AND",63:"T_OR",69:"T_NUMBER",70:"T_T",71:"T_F",72:"T_NOT",73:"T_END",74:"EOF"},
+productions_: [0,[3,6],[6,0],[6,1],[10,2],[10,1],[11,1],[12,8],[16,1],[13,2],[15,0],[15,2],[22,3],[23,0],[23,1],[7,1],[4,2],[5,0],[5,1],[27,3],[27,2],[24,1],[24,1],[28,2],[28,1],[8,0],[8,2],[31,1],[31,1],[31,1],[31,1],[31,1],[34,7],[39,1],[40,1],[35,3],[44,1],[32,1],[32,1],[46,2],[47,2],[33,5],[50,1],[51,1],[38,3],[38,3],[38,3],[38,3],[38,3],[38,3],[38,3],[38,3],[38,3],[38,1],[65,0],[65,1],[66,2],[66,1],[67,1],[68,2],[36,3],[64,1],[64,1],[64,1],[64,1],[64,2],[64,3],[9,2]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -109,15 +109,101 @@ case 1:
             return result;            
         
 break;
+case 3:
+   
+            mvs.push({label: "L0", instruction: "NADA", parameter: null, first_line: 0, last_line: 0, first_column: 0, last_column: 0})    
+        
+break;
+case 7:
+
+            mvs.push({label: null, instruction: "RTSP", parameter: parameterStack.length, first_line: _$[$0], last_line: _$[$0], first_column: _$[$0], last_column: _$[$0]})    
+            lastProcedure = globalSymbolTable.at(-1);
+
+            lastProcedure.subSymbolTree = symbolTable.slice(variableCount + ++procedureAndFunctionCount);
+            symbolTable = [...globalSymbolTable]
+        
+break;
+case 8:
+
+            console.log(parameterStack)
+            parameterStack.reverse();
+            for (let i = 0; i < parameterStack.length; i++) {
+                parameterStack.at(i).address = -3 -i;
+            }
+            parameterStack.reverse();
+            for (let i = 0; i < parameterStack.length; i++) {
+                success = addSymbol(parameterStack.at(i))
+                if(!success)
+                    error("Parâmetro em duplicidade")
+            }
+        
+break;
+case 9:
+
+            if (!procAndFuncStarted) {
+                procAndFuncStarted = true;
+                mvs.push({label: null, instruction: "DSVS", parameter: "L0", first_line: 0, last_line: 0, first_column: 0, last_column: 0})    
+            }
+
+            addSymbol({
+                type: null, 
+                name: $$[$0], 
+                address: null,
+                scope: "GLOBAL",
+                label: ++label,
+                category: "PROCEDURE",
+                mechanism: null,
+                parameter: [],
+                subSymbolTree: null
+            })
+
+            mvs.push({label: `L${label}`, instruction: "ENSP", parameter: null, first_line: 0, last_line: 0, first_column: 0, last_column: 0})    
+            globalSymbolTable = [...symbolTable];
+        
+break;
+case 12:
+
+            parameterStack.push({
+                type: variableType, 
+                name: $$[$0], 
+                address: null, // como lidar com o endereço?
+                scope: "LOCAL",
+                label: null,
+                category: "VARIABLE",
+                mechanism: $$[$0-2],
+                parameter: null,
+                subSymbolTree: null
+            })
+
+            lastProcedure = globalSymbolTable.at(-1);
+            lastProcedure.parameter.push({type: variableType, mechanism: $$[$0-2]});
+        
+break;
 case 13:
 
-            mvs.push({label: null, instruction: "AMEM", parameter: variableCount, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column}); 
-            this.$ = new SyntaxNode($$[$0], []);
+            this.$ = "VALUE"
         
 break;
 case 14:
 
-            console.log(typeof mvs);
+            this.$ = "REFERENCE"
+        
+break;
+case 15:
+
+            mvs.push({label: null, instruction: "AMEM", parameter: variableCount, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column}); 
+            insideFunctionDeclaration = false;
+            this.$ = new SyntaxNode($$[$0], []);
+
+            if (globalSymbolTable.length) {
+                symbolTable = [...globalSymbolTable]
+            }
+
+            console.log(symbolTable)
+        
+break;
+case 16:
+
             mvs.push({label: null, instruction: "INPP", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0].last_column});
             this.$ = new SyntaxNode("Cabeçalho", [
                 new SyntaxNode($$[$0-1], []), 
@@ -125,39 +211,39 @@ case 14:
             ]);
         
 break;
-case 15:
+case 17:
 
             this.$ = new SyntaxNode("IGNORE", []);
         
 break;
-case 16:
+case 18:
 
             this.$ = new SyntaxNode("Variáveis", [$$[$0]]);
         
 break;
-case 17:
+case 19:
 
             this.$ = new SyntaxNode("Declaração de variáveis", [$$[$0-2], $$[$0-1], $$[$0]]);
         
 break;
-case 18:
+case 20:
 
             this.$ = new SyntaxNode("Declaração de variáveis", [$$[$0-1], $$[$0]]);
         
 break;
-case 19:
+case 21:
 
             variableType = types.LOGIC;
             this.$ = new SyntaxNode("Tipo", [new SyntaxNode($$[$0],[])]);
         
 break;
-case 20:
+case 22:
 
             variableType = types.INTEGER;
             this.$ = new SyntaxNode("Tipo", [new SyntaxNode($$[$0], [])]);
         
 break;
-case 21:
+case 23:
 
             success = addSymbol({
                 type: variableType, 
@@ -168,13 +254,14 @@ case 21:
                 category: "VARIABLE",
                 mechanism: null,
                 parameter: null,
+                subSymbolTree: null
             });
 
             if (!success) error(_$[$0-1], "Nome de variável já declarada.");
             this.$ = new SyntaxNode("Lista de variáveis", [$$[$0-1], new SyntaxNode($$[$0],[])]);
         
 break;
-case 22:
+case 24:
 
             success = addSymbol({
                 type: variableType, 
@@ -185,48 +272,53 @@ case 22:
                 category: "VARIABLE",
                 mechanism: null,
                 parameter: null,
+                subSymbolTree: null
             });
 
             if (!success) error(_$[$0], "Nome de variável já declarada.");
             this.$ = new SyntaxNode("Lista de variáveis", [new SyntaxNode($$[$0], [])]);
         
 break;
-case 23:
+case 25:
   
             this.$ = new SyntaxNode("IGNORE", []);
         
 break;
-case 24:
+case 26:
 
             this.$ = new SyntaxNode("Lista de comandos", [$$[$0-1], $$[$0]]);
         
 break;
-case 25: case 26: case 27: case 28:
+case 27: case 28: case 29: case 30:
 
             this.$ = new SyntaxNode("Comando", [$$[$0]]);
         
 break;
-case 29:
+case 31:
+
+            // add a syntax node for procedure call
+        
+break;
+case 32:
 
             tmpLabel = labelStack.pop();
             mvs.push({label: `L${tmpLabel}`, instruction: "NADA", parameter: null, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
             this.$ = new SyntaxNode("Condicional", [new SyntaxNode($$[$0-6], []),$$[$0-5],$$[$0-4],$$[$0-3],$$[$0-2],$$[$0-1], new SyntaxNode($$[$0],[])]);
         
 break;
-case 30:
+case 33:
 
             tmpType = typeStack.pop();
 
             if (tmpType !== types.LOGIC) 
                 error(_$[$0], "Incompatibilidade de tipo.");
             
-
             mvs.push({label: null, instruction: "DSVF", parameter: `L${++label}`, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
             labelStack.push(label);
             this.$ = new SyntaxNode("Token então", [new SyntaxNode($$[$0],[])]);
         
 break;
-case 31:
+case 34:
 
             mvs.push({label: null, instruction: "DSVS", parameter: `L${++label}`, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
             tmpLabel = labelStack.pop();
@@ -235,7 +327,7 @@ case 31:
             this.$ = new SyntaxNode("Token Senão", [new SyntaxNode($$[$0],[])]);
         
 break;
-case 32:
+case 35:
 
             tmpType = typeStack.pop();
             tmpPos = labelStack.pop(); 
@@ -243,24 +335,23 @@ case 32:
             if (symbolTable[tmpPos].type != tmpType) 
                 error(_$[$0], "Incompatibilidade de tipo.");
             
-            console.log(typeof mvs);
             mvs.push({label: null, instruction: "ARZG", parameter: symbolTable[tmpPos].address, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             this.$ = new SyntaxNode("Atribuição", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
-case 33:
+case 36:
 
             tmpPos = findVariablePosition($$[$0]);
             labelStack.push(tmpPos); 
             this.$ = new SyntaxNode("Identificador de atribuição", [new SyntaxNode($$[$0],[])]);
         
 break;
-case 34: case 35:
+case 37: case 38:
 
             this.$ = new SyntaxNode("Entrada/Saída", [$$[$0]]);
         
 break;
-case 36:
+case 39:
 
             let variable = findVariable($$[$0]);
             mvs.push({label: null, instruction: "LEIA", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
@@ -268,14 +359,14 @@ case 36:
             this.$ = new SyntaxNode("Entrada", [new SyntaxNode($$[$0-1],[]), new SyntaxNode($$[$0],[])]);
         
 break;
-case 37:
+case 40:
 
             tmpType = typeStack.pop();
             mvs.push({label: null, instruction: "ESCR", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             this.$ = new SyntaxNode("Saída", [new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
-case 38:
+case 41:
 
             let firstLabel = labelStack.pop();
             let secondLabel = labelStack.pop();
@@ -284,14 +375,14 @@ case 38:
             this.$ = new SyntaxNode("Loop de repetição", [$$[$0-4], $$[$0-3], $$[$0-2], $$[$0-1], new SyntaxNode($$[$0], [])]);
         
 break;
-case 39:
+case 42:
 
             mvs.push({label: `L${++label}`, instruction: "NADA", parameter: null, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
             labelStack.push(label);
             this.$ = new SyntaxNode("Token enquanto", [new SyntaxNode($$[$0],[])]);
         
 break;
-case 40:
+case 43:
 
             tmpType = typeStack.pop();
             if (tmpType !== types.LOGIC) 
@@ -301,110 +392,119 @@ case 40:
             this.$ = new SyntaxNode("Faça Token", [new SyntaxNode($$[$0],[])]);
         
 break;
-case 41:
+case 44:
 
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
             mvs.push({label: null, instruction: "MULT", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
-case 42:
+case 45:
 
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
             mvs.push({label: null, instruction: "DIVI", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
-case 43:
+case 46:
 
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
             mvs.push({label: null, instruction: "SOMA", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
-case 44:
+case 47:
 
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
             mvs.push({label: null, instruction: "SUBT", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
-case 45:
+case 48:
 
             typeCheck(types.INTEGER, types.INTEGER, types.LOGIC);
             mvs.push({label: null, instruction: "CMMA", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
-case 46:
+case 49:
 
             typeCheck(types.INTEGER, types.INTEGER, types.LOGIC);
             mvs.push({label: null, instruction: "CMME", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
-case 47:
+case 50:
 
             typeCheck(types.INTEGER, types.INTEGER, types.LOGIC);
             mvs.push({label: null, instruction: "CMIG", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
-case 48:
+case 51:
 
             typeCheck(types.LOGIC, types.LOGIC, types.LOGIC);
             mvs.push({label: null, instruction: "CONJ", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
-case 49:
+case 52:
 
             typeCheck(types.LOGIC, types.LOGIC, types.LOGIC);
             mvs.push({label: null, instruction: "DISJ", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
-case 50:
+case 53:
 
             this.$ = new SyntaxNode("Expressão", [$$[$0]]);
         
 break;
-case 56:
+case 59:
 
-            tmpVariableId = $$[$0];
+            tmpVariableId = $$[$0-1];
             tmpVariable = findVariable(tmpVariableId);
-            mvs.push({label: null, instruction: "CRVG", parameter: tmpVariable.address, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
-            typeStack.push(tmpVariable.type); 
+            mvs.push({label: null, instruction: "DSVS", parameter: `L${tmpVariable.label}`, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column})    
+        
+break;
+case 61:
+
+            if (insideFunctionDeclaration) {
+                
+            }
+            
+            if (!insideFunctionDeclaration) {
+                tmpVariableId = $$[$0];
+                tmpVariable = findVariable(tmpVariableId);
+                mvs.push({label: null, instruction: "CRVG", parameter: tmpVariable.address, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
+                typeStack.push(tmpVariable.type); 
+            }
+            
             this.$ = new SyntaxNode("Termo", [new SyntaxNode($$[$0], [])]);
         
 break;
-case 57:
-
-
-        
-break;
-case 58:
+case 62:
 
             mvs.push({label: null, instruction: "CRCT", parameter: parseInt($$[$0]), first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
             typeStack.push(types.INTEGER);
             this.$ = new SyntaxNode("Termo", [new SyntaxNode($$[$0], [])]);
         
 break;
-case 59:
+case 63:
 
             mvs.push({label: null, instruction: "CRCT", parameter: 1, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
             typeStack.push(types.LOGIC);
             this.$ = new SyntaxNode("Termo", [new SyntaxNode($$[$0], [])]);
         
 break;
-case 60:
+case 64:
 
             mvs.push({label: null, instruction: "CRCT", parameter: 0, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
             typeStack.push(types.LOGIC);
             this.$ = new SyntaxNode("Termo", [new SyntaxNode($$[$0], [])]);
         
 break;
-case 61:
+case 65:
 
             tmpType = typeStack.pop();
             if (tmpType !== types.LOGIC) 
@@ -414,12 +514,12 @@ case 61:
             this.$ = new SyntaxNode("Termo", [new SyntaxNode($$[$0-1], []), $$[$0]]);
         
 break;
-case 62:
+case 66:
 
             this.$ = new SyntaxNode("Termo", [new SyntaxNode($$[$0-2], []),$$[$0-1],new SyntaxNode($$[$0], [])]);
         
 break;
-case 63:
+case 67:
    
             mvs.push({label: null, instruction: "DMEM", parameter: variableCount, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             mvs.push({label: null, instruction: "FIMP", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
@@ -429,8 +529,8 @@ case 63:
 break;
 }
 },
-table: [{3:1,4:2,24:[1,3]},{1:[3]},o($V0,$V1,{5:4,25:5,22:6,27:$V2,28:$V3}),{14:[1,9]},{6:10,10:11,11:12,12:13,13:$V4,18:[2,2]},o($V0,[2,16]),{14:[1,16],26:15},{14:[2,19]},{14:[2,20]},o([13,18,27,28],[2,14]),{7:17,18:[1,18]},{11:19,12:13,13:$V4,18:[2,3]},o($V0,[2,5]),o($V0,[2,6]),{14:[1,20]},o($V0,[2,18],{22:6,25:21,14:[1,22],27:$V2,28:$V3}),o($V5,[2,22]),{8:23,14:$V6,29:24,30:25,31:26,32:27,33:28,34:$V7,41:33,43:29,44:30,45:$V8,46:$V9,47:31,50:$Va,69:$Vb},o([14,34,45,46,50,69],[2,13]),o($V0,[2,4]),{15:[1,38]},o($V0,[2,17]),o($V5,[2,21]),{9:39,69:[1,40]},o($Vc,$Vb,{29:24,30:25,31:26,32:27,33:28,43:29,44:30,47:31,41:33,8:41,14:$V6,34:$V7,45:$V8,46:$V9,50:$Va}),o($Vd,[2,25]),o($Vd,[2,26]),o($Vd,[2,27]),o($Vd,[2,28]),o($Vd,[2,34]),o($Vd,[2,35]),{14:$Ve,15:$Vf,35:42,61:43,65:$Vg,66:$Vh,67:$Vi,68:$Vj},{14:$Ve,15:$Vf,35:50,61:43,65:$Vg,66:$Vh,67:$Vi,68:$Vj},{42:[1,51]},{14:[1,52]},{14:$Ve,15:$Vf,35:53,61:43,65:$Vg,66:$Vh,67:$Vi,68:$Vj},o([14,15,65,66,67,68],[2,39]),{42:[2,33]},o($Vk,[2,8],{16:54}),{1:[2,1]},{70:[1,55]},o($Vc,[2,24]),{48:56,51:[1,66],52:$Vl,53:$Vm,54:$Vn,55:$Vo,56:$Vp,57:$Vq,58:$Vr,59:$Vs,60:$Vt},o($Vu,[2,50]),o([14,17,19,34,38,39,40,45,46,49,50,51,52,53,54,55,56,57,58,59,60,65,66,67,68,69],[2,56],{15:[1,67]}),o($Vu,[2,58]),o($Vu,[2,59]),o($Vu,[2,60]),{14:$Ve,15:$Vf,61:68,65:$Vg,66:$Vh,67:$Vi,68:$Vj},{14:$Ve,15:$Vf,35:69,61:43,65:$Vg,66:$Vh,67:$Vi,68:$Vj},{36:70,39:[1,71],52:$Vl,53:$Vm,54:$Vn,55:$Vo,56:$Vp,57:$Vq,58:$Vr,59:$Vs,60:$Vt},{14:$Ve,15:$Vf,35:72,61:43,65:$Vg,66:$Vh,67:$Vi,68:$Vj},o($Vd,[2,36]),o($Vd,[2,37],{52:$Vl,53:$Vm,54:$Vn,55:$Vo,56:$Vp,57:$Vq,58:$Vr,59:$Vs,60:$Vt}),o($Vv,[2,11],{20:74,21:75,17:[1,73],23:[1,76]}),{1:[2,63]},{8:77,14:$V6,29:24,30:25,31:26,32:27,33:28,34:$V7,41:33,43:29,44:30,45:$V8,46:$V9,47:31,49:$Vb,50:$Va},{14:$Ve,15:$Vf,35:78,61:43,65:$Vg,66:$Vh,67:$Vi,68:$Vj},{14:$Ve,15:$Vf,35:79,61:43,65:$Vg,66:$Vh,67:$Vi,68:$Vj},{14:$Ve,15:$Vf,35:80,61:43,65:$Vg,66:$Vh,67:$Vi,68:$Vj},{14:$Ve,15:$Vf,35:81,61:43,65:$Vg,66:$Vh,67:$Vi,68:$Vj},{14:$Ve,15:$Vf,35:82,61:43,65:$Vg,66:$Vh,67:$Vi,68:$Vj},{14:$Ve,15:$Vf,35:83,61:43,65:$Vg,66:$Vh,67:$Vi,68:$Vj},{14:$Ve,15:$Vf,35:84,61:43,65:$Vg,66:$Vh,67:$Vi,68:$Vj},{14:$Ve,15:$Vf,35:85,61:43,65:$Vg,66:$Vh,67:$Vi,68:$Vj},{14:$Ve,15:$Vf,35:86,61:43,65:$Vg,66:$Vh,67:$Vi,68:$Vj},o([14,34,45,46,49,50],[2,40]),{14:$Ve,15:$Vf,17:[2,51],35:90,61:43,62:87,63:88,64:89,65:$Vg,66:$Vh,67:$Vi,68:$Vj},o($Vu,[2,61]),{17:[1,91],52:$Vl,53:$Vm,54:$Vn,55:$Vo,56:$Vp,57:$Vq,58:$Vr,59:$Vs,60:$Vt},{8:92,14:$V6,29:24,30:25,31:26,32:27,33:28,34:$V7,40:$Vb,41:33,43:29,44:30,45:$V8,46:$V9,47:31,50:$Va},o([14,34,40,45,46,50],[2,30]),o($Vd,[2,32],{52:$Vl,53:$Vm,54:$Vn,55:$Vo,56:$Vp,57:$Vq,58:$Vr,59:$Vs,60:$Vt}),{5:93,18:$V1,22:6,25:5,27:$V2,28:$V3},o($Vk,[2,9]),{22:94,27:$V2,28:$V3},o($Vv,[2,12]),{49:[1,95]},o($Vu,[2,41]),o($Vu,[2,42]),o($Vw,[2,43],{52:$Vl,53:$Vm}),o($Vw,[2,44],{52:$Vl,53:$Vm}),o($Vx,[2,45],{52:$Vl,53:$Vm,54:$Vn,55:$Vo}),o($Vx,[2,46],{52:$Vl,53:$Vm,54:$Vn,55:$Vo}),o([14,15,17,19,34,38,39,40,45,46,49,50,51,58,59,60,65,66,67,68,69],[2,47],{52:$Vl,53:$Vm,54:$Vn,55:$Vo,56:$Vp,57:$Vq}),o($Vy,[2,48],{52:$Vl,53:$Vm,54:$Vn,55:$Vo,56:$Vp,57:$Vq,58:$Vr}),o($Vy,[2,49],{52:$Vl,53:$Vm,54:$Vn,55:$Vo,56:$Vp,57:$Vq,58:$Vr}),{17:[1,96]},{14:$Ve,15:$Vf,17:[2,52],35:90,61:43,64:97,65:$Vg,66:$Vh,67:$Vi,68:$Vj},o($Vz,[2,54]),o($Vz,[2,55],{52:$Vl,53:$Vm,54:$Vn,55:$Vo,56:$Vp,57:$Vq,58:$Vr,59:$Vs,60:$Vt}),o($Vu,[2,62]),{37:98,40:[1,99]},{18:[1,100]},{14:[1,101]},o($Vd,[2,38]),o($Vu,[2,57]),o($Vz,[2,53]),{8:102,14:$V6,29:24,30:25,31:26,32:27,33:28,34:$V7,38:$Vb,41:33,43:29,44:30,45:$V8,46:$V9,47:31,50:$Va},o([14,34,38,45,46,50],[2,31]),{8:103,14:$V6,19:$Vb,29:24,30:25,31:26,32:27,33:28,34:$V7,41:33,43:29,44:30,45:$V8,46:$V9,47:31,50:$Va},o($Vk,[2,10]),{38:[1,104]},{19:[1,105]},o($Vd,[2,29]),o($V0,[2,7])],
-defaultActions: {7:[2,19],8:[2,20],37:[2,33],39:[2,1],55:[2,63]},
+table: [{3:1,4:2,26:[1,3]},{1:[3]},o($V0,$V1,{5:4,27:5,24:6,29:$V2,30:$V3}),{21:[1,9]},{6:10,10:11,11:12,12:13,13:14,17:[2,2],20:$V4},o($V0,[2,18]),{21:[1,17],28:16},{21:[2,21]},{21:[2,22]},o([17,20,29,30],[2,16]),{7:18,17:[1,19]},{11:20,12:13,13:14,17:[2,3],20:$V4},o($V0,[2,5]),o($V0,[2,6]),{14:[1,21]},{21:[1,22]},o($V0,[2,20],{24:6,27:23,21:[1,24],29:$V2,30:$V3}),o($V5,[2,24]),{8:25,21:$V6,31:26,32:27,33:28,34:29,35:30,36:31,37:$V7,44:36,46:32,47:33,48:$V8,49:$V9,50:34,53:$Va,68:37,73:$Vb},o([21,37,48,49,53,73],[2,15]),o($V0,[2,4]),o($Vc,[2,10],{15:42}),{14:[2,9]},o($V0,[2,19]),o($V5,[2,23]),{9:43,73:[1,44]},o($Vd,$Vb,{31:26,32:27,33:28,34:29,35:30,36:31,46:32,47:33,50:34,44:36,68:37,8:45,21:$V6,37:$V7,48:$V8,49:$V9,53:$Va}),o($Ve,[2,27]),o($Ve,[2,28]),o($Ve,[2,29]),o($Ve,[2,30]),o($Ve,[2,31]),o($Ve,[2,37]),o($Ve,[2,38]),{14:$Vf,21:$Vg,38:46,64:47,69:$Vh,70:$Vi,71:$Vj,72:$Vk},{14:$Vf,21:$Vg,38:54,64:47,69:$Vh,70:$Vi,71:$Vj,72:$Vk},{45:[1,55]},{14:$Vf,19:[2,54],21:$Vg,38:59,64:47,65:56,66:57,67:58,69:$Vh,70:$Vi,71:$Vj,72:$Vk},{21:[1,60]},{14:$Vf,21:$Vg,38:61,64:47,69:$Vh,70:$Vi,71:$Vj,72:$Vk},o([14,21,69,70,71,72],[2,42]),{14:[1,62],45:[2,36]},o($Vl,[2,13],{16:63,22:64,23:66,19:[1,65],25:[1,67]}),{1:[2,1]},{74:[1,68]},o($Vd,[2,26]),{51:69,54:[1,79],55:$Vm,56:$Vn,57:$Vo,58:$Vp,59:$Vq,60:$Vr,61:$Vs,62:$Vt,63:$Vu},o($Vv,[2,53]),o($Vv,[2,61]),o($Vv,[2,62]),o($Vv,[2,63]),o($Vv,[2,64]),{14:$Vf,21:$Vg,64:80,69:$Vh,70:$Vi,71:$Vj,72:$Vk},{14:$Vf,21:$Vg,38:81,64:47,69:$Vh,70:$Vi,71:$Vj,72:$Vk},{39:82,42:[1,83],55:$Vm,56:$Vn,57:$Vo,58:$Vp,59:$Vq,60:$Vr,61:$Vs,62:$Vt,63:$Vu},{14:$Vf,21:$Vg,38:84,64:47,69:$Vh,70:$Vi,71:$Vj,72:$Vk},{19:[1,85]},{14:$Vf,19:[2,55],21:$Vg,38:59,64:47,67:86,69:$Vh,70:$Vi,71:$Vj,72:$Vk},o($Vw,[2,57]),o($Vw,[2,58],{55:$Vm,56:$Vn,57:$Vo,58:$Vp,59:$Vq,60:$Vr,61:$Vs,62:$Vt,63:$Vu}),o($Ve,[2,39]),o($Ve,[2,40],{55:$Vm,56:$Vn,57:$Vo,58:$Vp,59:$Vq,60:$Vr,61:$Vs,62:$Vt,63:$Vu}),o($Vw,[2,59]),{5:87,17:$V1,24:6,27:5,29:$V2,30:$V3},o($Vc,[2,11]),o([17,29,30],[2,8]),{24:88,29:$V2,30:$V3},o($Vl,[2,14]),{1:[2,67]},{8:89,21:$V6,31:26,32:27,33:28,34:29,35:30,36:31,37:$V7,44:36,46:32,47:33,48:$V8,49:$V9,50:34,52:$Vb,53:$Va,68:37},{14:$Vf,21:$Vg,38:90,64:47,69:$Vh,70:$Vi,71:$Vj,72:$Vk},{14:$Vf,21:$Vg,38:91,64:47,69:$Vh,70:$Vi,71:$Vj,72:$Vk},{14:$Vf,21:$Vg,38:92,64:47,69:$Vh,70:$Vi,71:$Vj,72:$Vk},{14:$Vf,21:$Vg,38:93,64:47,69:$Vh,70:$Vi,71:$Vj,72:$Vk},{14:$Vf,21:$Vg,38:94,64:47,69:$Vh,70:$Vi,71:$Vj,72:$Vk},{14:$Vf,21:$Vg,38:95,64:47,69:$Vh,70:$Vi,71:$Vj,72:$Vk},{14:$Vf,21:$Vg,38:96,64:47,69:$Vh,70:$Vi,71:$Vj,72:$Vk},{14:$Vf,21:$Vg,38:97,64:47,69:$Vh,70:$Vi,71:$Vj,72:$Vk},{14:$Vf,21:$Vg,38:98,64:47,69:$Vh,70:$Vi,71:$Vj,72:$Vk},o([21,37,48,49,52,53],[2,43]),o($Vv,[2,65]),{19:[1,99],55:$Vm,56:$Vn,57:$Vo,58:$Vp,59:$Vq,60:$Vr,61:$Vs,62:$Vt,63:$Vu},{8:100,21:$V6,31:26,32:27,33:28,34:29,35:30,36:31,37:$V7,43:$Vb,44:36,46:32,47:33,48:$V8,49:$V9,50:34,53:$Va,68:37},o([21,37,43,48,49,53],[2,33]),o($Ve,[2,35],{55:$Vm,56:$Vn,57:$Vo,58:$Vp,59:$Vq,60:$Vr,61:$Vs,62:$Vt,63:$Vu}),o($Ve,[2,60]),o($Vw,[2,56]),{17:[1,101]},{21:[1,102]},{52:[1,103]},o($Vv,[2,44]),o($Vv,[2,45]),o($Vx,[2,46],{55:$Vm,56:$Vn}),o($Vx,[2,47],{55:$Vm,56:$Vn}),o($Vy,[2,48],{55:$Vm,56:$Vn,57:$Vo,58:$Vp}),o($Vy,[2,49],{55:$Vm,56:$Vn,57:$Vo,58:$Vp}),o([14,18,19,21,37,41,42,43,48,49,52,53,54,61,62,63,69,70,71,72,73],[2,50],{55:$Vm,56:$Vn,57:$Vo,58:$Vp,59:$Vq,60:$Vr}),o($Vz,[2,51],{55:$Vm,56:$Vn,57:$Vo,58:$Vp,59:$Vq,60:$Vr,61:$Vs}),o($Vz,[2,52],{55:$Vm,56:$Vn,57:$Vo,58:$Vp,59:$Vq,60:$Vr,61:$Vs}),o($Vv,[2,66]),{40:104,43:[1,105]},{8:106,18:$Vb,21:$V6,31:26,32:27,33:28,34:29,35:30,36:31,37:$V7,44:36,46:32,47:33,48:$V8,49:$V9,50:34,53:$Va,68:37},o($Vc,[2,12]),o($Ve,[2,41]),{8:107,21:$V6,31:26,32:27,33:28,34:29,35:30,36:31,37:$V7,41:$Vb,44:36,46:32,47:33,48:$V8,49:$V9,50:34,53:$Va,68:37},o([21,37,41,48,49,53],[2,34]),{18:[1,108]},{41:[1,109]},o($V0,[2,7]),o($Ve,[2,32])],
+defaultActions: {7:[2,21],8:[2,22],22:[2,9],43:[2,1],68:[2,67]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -622,11 +722,14 @@ const types = Object.freeze({
 
 let mvs = [];
 
-let variableType = null,
-    variableCount = 0;
+let tmptmp = 0;
 
-const symbolTable = [],
-    typeStack = [],
+let variableType = null,
+    variableCount = 0,
+    procAndFuncStarted = false,
+    insideFunctionDeclaration = true;
+
+const typeStack = [],
     labelStack = [];
 
 let label = 0,
@@ -635,19 +738,48 @@ let label = 0,
     tmpPos,
     tmpVariableId,
     tmpVariable,
-    success;
+    globalSymbolTable = [], // This is to save the global symbol table temporarly
+    parameterStack = [],
+    symbolTable = [],
+    success,
+    lastProcedure,
+    procedureAndFunctionCount = 0;
 
-const clearEverything = () => {
-    symbolTable.length = 0;
+const clearEverything = () => { // Clean all variable in an error case
+    symbolTable = [];
     typeStack.length = 0;
     labelStack.length = 0;
     mvs = [];
     variableCount = 0;
     label = 0;
+    procAndFuncStarted = false;
+    parameterStack = [];
+    insideFunctionDeclaration = true;
+    globalSymbolTable = [];
+    lastProcedure = null;
+    procedureAndFunctionCount = 0;
 }
 
+/**
+    Add a symbol to the current symbol table.
+    @param {
+                type: "LOGIC" | "INTEGER", 
+                name: string, 
+                address: number,
+                scope: "LOCAL" | "GLOBAL",
+                label: string,
+                category: "VARIABLE" | "PROCEDURE",
+                mechanism: null | "REF",
+                parameter: string,
+            } v 
+    @returns {boolean} The status of the insert
+*/
 const addSymbol = (v) => {
-    const symbolNameAlreadyExists = symbolTable.some(variable => variable.name === v.name);
+    
+    /* If the variable is on the same scope and with the same ID */
+    const symbolNameAlreadyExists = symbolTable.some(
+        variable => (variable.name === v.name && variable.scope === v.scope)
+    );
     
     if (symbolNameAlreadyExists) 
         return false;    
@@ -669,12 +801,11 @@ const typeCheck = (type1, type2, resultType) => {
 }
 
 const findVariable = (variableName) => {
-    const variable = symbolTable.find(variable => variable.name === variableName);
-    if (variable) {
-        return variable;
-    }
-    return false;
-}
+    return symbolTable
+        .slice() // used to make a copy and dont alter the original symbol table
+        .reverse()
+        .find(variable => variable.name === variableName) || false;
+};
 
 const findVariablePosition = (variableName) => {
     const index = symbolTable.findIndex(variable => variable.name === variableName);
@@ -1019,11 +1150,11 @@ var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0:/* skip whitespaces */
 break;
-case 1:return 24;
+case 1:return 26;
 break;
-case 2:return 18;
+case 2:return 17;
 break;
-case 3:return 69;
+case 3:return 73;
 break;
 case 4:return "T_READ";
 break;
@@ -1083,11 +1214,11 @@ case 31:return "T_ENDPROC";
 break;
 case 32:return "T_REF";
 break;
-case 33:return 70;
+case 33:return 74;
 break;
-case 34:return 14;
+case 34:return 21;
 break;
-case 35:return 65;
+case 35:return 69;
 break;
 }
 },
