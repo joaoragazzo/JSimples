@@ -265,22 +265,33 @@ procedure
 
             lastProcedure.subSymbolTree = symbolTable.slice(variableCount + ++procedureAndFunctionCount);
             symbolTable = [...globalSymbolTable]
+            parameterStack = []
+            
         }
     ;
 
 routine_header_closed 
     : T_CLOSE 
         {
-            console.log(parameterStack)
-            parameterStack.reverse();
             for (let i = 0; i < parameterStack.length; i++) {
                 parameterStack.at(i).address = -3 -i;
             }
             parameterStack.reverse();
             for (let i = 0; i < parameterStack.length; i++) {
-                success = addSymbol(parameterStack.at(i))
+                tmpVariable = parameterStack.at(i);
+                success = addSymbol({
+                    type: tmpVariable.type, 
+                    name: tmpVariable.name, 
+                    address: tmpVariable.address,
+                    scope: tmpVariable.scope,
+                    label: tmpVariable.label,
+                    category: tmpVariable.category,
+                    mechanism: tmpVariable.mechanism,
+                    parameter: tmpVariable.parameter,
+                    subSymbolTree: tmpVariable.subSymbolTree
+                })
                 if(!success)
-                    error("Parâmetro em duplicidade")
+                    error(tmpVariable.reference, "Nome do parâmetro já declarado nesse escopo")
             }
         }
     ;
@@ -328,7 +339,8 @@ parameter
                 category: "VARIABLE",
                 mechanism: $1,
                 parameter: null,
-                subSymbolTree: null
+                subSymbolTree: null,
+                reference: @3
             })
 
             lastProcedure = globalSymbolTable.at(-1);
@@ -359,6 +371,7 @@ start_block
             }
 
             console.log(symbolTable)
+            
         }
     ;
 
