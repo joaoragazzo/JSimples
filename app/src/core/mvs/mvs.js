@@ -13,7 +13,6 @@ export const MVS = (
   let iterationCounter = 0;
   let instructionPointer = 0;
   let register = algorithm[instructionPointer];
-  let memory = [];
   let stack = [];
   let isIteration = false;
   let isWaitingInput = false;
@@ -30,11 +29,14 @@ export const MVS = (
   }
     
   const executeAmem = () => {
-    memory = new Array(register.parameter).fill(0);
+    for (let i = 0; i < register.parameter; i++) {
+      stack[i] = 0;
+    }
   }
 
   const executeCrvg = () => {
-    stack.push(memory[register.parameter]);
+    const value = stack[register.parameter];
+    stack.push(value);
   };
 
   const executeCrct = () => {
@@ -42,7 +44,8 @@ export const MVS = (
   };
 
   const executeArzg = () => {
-    memory[register.parameter] = stack.pop();
+    const value = stack.pop();
+    stack[register.parameter] = value;
   };
 
   const executeSoma = () => {
@@ -140,7 +143,8 @@ export const MVS = (
   };
 
   const executeDmem = () => {
-    memory = [];
+    // Limpa toda a stack (equivalente a limpar memória)
+    stack = [];
   }
 
   const executeFrame = async () => {
@@ -263,16 +267,16 @@ export const MVS = (
     if (stepByStep && waitingNextStep && !isWaitingInput) {
       executeFrame();
     }
-    return {instructionPointer: instructionPointer, stack: stack, memory: memory};
+    return {instructionPointer: instructionPointer, stack: stack};
   };
 
   const start = () => {
     if (stepByStep) {
-      return {instructionPointer: instructionPointer, stack: stack, memory: memory};
+      return {instructionPointer: instructionPointer, stack: stack};
     } 
 
     animationFrameId = requestAnimationFrame(executeFrame);
-    return {instructionPointer: instructionPointer, stack: stack, memory: memory};
+    return {instructionPointer: instructionPointer, stack: stack};
   };
 
   if (!stepByStep) {
