@@ -87,9 +87,9 @@ case 1:
 
             const headerNode = $$[$0-5];
             const variablesNode = $$[$0-4];
-            const startBlockNode = $$[$0-3];
-            const commandsNode = $$[$0-2];
-            const footerNode = $$[$0-1];
+            const startBlockNode = $$[$0-2];
+            const commandsNode = $$[$0-1];
+            const footerNode = $$[$0];
 
             const children = [headerNode];
             if (variablesNode) children.push(variablesNode);
@@ -127,10 +127,10 @@ case 7:
 break;
 case 8:
 
+            parameterStack.reverse();
             for (let i = 0; i < parameterStack.length; i++) {
                 parameterStack.at(i).address = -3 -i;
             }
-            parameterStack.reverse();
             for (let i = 0; i < parameterStack.length; i++) {
                 tmpVariable = parameterStack.at(i);
                 success = addSymbol({
@@ -483,7 +483,10 @@ break;
 case 61:
 
             if (insideFunctionDeclaration) {
-                
+                tmpVariableId = $$[$0];
+                tmpVariable = findVariable(tmpVariableId);
+                mvs.push({label: null, instruction: "CRVL", parameter: tmpVariable.address, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
+                typeStack.push(tmpVariable.type); 
             }
             
             if (!insideFunctionDeclaration) {

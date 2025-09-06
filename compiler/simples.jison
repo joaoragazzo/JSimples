@@ -216,9 +216,9 @@ algorithm
         {
             const headerNode = $1;
             const variablesNode = $2;
-            const startBlockNode = $3;
-            const commandsNode = $4;
-            const footerNode = $5;
+            const startBlockNode = $4;
+            const commandsNode = $5;
+            const footerNode = $6;
 
             const children = [headerNode];
             if (variablesNode) children.push(variablesNode);
@@ -273,10 +273,10 @@ procedure
 routine_header_closed 
     : T_CLOSE 
         {
+            parameterStack.reverse();
             for (let i = 0; i < parameterStack.length; i++) {
                 parameterStack.at(i).address = -3 -i;
             }
-            parameterStack.reverse();
             for (let i = 0; i < parameterStack.length; i++) {
                 tmpVariable = parameterStack.at(i);
                 success = addSymbol({
@@ -706,7 +706,10 @@ term
     : T_IDENTIFIER 
         {
             if (insideFunctionDeclaration) {
-                
+                tmpVariableId = $1;
+                tmpVariable = findVariable(tmpVariableId);
+                mvs.push({label: null, instruction: "CRVL", parameter: tmpVariable.address, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
+                typeStack.push(tmpVariable.type); 
             }
             
             if (!insideFunctionDeclaration) {
