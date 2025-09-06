@@ -64,7 +64,8 @@ let label = 0,
     symbolTable = [],
     success,
     lastProcedure,
-    procedureAndFunctionCount = 0;
+    procedureAndFunctionCount = 0,
+    localVariableCount = 0;
 
 const clearEverything = () => { // Clean all variable in an error case
     symbolTable = [];
@@ -78,7 +79,9 @@ const clearEverything = () => { // Clean all variable in an error case
     insideFunctionDeclaration = true;
     globalSymbolTable = [];
     lastProcedure = null;
-    procedureAndFunctionCount = 0;
+    procedureAndFunctionCount = 0,
+    localVariableCount = 0;
+    
 }
 
 /**
@@ -258,7 +261,7 @@ routine
     ;
 
 procedure
-    : procedure_header T_OPEN parameter_list routine_header_closed variables T_START command_list T_ENDPROC
+    : procedure_header T_OPEN parameter_list routine_header_closed variables t_start_proc command_list T_ENDPROC
         {
             mvs.push({label: null, instruction: "RTSP", parameter: parameterStack.length, first_line: @8, last_line: @8, first_column: @8, last_column: @8})    
             lastProcedure = globalSymbolTable.at(-1);
@@ -267,6 +270,13 @@ procedure
             symbolTable = [...globalSymbolTable]
             parameterStack = []
             
+        }
+    ;
+
+t_start_proc 
+    : T_START 
+        {
+            mvs.push({label: null, instruction: "AMEM", parameter: localVariableCount, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column}); 
         }
     ;
 
@@ -296,11 +306,13 @@ routine_header_closed
         }
     ;
 
+
 procedure_header
     : T_PROC T_IDENTIFIER
         {
             if (!procAndFuncStarted) {
                 procAndFuncStarted = true;
+                console.log(`entro aqui e agora é ${procAndFuncStarted}`)
                 mvs.push({label: null, instruction: "DSVS", parameter: "L0", first_line: 0, last_line: 0, first_column: 0, last_column: 0})    
             }
 
@@ -333,7 +345,7 @@ parameter
             parameterStack.push({
                 type: variableType, 
                 name: $3, 
-                address: null, // como lidar com o endereço?
+                address: null,
                 scope: "LOCAL",
                 label: null,
                 category: "VARIABLE",
@@ -424,36 +436,77 @@ type
 variable_list
     : variable_list T_IDENTIFIER
         {
-            success = addSymbol({
-                type: variableType, 
-                name: $2, 
-                address: variableCount++,
-                scope: "GLOBAL",
-                label: null,
-                category: "VARIABLE",
-                mechanism: null,
-                parameter: null,
-                subSymbolTree: null
-            });
+            if (!procAndFuncStarted) {
+                success = addSymbol({
+                    type: variableType, 
+                    name: $2, 
+                    address: variableCount++,
+                    scope: "GLOBAL",
+                    label: null,
+                    category: "VARIABLE",
+                    mechanism: null,
+                    parameter: null,
+                    subSymbolTree: null
+                });
 
-            if (!success) error(@1, "Nome de variável já declarada.");
+                if (!success) error(@1, "Nome de variável já declarada.");
+            }
+
+            if (procAndFuncStarted) {
+                console.log(localVariableCount)
+                success = addSymbol({
+                    type: variableType, 
+                    name: $2, 
+                    address: localVariableCount++,
+                    scope: "LOCAL",
+                    label: null,
+                    category: "VARIABLE",
+                    mechanism: null,
+                    parameter: null,
+                    subSymbolTree: null
+                });
+
+                if (!success) error(@1, "Nome de variável já declarada.");
+            }
+            
             $$ = new SyntaxNode("Lista de variáveis", [$1, new SyntaxNode($2,[])]);
         }
     | T_IDENTIFIER
         {
-            success = addSymbol({
-                type: variableType, 
-                name: $1, 
-                address: variableCount++,
-                scope: "GLOBAL",
-                label: null,
-                category: "VARIABLE",
-                mechanism: null,
-                parameter: null,
-                subSymbolTree: null
-            });
 
-            if (!success) error(@1, "Nome de variável já declarada.");
+            if (!procAndFuncStarted) {
+                success = addSymbol({
+                    type: variableType, 
+                    name: $1, 
+                    address: variableCount++,
+                    scope: "GLOBAL",
+                    label: null,
+                    category: "VARIABLE",
+                    mechanism: null,
+                    parameter: null,
+                    subSymbolTree: null
+                });
+
+                if (!success) error(@1, "Nome de variável já declarada.");
+            }
+
+            if (procAndFuncStarted) {
+                console.log(localVariableCount)
+                success = addSymbol({
+                    type: variableType, 
+                    name: $1, 
+                    address: localVariableCount++,
+                    scope: "LOCAL",
+                    label: null,
+                    category: "VARIABLE",
+                    mechanism: null,
+                    parameter: null,
+                    subSymbolTree: null
+                });
+
+                if (!success) error(@1, "Nome de variável já declarada.");
+            }
+            
             $$ = new SyntaxNode("Lista de variáveis", [new SyntaxNode($1, [])]);
         }
     ;
