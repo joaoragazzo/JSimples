@@ -147,6 +147,10 @@ export const MVS = (
     stack = [];
   }
 
+  const executeSvcp = () => {
+    stack.push(instructionPointer + 2)
+  }
+
   const executeFrame = async () => {
     if (isWaitingInput || !isRunning) {
       if (!stepByStep) {
@@ -227,6 +231,9 @@ export const MVS = (
           break;
         case "CMIG":
           executeCmig();
+          break;
+        case "SVCP":
+          executeSvcp();
           break;
       }
       if (!isIteration) instructionPointer++;
