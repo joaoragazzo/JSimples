@@ -50,9 +50,6 @@ export const Stack = ({data, variables}) => {
           {typeof value === "number" ? value : value ? "V" : "F" }
         </StackVariable>
       ))}
-      <div>
-        Variáveis
-      </div>
       {data.map((value, index) => (
         <StackItem key={index}>
           {typeof value === "number" ? value : value ? "V" : "F" }
