@@ -75,7 +75,9 @@ const JSimples = StreamLanguage.define({
         "nao",
         "div",
         "escreva",
-        "leia"
+        "leia",
+        "proc",
+        "fimproc"
       ];
 
       const types = [
