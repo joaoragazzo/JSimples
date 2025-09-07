@@ -67,7 +67,8 @@ let label = 0,
     lastProcedure,
     procedureAndFunctionCount = 0,
     localVariableCount = 0,
-    tmpArgument;
+    tmpArgument,
+    isVariable = true;
 
 const clearEverything = () => { // Clean all variable in an error case
     symbolTable = [];
@@ -83,7 +84,8 @@ const clearEverything = () => { // Clean all variable in an error case
     lastProcedure = null;
     procedureAndFunctionCount = 0,
     localVariableCount = 0,
-    argumentStack = []; 
+    argumentStack = [],
+    isVariable = true;; 
 }
 
 /**
@@ -680,54 +682,63 @@ do_token
 expression 
     : expression T_TIMES   expression
         {
+            isVariable = false;
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
             mvs.push({label: null, instruction: "MULT", parameter: null, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
             $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         }
     | expression T_DIV     expression
         {
+            isVariable = false;
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
             mvs.push({label: null, instruction: "DIVI", parameter: null, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
             $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         }
     | expression T_PLUS    expression
         {
+            isVariable = false;
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
             mvs.push({label: null, instruction: "SOMA", parameter: null, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
             $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         }
     | expression T_MINUS   expression
         {
+            isVariable = false;
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
             mvs.push({label: null, instruction: "SUBT", parameter: null, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
             $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         } 
     | expression T_GREATER expression
         {
+            isVariable = false;
             typeCheck(types.INTEGER, types.INTEGER, types.LOGIC);
             mvs.push({label: null, instruction: "CMMA", parameter: null, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
             $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         } 
     | expression T_LESS    expression
         {
+            isVariable = false;
             typeCheck(types.INTEGER, types.INTEGER, types.LOGIC);
             mvs.push({label: null, instruction: "CMME", parameter: null, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
             $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         } 
     | expression T_EQUAL   expression
         {
+            isVariable = false;
             typeCheck(types.INTEGER, types.INTEGER, types.LOGIC);
             mvs.push({label: null, instruction: "CMIG", parameter: null, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
             $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         } 
     | expression T_AND     expression
         {
+            isVariable = false;
             typeCheck(types.LOGIC, types.LOGIC, types.LOGIC);
             mvs.push({label: null, instruction: "CONJ", parameter: null, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
             $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
         } 
     | expression T_OR      expression
         {
+            isVariable = false;
             typeCheck(types.LOGIC, types.LOGIC, types.LOGIC);
             mvs.push({label: null, instruction: "DISJ", parameter: null, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
             $$ = new SyntaxNode("Expressão", [$1, new SyntaxNode($2,[]), $3]);
@@ -746,16 +757,30 @@ arguments
 argument_list 
     : argument_list expression {
             tmpArgument = argumentStack.pop();
+            
+            if (tmpArgument.mechanism === "REFERENCE" && !isVariable) {
+                error(@2, `Tipo errado de parâmetro. Espera-se uma referência de uma variavel`);
+            }
+            
             if (tmpArgument.type != typeStack.pop()) {
                error(@2, `Tipo errado de parâmetro.`)
             }
+            
+            isVariable = true;
         }
     | expression 
         {
             tmpArgument = argumentStack.pop();
+            
+            if (tmpArgument.mechanism === "REFERENCE" && !isVariable) {
+                error(@2, `Tipo errado de parâmetro. Espera-se uma referência de uma variável`);
+            }
+            
             if (tmpArgument.type != typeStack.pop()) {
                error(@1, `Tipo errado de parâmetro.`)
             }
+
+            isVariable = true;
         }
     ;
 
@@ -796,6 +821,7 @@ term
                 typeStack.push(tmpVariable.type); 
             }
             
+            
             $$ = new SyntaxNode("Termo", [new SyntaxNode($1, [])]);
         }
     // |  T_IDENTIFIER T_OPEN arguments T_CLOSE
@@ -806,18 +832,21 @@ term
         {
             mvs.push({label: null, instruction: "CRCT", parameter: parseInt($1), first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
             typeStack.push(types.INTEGER);
+            isVariable = false;
             $$ = new SyntaxNode("Termo", [new SyntaxNode($1, [])]);
         }
     | T_T
         {
             mvs.push({label: null, instruction: "CRCT", parameter: 1, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
             typeStack.push(types.LOGIC);
+            isVariable = false;
             $$ = new SyntaxNode("Termo", [new SyntaxNode($1, [])]);
         }
     | T_F
         {
             mvs.push({label: null, instruction: "CRCT", parameter: 0, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
             typeStack.push(types.LOGIC);
+            isVariable = false;
             $$ = new SyntaxNode("Termo", [new SyntaxNode($1, [])]);
         }
     | T_NOT term
@@ -827,10 +856,12 @@ term
                 error(@2, "Incompatibilidade de tipo.");
             mvs.push({label: null, instruction: "NEGA", parameter: null, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
             typeStack.push(types.LOGIC);
+            isVariable = false;
             $$ = new SyntaxNode("Termo", [new SyntaxNode($1, []), $2]);
         }
     | T_OPEN expression T_CLOSE
         {
+            isVariable = false;
             $$ = new SyntaxNode("Termo", [new SyntaxNode($1, []),$2,new SyntaxNode($3, [])]);
         }
     ;

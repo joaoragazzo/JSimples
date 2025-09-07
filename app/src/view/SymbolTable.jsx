@@ -34,6 +34,20 @@ const toPtBrCategory = (category) => {
     return category
 }
 
+const toPtBrMechanism = (mechanism) => {
+    if (mechanism == null || mechanism === undefined) {
+        return "-"
+    }
+
+    if (mechanism === "REFERENCE") {
+        return "Referência"
+    }
+
+    if (mechanism === "VALUE") {
+        return "Valor"
+    }
+}
+
 const expandColumns = [
   {
     title: 'Tipo',
@@ -73,7 +87,7 @@ const expandColumns = [
     title: 'Mecanismo',
     dataIndex: 'mechanism',
     key: 'mechanism',
-    render: (mechanism) => mechanism || '-'
+    render: (mechanism) => <>{toPtBrMechanism(mechanism)}</>
   }
 ];
 
@@ -134,7 +148,7 @@ const columns = [
         <Space direction="vertical" size="small">
           {parameters.map((param, index) => (
             <div key={index} style={{ fontSize: '12px' }}>
-              {param.type} ({param.mechanism})
+              {toPtBrType(param.type)} ({toPtBrMechanism(param.mechanism)})
             </div>
           ))}
         </Space>
