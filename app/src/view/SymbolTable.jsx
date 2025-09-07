@@ -42,7 +42,7 @@ const expandColumns = [
     render: (type) => <>{toPtBrType(type)}</>
   },
   {
-    title: 'Nome',
+    title: 'Identificador',
     dataIndex: 'name',
     key: 'name'
   },
@@ -85,7 +85,7 @@ const columns = [
     render: (type) => <>{toPtBrType(type)}</>
   },
   {
-    title: 'Nome',
+    title: 'Identificador',
     dataIndex: 'name',
     key: 'name',
     render: (name) => <div style={{fontFamily: "monospace"}}>{name}</div>
@@ -171,7 +171,9 @@ export const SymbolTable = () => {
   const dataWithKeys = parserResponse.symbolTable.map((item, index) => ({ ...item, key: index.toString() }));
 
   return (
-      <Table
+    <>
+    <h2 style={{margin: 0, marginBottom: "12px"}}>Tabela de Símbolos</h2>
+    <Table
         columns={columns}
         dataSource={dataWithKeys}
         expandable={{
@@ -183,5 +185,7 @@ export const SymbolTable = () => {
         bordered
         size="middle"
       />
+    </>
+      
   );
 };

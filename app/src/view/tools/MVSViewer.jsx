@@ -12,7 +12,7 @@ export const MVSViewer = () => {
   
   return (
     <Container>
-      <CodeEditor stepByStep={true}/>
+      <CodeEditor/>
     </Container>
   );
 };
