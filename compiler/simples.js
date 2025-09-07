@@ -103,6 +103,7 @@ case 1:
                 mvs: mvs, 
                 symbolTable: [...symbolTable] 
             }
+            console.log(symbolTable)
 
             clearEverything();
 
@@ -127,7 +128,8 @@ case 7:
 break;
 case 8:
 
-            mvs.push({label: null, instruction: "AMEM", parameter: localVariableCount, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column}); 
+            if (localVariableCount > 0)
+                mvs.push({label: null, instruction: "AMEM", parameter: localVariableCount, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column}); 
         
 break;
 case 9:

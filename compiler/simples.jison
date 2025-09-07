@@ -276,7 +276,8 @@ procedure
 t_start_proc 
     : T_START 
         {
-            mvs.push({label: null, instruction: "AMEM", parameter: localVariableCount, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column}); 
+            if (localVariableCount > 0)
+                mvs.push({label: null, instruction: "AMEM", parameter: localVariableCount, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column}); 
         }
     ;
 
@@ -312,7 +313,6 @@ procedure_header
         {
             if (!procAndFuncStarted) {
                 procAndFuncStarted = true;
-                console.log(`entro aqui e agora é ${procAndFuncStarted}`)
                 mvs.push({label: null, instruction: "DSVS", parameter: "L0", first_line: 0, last_line: 0, first_column: 0, last_column: 0})    
             }
 
@@ -382,7 +382,6 @@ start_block
                 symbolTable = [...globalSymbolTable]
             }
 
-            console.log(symbolTable)
             
         }
     ;
@@ -453,7 +452,6 @@ variable_list
             }
 
             if (procAndFuncStarted) {
-                console.log(localVariableCount)
                 success = addSymbol({
                     type: variableType, 
                     name: $2, 
@@ -491,7 +489,6 @@ variable_list
             }
 
             if (procAndFuncStarted) {
-                console.log(localVariableCount)
                 success = addSymbol({
                     type: variableType, 
                     name: $1, 
