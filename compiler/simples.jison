@@ -61,11 +61,13 @@ let label = 0,
     tmpVariable,
     globalSymbolTable = [], // This is to save the global symbol table temporarly
     parameterStack = [],
+    argumentStack = [],
     symbolTable = [],
     success,
     lastProcedure,
     procedureAndFunctionCount = 0,
-    localVariableCount = 0;
+    localVariableCount = 0,
+    tmpArgument;
 
 const clearEverything = () => { // Clean all variable in an error case
     symbolTable = [];
@@ -80,8 +82,8 @@ const clearEverything = () => { // Clean all variable in an error case
     globalSymbolTable = [];
     lastProcedure = null;
     procedureAndFunctionCount = 0,
-    localVariableCount = 0;
-    
+    localVariableCount = 0,
+    argumentStack = []; 
 }
 
 /**
@@ -236,9 +238,11 @@ algorithm
                 symbolTable: [...symbolTable] 
             }
 
+            console.log("=============DEBUG CONTENT=============");
             console.log(symbolTable);
             console.log("===========================");
             console.log(mvs);
+            console.log("=============FINISHED CONTENT=============");
 
             clearEverything();
             
@@ -740,19 +744,29 @@ arguments
     ;
 
 argument_list 
-    : argument_list argument
-    | argument
+    : argument_list expression {
+            tmpArgument = argumentStack.pop();
+            if (tmpArgument.type != typeStack.pop()) {
+               error(@2, `Tipo errado de parâmetro.`)
+            }
+        }
+    | expression 
+        {
+            tmpArgument = argumentStack.pop();
+            if (tmpArgument.type != typeStack.pop()) {
+               error(@1, `Tipo errado de parâmetro.`)
+            }
+        }
     ;
 
-argument
-    : expression
-    ;
 
 procedure_call_header
     : T_IDENTIFIER T_OPEN
         {
             tmpVariableId = $1;
             tmpVariable = findVariable(tmpVariableId);
+            argumentStack = [...tmpVariable.parameter];
+            argumentStack.reverse();
             $$ = @1;
         }
     ;
