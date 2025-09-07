@@ -49,7 +49,7 @@ const TerminalWrapper = styled.div`
 
 const TerminalCard = styled.div`
   flex: 1;
-  height: 710px;
+  height: 750px;
   box-sizing: border-box;
   background: #1a202c;
   font-family: "Courier New", monospace;
