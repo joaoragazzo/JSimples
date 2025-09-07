@@ -68,7 +68,8 @@ let label = 0,
     procedureAndFunctionCount = 0,
     localVariableCount = 0,
     tmpArgument,
-    isVariable = true;
+    isVariable = true,
+    tmpProcAndFunc;
 
 const clearEverything = () => { // Clean all variable in an error case
     symbolTable = [];
@@ -85,7 +86,8 @@ const clearEverything = () => { // Clean all variable in an error case
     procedureAndFunctionCount = 0,
     localVariableCount = 0,
     argumentStack = [],
-    isVariable = true;; 
+    isVariable = true,
+    tmpProcAndFunc = null;
 }
 
 /**
@@ -789,8 +791,8 @@ procedure_call_header
     : T_IDENTIFIER T_OPEN
         {
             tmpVariableId = $1;
-            tmpVariable = findVariable(tmpVariableId);
-            argumentStack = [...tmpVariable.parameter];
+            tmpProcAndFunc = findVariable(tmpVariableId);
+            argumentStack = [...tmpProcAndFunc.parameter];
             argumentStack.reverse();
             $$ = @1;
         }
@@ -799,7 +801,7 @@ procedure_call_header
 procedure_call
     : procedure_call_header arguments T_CLOSE
         {
-            mvs.push({label: null, instruction: "DSVS", parameter: `L${tmpVariable.label}`, first_line: $1.first_line, last_line: @3.last_line, first_column: $1.first_column, last_column: @3.last_column})    
+            mvs.push({label: null, instruction: "DSVS", parameter: `L${tmpProcAndFunc.label}`, first_line: $1.first_line, last_line: @3.last_line, first_column: $1.first_column, last_column: @3.last_column})    
         }
     ;
 
