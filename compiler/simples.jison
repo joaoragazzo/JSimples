@@ -236,8 +236,12 @@ algorithm
                 symbolTable: [...symbolTable] 
             }
 
-            clearEverything();
+            console.log(symbolTable);
+            console.log("===========================");
+            console.log(mvs);
 
+            clearEverything();
+            
             return result;            
         }
     ;
@@ -587,7 +591,13 @@ assignment
             if (symbolTable[tmpPos].type != tmpType) 
                 error(@3, "Incompatibilidade de tipo.");
             
-            mvs.push({label: null, instruction: "ARZG", parameter: symbolTable[tmpPos].address, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
+            if (!insideFunctionDeclaration)
+                mvs.push({label: null, instruction: "ARZG", parameter: symbolTable[tmpPos].address, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
+            
+            if (insideFunctionDeclaration)
+                mvs.push({label: null, instruction: "ARZL", parameter: symbolTable[tmpPos].address, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
+        
+            
             $$ = new SyntaxNode("Atribuição", [$1, new SyntaxNode($2,[]), $3]);
         }
     ;

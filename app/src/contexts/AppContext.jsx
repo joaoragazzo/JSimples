@@ -30,7 +30,10 @@ export const AppContextProvider = ({ children }) => {
     syntaxTree: {},
     mvs: [],
     finished: false,
+    symbolTable: []
   });
+
+  useEffect(() => {console.log(parserResponse)},[parserResponse])
 
   const output = (type, content) => {
     setLogs((prevLogs) => [

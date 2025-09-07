@@ -7,7 +7,7 @@ import { CodeEditor } from "./tools/CodeEditor";
 import styled from "styled-components";
 import { MVSViewer } from "./tools/MVSViewer";
 import { MachineStateViewer } from "./tools/MachineStateViewer";
-import { useRef } from "react";
+import { SymbolTable } from "./SymbolTable";
 
 const ExtendedRow = styled(Row)`
   flex: 1;
@@ -29,6 +29,8 @@ const StyledCard = styled.div`
   background: rgba(255, 255, 255);
   height: 100%;
   min-height: 0;
+  width: 100%;
+  z-index: 1;
   
   @media (max-width: 768px) {
     padding: 16px;
@@ -66,6 +68,7 @@ export const Workspace = () => {
   const { tab } = useAppData();
 
   return (
+    <div style={{gap: "12px", display: "flex", flexDirection: "column"}}>
     <ExtendedRow gutter={[12, 12]}>
       <ResponsiveCol xs={24} sm={24} md={12} lg={12} xl={12}>
         <StyledCard>
@@ -89,5 +92,13 @@ export const Workspace = () => {
         </StyledCard>
       </ResponsiveCol>
     </ExtendedRow>
+    <ExtendedRow>
+      <StyledCard>
+
+        <SymbolTable />
+      </StyledCard>
+    </ExtendedRow>
+    </div>
+    
   );
 };

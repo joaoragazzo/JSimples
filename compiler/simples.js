@@ -103,10 +103,13 @@ case 1:
                 mvs: mvs, 
                 symbolTable: [...symbolTable] 
             }
-            console.log(symbolTable)
+
+            console.log(symbolTable);
+            console.log("===========================");
+            console.log(mvs);
 
             clearEverything();
-
+            
             return result;            
         
 break;
@@ -160,7 +163,6 @@ case 10:
 
             if (!procAndFuncStarted) {
                 procAndFuncStarted = true;
-                console.log(`entro aqui e agora é ${procAndFuncStarted}`)
                 mvs.push({label: null, instruction: "DSVS", parameter: "L0", first_line: 0, last_line: 0, first_column: 0, last_column: 0})    
             }
 
@@ -219,7 +221,6 @@ case 16:
                 symbolTable = [...globalSymbolTable]
             }
 
-            console.log(symbolTable)
             
         
 break;
@@ -283,7 +284,6 @@ case 24:
             }
 
             if (procAndFuncStarted) {
-                console.log(localVariableCount)
                 success = addSymbol({
                     type: variableType, 
                     name: $$[$0], 
@@ -322,7 +322,6 @@ case 25:
             }
 
             if (procAndFuncStarted) {
-                console.log(localVariableCount)
                 success = addSymbol({
                     type: variableType, 
                     name: $$[$0], 
@@ -397,7 +396,13 @@ case 36:
             if (symbolTable[tmpPos].type != tmpType) 
                 error(_$[$0], "Incompatibilidade de tipo.");
             
-            mvs.push({label: null, instruction: "ARZG", parameter: symbolTable[tmpPos].address, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
+            if (!insideFunctionDeclaration)
+                mvs.push({label: null, instruction: "ARZG", parameter: symbolTable[tmpPos].address, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
+            
+            if (insideFunctionDeclaration)
+                mvs.push({label: null, instruction: "ARZL", parameter: symbolTable[tmpPos].address, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
+        
+            
             this.$ = new SyntaxNode("Atribuição", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
