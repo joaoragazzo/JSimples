@@ -558,28 +558,31 @@ case 58:
             tmpArgument = argumentStack.pop();
             
             if (tmpArgument.mechanism === "REFERENCE" && !isVariable) {
-                error(_$[$01], `Tipo errado de parâmetro. Espera-se uma referência de uma variavel`);
+                error(_$[$01], `Tipo errado de parâmetro. Espera-se uma referência de uma variável`);
             }
             
             if (tmpArgument.type != typeStack.pop()) {
                error(_$[$0], `Tipo errado de parâmetro.`)
             }
-            
+
             isVariable = true;
         
 break;
 case 59:
 
             tmpVariableId = $$[$0-1];
-            tmpVariable = findVariable(tmpVariableId);
-            argumentStack = [...tmpVariable.parameter];
+            tmpProcAndFunc = findVariable(tmpVariableId);
+            argumentStack = [...tmpProcAndFunc.parameter];
             argumentStack.reverse();
+            isArguments = true;
             this.$ = _$[$0-1];
         
 break;
 case 60:
 
-            mvs.push({label: null, instruction: "DSVS", parameter: `L${tmpVariable.label}`, first_line: $$[$0-2].first_line, last_line: _$[$0].last_line, first_column: $$[$0-2].first_column, last_column: _$[$0].last_column})    
+            isArguments = false;
+            mvs.push({label: null, instruction: "SVCP", parameter: null, first_line: $$[$0-2].first_line, last_line: _$[$0].last_line, first_column: $$[$0-2].first_column, last_column: _$[$0].last_column})    
+            mvs.push({label: null, instruction: "DSVS", parameter: `L${tmpProcAndFunc.label}`, first_line: $$[$0-2].first_line, last_line: _$[$0].last_line, first_column: $$[$0-2].first_column, last_column: _$[$0].last_column})    
         
 break;
 case 61:
@@ -587,11 +590,24 @@ case 61:
             if (insideFunctionDeclaration) {
                 tmpVariableId = $$[$0];
                 tmpVariable = findVariable(tmpVariableId);
-                mvs.push({label: null, instruction: "CRVL", parameter: tmpVariable.address, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
+                mvs.push({label: null, instruction: "CRVL", parameter: tmpVariable.address, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});  
                 typeStack.push(tmpVariable.type); 
             }
             
-            if (!insideFunctionDeclaration) {
+            if (isArguments) {
+                tmpVariableId = $$[$0];
+                tmpVariable = findVariable(tmpVariableId);
+
+                if(argumentStack[argumentStack.length - 1].mechanism === "REFERENCE")
+                    mvs.push({label: null, instruction: "CREG", parameter: tmpVariable.address, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
+
+                if (argumentStack[argumentStack.length - 1].mechanism === "VALUE")
+                    mvs.push({label: null, instruction: "CRVG", parameter: tmpVariable.address, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
+                
+                typeStack.push(tmpVariable.type); 
+            }
+
+            if (!insideFunctionDeclaration && !isArguments) {
                 tmpVariableId = $$[$0];
                 tmpVariable = findVariable(tmpVariableId);
                 mvs.push({label: null, instruction: "CRVG", parameter: tmpVariable.address, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
@@ -871,7 +887,9 @@ let label = 0,
     procedureAndFunctionCount = 0,
     localVariableCount = 0,
     tmpArgument,
-    isVariable = true;
+    isVariable = true,
+    isArguments = false,
+    tmpProcAndFunc;
 
 const clearEverything = () => { // Clean all variable in an error case
     symbolTable = [];
@@ -888,7 +906,9 @@ const clearEverything = () => { // Clean all variable in an error case
     procedureAndFunctionCount = 0,
     localVariableCount = 0,
     argumentStack = [],
-    isVariable = true;; 
+    isVariable = true,
+    tmpProcAndFunc = null,
+    isArguments=false;
 }
 
 /**

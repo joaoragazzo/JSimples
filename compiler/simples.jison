@@ -69,6 +69,7 @@ let label = 0,
     localVariableCount = 0,
     tmpArgument,
     isVariable = true,
+    isArguments = false,
     tmpProcAndFunc;
 
 const clearEverything = () => { // Clean all variable in an error case
@@ -87,7 +88,8 @@ const clearEverything = () => { // Clean all variable in an error case
     localVariableCount = 0,
     argumentStack = [],
     isVariable = true,
-    tmpProcAndFunc = null;
+    tmpProcAndFunc = null,
+    isArguments=false;
 }
 
 /**
@@ -757,7 +759,8 @@ arguments
     ;
 
 argument_list 
-    : argument_list expression {
+    : argument_list expression 
+        {
             tmpArgument = argumentStack.pop();
             
             if (tmpArgument.mechanism === "REFERENCE" && !isVariable) {
@@ -794,6 +797,7 @@ procedure_call_header
             tmpProcAndFunc = findVariable(tmpVariableId);
             argumentStack = [...tmpProcAndFunc.parameter];
             argumentStack.reverse();
+            isArguments = true;
             $$ = @1;
         }
     ;
@@ -801,6 +805,8 @@ procedure_call_header
 procedure_call
     : procedure_call_header arguments T_CLOSE
         {
+            isArguments = false;
+            mvs.push({label: null, instruction: "SVCP", parameter: null, first_line: $1.first_line, last_line: @3.last_line, first_column: $1.first_column, last_column: @3.last_column})    
             mvs.push({label: null, instruction: "DSVS", parameter: `L${tmpProcAndFunc.label}`, first_line: $1.first_line, last_line: @3.last_line, first_column: $1.first_column, last_column: @3.last_column})    
         }
     ;
@@ -812,11 +818,24 @@ term
             if (insideFunctionDeclaration) {
                 tmpVariableId = $1;
                 tmpVariable = findVariable(tmpVariableId);
-                mvs.push({label: null, instruction: "CRVL", parameter: tmpVariable.address, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
+                mvs.push({label: null, instruction: "CRVL", parameter: tmpVariable.address, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});  
                 typeStack.push(tmpVariable.type); 
             }
             
-            if (!insideFunctionDeclaration) {
+            if (isArguments) {
+                tmpVariableId = $1;
+                tmpVariable = findVariable(tmpVariableId);
+
+                if(argumentStack[argumentStack.length - 1].mechanism === "REFERENCE")
+                    mvs.push({label: null, instruction: "CREG", parameter: tmpVariable.address, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
+
+                if (argumentStack[argumentStack.length - 1].mechanism === "VALUE")
+                    mvs.push({label: null, instruction: "CRVG", parameter: tmpVariable.address, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
+                
+                typeStack.push(tmpVariable.type); 
+            }
+
+            if (!insideFunctionDeclaration && !isArguments) {
                 tmpVariableId = $1;
                 tmpVariable = findVariable(tmpVariableId);
                 mvs.push({label: null, instruction: "CRVG", parameter: tmpVariable.address, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
