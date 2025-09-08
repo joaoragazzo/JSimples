@@ -590,11 +590,17 @@ case 61:
             if (insideFunctionDeclaration) {
                 tmpVariableId = $$[$0];
                 tmpVariable = findVariable(tmpVariableId);
-                mvs.push({label: null, instruction: "CRVL", parameter: tmpVariable.address, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});  
+
+                if(argumentStack[argumentStack.length - 1].mechanism === "REFERENCE")
+                    mvs.push({label: null, instruction: "CREL", parameter: tmpVariable.address, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
+
+                if (argumentStack[argumentStack.length - 1].mechanism === "VALUE")
+                    mvs.push({label: null, instruction: "CRVL", parameter: tmpVariable.address, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
+
                 typeStack.push(tmpVariable.type); 
             }
             
-            if (isArguments) {
+            if (!insideFunctionDeclaration && isArguments) {
                 tmpVariableId = $$[$0];
                 tmpVariable = findVariable(tmpVariableId);
 
