@@ -447,7 +447,17 @@ case 40:
             }
 
             mvs.push({label: null, instruction: "LEIA", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
-            mvs.push({label: null, instruction: "ARZG", parameter: variable.address, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
+            
+            if (insideFunctionDeclaration)
+                if (variable.mechanism === "REFERENCE"){
+                    mvs.push({label: null, instruction: "ARMI", parameter: variable.address, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
+                } else {
+                    mvs.push({label: null, instruction: "ARZL", parameter: variable.address, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
+                }
+            else {
+                mvs.push({label: null, instruction: "ARZG", parameter: variable.address, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
+            }
+            
             this.$ = new SyntaxNode("Entrada", [new SyntaxNode($$[$0-1],[]), new SyntaxNode($$[$0],[])]);
         
 break;
@@ -1418,7 +1428,7 @@ case 35:return 69;
 break;
 }
 },
-rules: [/^(?:\s+)/,/^(?:programa\b)/,/^(?:inicio\b)/,/^(?:fimprograma\b)/,/^(?:leia\b)/,/^(?:escreva\b)/,/^(?:se\b)/,/^(?:entao\b)/,/^(?:senao\b)/,/^(?:fimse\b)/,/^(?:enquanto\b)/,/^(?:faca\b)/,/^(?:fimenquanto\b)/,/^(?:\+)/,/^(?:-)/,/^(?:\*)/,/^(?:div\b)/,/^(?:<-)/,/^(?:>)/,/^(?:<)/,/^(?:=)/,/^(?:e\b)/,/^(?:ou\b)/,/^(?:nao\b)/,/^(?:\()/,/^(?:\))/,/^(?:inteiro\b)/,/^(?:logico\b)/,/^(?:V\b)/,/^(?:F\b)/,/^(?:proc\b)/,/^(?:fimproc\b)/,/^(?:ref\b)/,/^(?:$)/,/^(?:[a-zA-Z][a-zA-Z0-9]*)/,/^(?:[0-9]+)/],
+rules: [/^(?:\s+)/,/^(?:programa\b)/,/^(?:inicio\b)/,/^(?:fimprograma\b)/,/^(?:leia\b)/,/^(?:escreva\b)/,/^(?:se\b)/,/^(?:entao\b)/,/^(?:senao\b)/,/^(?:fimse\b)/,/^(?:enquanto\b)/,/^(?:faca\b)/,/^(?:fimenquanto\b)/,/^(?:\+)/,/^(?:-)/,/^(?:\*)/,/^(?:div\b)/,/^(?:<-)/,/^(?:>)/,/^(?:<)/,/^(?:=)/,/^(?:e\b)/,/^(?:ou\b)/,/^(?:nao\b)/,/^(?:\()/,/^(?:\))/,/^(?:inteiro\b)/,/^(?:logico\b)/,/^(?:V\b)/,/^(?:F\b)/,/^(?:proc\b)/,/^(?:fimproc\b)/,/^(?:ref\b)/,/^(?:$)/,/^(?:[a-zA-Z_][a-zA-Z0-9_]*)/,/^(?:[0-9]+)/],
 conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35],"inclusive":true}}
 });
 return lexer;

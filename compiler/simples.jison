@@ -660,7 +660,17 @@ input
             }
 
             mvs.push({label: null, instruction: "LEIA", parameter: null, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
-            mvs.push({label: null, instruction: "ARZG", parameter: variable.address, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
+            
+            if (insideFunctionDeclaration)
+                if (variable.mechanism === "REFERENCE"){
+                    mvs.push({label: null, instruction: "ARMI", parameter: variable.address, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
+                } else {
+                    mvs.push({label: null, instruction: "ARZL", parameter: variable.address, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
+                }
+            else {
+                mvs.push({label: null, instruction: "ARZG", parameter: variable.address, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
+            }
+            
             $$ = new SyntaxNode("Entrada", [new SyntaxNode($1,[]), new SyntaxNode($2,[])]);
         }
     ;
