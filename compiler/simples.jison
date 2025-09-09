@@ -140,7 +140,7 @@ const findVariable = (variableName) => {
 };
 
 const findVariablePosition = (variableName) => {
-    const index = symbolTable.findIndex(variable => variable.name === variableName);
+    const index = symbolTable.findLastIndex(variable => variable.name === variableName);
     if (index != -1) {
         return index;
     }
@@ -277,6 +277,10 @@ routine
 procedure
     : procedure_header T_OPEN parameter_list routine_header_closed variables t_start_proc command_list T_ENDPROC
         {
+            if (localVariableCount > 0)
+                mvs.push({label: null, instruction: "DMEM", parameter: localVariableCount, first_line: @8, last_line: @8, first_column: @8, last_column: @8})    
+            localVariableCount = 0;
+
             mvs.push({label: null, instruction: "RTSP", parameter: parameterStack.length, first_line: @8, last_line: @8, first_column: @8, last_column: @8})    
             lastProcedure = globalSymbolTable.at(-1);
 
@@ -368,7 +372,6 @@ parameter
                 subSymbolTree: null,
                 reference: @3
             })
-
             lastProcedure = globalSymbolTable.at(-1);
             lastProcedure.parameter.push({type: variableType, mechanism: $1});
         }
@@ -462,7 +465,7 @@ variable_list
                     subSymbolTree: null
                 });
 
-                if (!success) error(@1, "Nome de variável já declarada.");
+                if (!success) error(@2, "Nome de variável já declarada.");
             }
 
             if (procAndFuncStarted) {
@@ -478,7 +481,7 @@ variable_list
                     subSymbolTree: null
                 });
 
-                if (!success) error(@1, "Nome de variável já declarada.");
+                if (!success) error(@2, "Nome de variável já declarada.");
             }
             
             $$ = new SyntaxNode("Lista de variáveis", [$1, new SyntaxNode($2,[])]);
@@ -598,15 +601,25 @@ assignment
             tmpType = typeStack.pop();
             tmpPos = labelStack.pop(); 
 
+            console.log(symbolTable[tmpPos]);
+
             if (symbolTable[tmpPos].type != tmpType) 
                 error(@3, "Incompatibilidade de tipo.");
             
             if (!insideFunctionDeclaration)
                 mvs.push({label: null, instruction: "ARZG", parameter: symbolTable[tmpPos].address, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
             
-            if (insideFunctionDeclaration)
-                mvs.push({label: null, instruction: "ARZL", parameter: symbolTable[tmpPos].address, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
-        
+            if (insideFunctionDeclaration) {
+                if (symbolTable[tmpPos].mechanism === "REFERENCE")
+                    mvs.push({label: null, instruction: "ARMI", parameter: symbolTable[tmpPos].address, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
+                else {
+                    if (symbolTable[tmpPos].scope === "LOCAL")
+                        mvs.push({label: null, instruction: "ARZL", parameter: symbolTable[tmpPos].address, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
+                    else 
+                        mvs.push({label: null, instruction: "ARZG", parameter: symbolTable[tmpPos].address, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
+                }
+                
+            }
             
             $$ = new SyntaxNode("Atribuição", [$1, new SyntaxNode($2,[]), $3]);
         }
@@ -616,6 +629,11 @@ assignment_identifier
     : T_IDENTIFIER
         {
             tmpPos = findVariablePosition($1);
+            
+            if(typeof tmpPos !== 'number') {
+                error(@1, `A variável não foi declarada`)
+            }
+
             labelStack.push(tmpPos); 
             $$ = new SyntaxNode("Identificador de atribuição", [new SyntaxNode($1,[])]);
         }
@@ -636,6 +654,11 @@ input
     : T_READ T_IDENTIFIER 
         {
             let variable = findVariable($2);
+
+            if(!variable) {
+                error(@2, `A variável não foi declarada`)
+            }
+
             mvs.push({label: null, instruction: "LEIA", parameter: null, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
             mvs.push({label: null, instruction: "ARZG", parameter: variable.address, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
             $$ = new SyntaxNode("Entrada", [new SyntaxNode($1,[]), new SyntaxNode($2,[])]);
@@ -778,7 +801,7 @@ argument_list
             tmpArgument = argumentStack.pop();
             
             if (tmpArgument.mechanism === "REFERENCE" && !isVariable) {
-                error(@2, `Tipo errado de parâmetro. Espera-se uma referência de uma variável`);
+                error(@1, `Tipo errado de parâmetro. Espera-se uma referência de uma variável`);
             }
             
             if (tmpArgument.type != typeStack.pop()) {
@@ -795,9 +818,11 @@ procedure_call_header
         {
             tmpVariableId = $1;
             tmpProcAndFunc = findVariable(tmpVariableId);
+            console.log(tmpProcAndFunc.parameter);
             argumentStack = [...tmpProcAndFunc.parameter];
             argumentStack.reverse();
             isArguments = true;
+            isVariable = true;
             $$ = @1;
         }
     ;
@@ -806,8 +831,16 @@ procedure_call
     : procedure_call_header arguments T_CLOSE
         {
             isArguments = false;
+        
+            if (argumentStack.length != 0) {
+                error(@3, "Quantidade de parâmetros errada!")
+            }
+            
+        
             mvs.push({label: null, instruction: "SVCP", parameter: null, first_line: $1.first_line, last_line: @3.last_line, first_column: $1.first_column, last_column: @3.last_column})    
             mvs.push({label: null, instruction: "DSVS", parameter: `L${tmpProcAndFunc.label}`, first_line: $1.first_line, last_line: @3.last_line, first_column: $1.first_column, last_column: @3.last_column})    
+        
+        
         }
     ;
 
@@ -818,12 +851,15 @@ term
             if (insideFunctionDeclaration) {
                 tmpVariableId = $1;
                 tmpVariable = findVariable(tmpVariableId);
-
-                if(argumentStack[argumentStack.length - 1].mechanism === "REFERENCE")
+                if(tmpVariable.mechanism === "REFERENCE") {
                     mvs.push({label: null, instruction: "CREL", parameter: tmpVariable.address, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
-
-                if (argumentStack[argumentStack.length - 1].mechanism === "VALUE")
-                    mvs.push({label: null, instruction: "CRVL", parameter: tmpVariable.address, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
+                } else {
+                    if (tmpVariable.scope === "LOCAL")
+                        mvs.push({label: null, instruction: "CRVL", parameter: tmpVariable.address, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
+                    else if (tmpVariable.scope === "GLOBAL")
+                        mvs.push({label: null, instruction: "CRVG", parameter: tmpVariable.address, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
+                }
+                
 
                 typeStack.push(tmpVariable.type); 
             }
@@ -832,11 +868,13 @@ term
                 tmpVariableId = $1;
                 tmpVariable = findVariable(tmpVariableId);
 
-                if(argumentStack[argumentStack.length - 1].mechanism === "REFERENCE")
-                    mvs.push({label: null, instruction: "CREG", parameter: tmpVariable.address, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
+                if(argumentStack[argumentStack.length - 1].mechanism === "REFERENCE") {
+                    mvs.push({label: null, instruction: "CREG", parameter: tmpVariable.address, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});                
+                }
 
-                if (argumentStack[argumentStack.length - 1].mechanism === "VALUE")
+                if (argumentStack[argumentStack.length - 1].mechanism === "VALUE") {
                     mvs.push({label: null, instruction: "CRVG", parameter: tmpVariable.address, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
+                }
                 
                 typeStack.push(tmpVariable.type); 
             }
@@ -896,7 +934,8 @@ term
 footer
     : T_END EOF
         {   
-            mvs.push({label: null, instruction: "DMEM", parameter: variableCount, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
+            if (variableCount > 0)
+                mvs.push({label: null, instruction: "DMEM", parameter: variableCount, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
             mvs.push({label: null, instruction: "FIMP", parameter: null, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
 
             $$ = new SyntaxNode("Rodapé", [new SyntaxNode($1,[])]);

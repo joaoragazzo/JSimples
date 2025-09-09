@@ -119,6 +119,7 @@ export const AppContextProvider = ({ children }) => {
       }, 0);
     } catch (e) {
       output("error", e.message);
+      console.log(e);
     }
   }
 
