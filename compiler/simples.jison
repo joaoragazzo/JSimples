@@ -204,7 +204,7 @@ const error = (token, message) => {
 
 <<EOF>>         return 'EOF';
 
-[a-zA-Z][a-zA-Z0-9]*    return 'T_IDENTIFIER';
+[a-zA-Z_][a-zA-Z0-9_]* return 'T_IDENTIFIER';
 [0-9]+                  return 'T_NUMBER';
 
 /lex 
