@@ -16,7 +16,7 @@ export const AppContextProvider = ({ children }) => {
     "programa teste\n\tinteiro a b\n\tlogico c d\ninicio\n\ta <- 1\n\ta <- a * 3\n\tescreva a\nfimprograma"
   );
   const [logs, setLogs] = useState([]);
-  const [mvsState, setMvsState] = useState({stack:[], instructionPointer: 0});
+  const [mvsState, setMvsState] = useState({stack:[], instructionPointer: 0, dPointer: -1});
   const [waitingInput, setWaitingInput] = useState(false);
 
   const [tab, setTab] = useState("terminal");

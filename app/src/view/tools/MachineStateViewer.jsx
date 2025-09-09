@@ -226,7 +226,7 @@ export const MachineStateViewer = () => {
             <PointersContainer >
               <Pointer value={mvsState?.instructionPointer} label={"I"}/>
               <Pointer value={mvsState?.stack.length + (mvsState?.memory?.length || 0)} label={"S"}/>
-              <Pointer value={-1} label={"D"}/>
+              <Pointer value={mvsState?.dPointer || -1} label={"D"}/>
               
             </PointersContainer>
           </PointersCard>

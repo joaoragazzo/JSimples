@@ -12,6 +12,7 @@ export const MVS = (
 
   let iterationCounter = 0;
   let instructionPointer = 0;
+  let dPointer = -1;
   let register = algorithm[instructionPointer];
   let stack = [];
   let isIteration = false;
@@ -29,9 +30,7 @@ export const MVS = (
   }
     
   const executeAmem = () => {
-    for (let i = 0; i < register.parameter; i++) {
-      stack[i] = 0;
-    }
+    stack.push(...Array(register.parameter).fill(0));
   }
 
   const executeCrvg = () => {
@@ -143,12 +142,49 @@ export const MVS = (
   };
 
   const executeDmem = () => {
-    // Limpa toda a stack (equivalente a limpar memória)
-    stack = [];
+    stack.splice(-register.parameter, register.parameter);
   }
 
   const executeSvcp = () => {
     stack.push(instructionPointer + 2)
+  }
+
+  const executeEnsp = () => {
+    stack.push(dPointer);
+    dPointer = stack.length
+  }
+
+  const executeArmi = () => {
+    let tmp = stack.pop();
+    stack[stack[dPointer + register.parameter]] = tmp;
+  }
+
+  const executeRtsp = () => {
+    let tmp = stack.pop()
+    let tmp2 = stack.pop()
+    instructionPointer = tmp2;
+    dPointer = tmp
+  }
+
+  const executeCrvl = () => {
+    stack.push(stack[dPointer + register.parameter])
+  }
+
+  const executeArzl = () => {
+    let value = stack.pop();
+    stack[dPointer + register.parameter] = value;
+  }
+
+  const executeCrel = () => {
+    stack.push(dPointer + register.parameter)
+  }
+
+  const executeCreg = () => {
+    stack.push(stack.parameter)
+  }
+
+  const executeCrvi = () => {
+    stack.push(stack[stack[d + register.parameter]])
   }
 
   const executeFrame = async () => {
@@ -235,6 +271,30 @@ export const MVS = (
         case "SVCP":
           executeSvcp();
           break;
+        case "ENSP":
+          executeEnsp();
+          break;
+        case "ARMI":
+          executeArmi();
+          break;
+        case "RTSP":
+          executeRtsp();
+          break;
+        case "CRVL":
+          executeCrvl();
+          break;
+        case "ARZL":
+          executeArzl();
+          break;
+        case "CREL":
+          executeCrel();
+          break;
+        case "CREG":
+          executeCreg();
+          break;
+        case "CRVI":
+          executeCrvi();
+          break;
       }
       if (!isIteration) instructionPointer++;
       if (isIteration) iterationCounter++;
@@ -274,7 +334,7 @@ export const MVS = (
     if (stepByStep && waitingNextStep && !isWaitingInput) {
       executeFrame();
     }
-    return {instructionPointer: instructionPointer, stack: stack};
+    return {instructionPointer: instructionPointer, sPointer: stack.length, dPointer: dPointer, stack: stack};
   };
 
   const start = () => {
