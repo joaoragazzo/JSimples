@@ -70,7 +70,9 @@ let label = 0,
     tmpArgument,
     isVariable = true,
     isArguments = false,
-    tmpProcAndFunc;
+    tmpProcAndFunc,
+    tmpTypeParameter,
+    tmpProcIdentifier;
 
 const clearEverything = () => { // Clean all variable in an error case
     symbolTable = [];
@@ -227,12 +229,14 @@ algorithm
         {
             const headerNode = $1;
             const variablesNode = $2;
+            const routinesNode = $3;
             const startBlockNode = $4;
             const commandsNode = $5;
             const footerNode = $6;
 
             const children = [headerNode];
             if (variablesNode) children.push(variablesNode);
+            if (routinesNode) children.push(routinesNode);
             if (startBlockNode) children.push(startBlockNode);
             if (commandsNode) children.push(commandsNode);
             if (footerNode) children.push(footerNode);
@@ -244,12 +248,6 @@ algorithm
                 symbolTable: [...symbolTable] 
             }
 
-            console.log("=============DEBUG CONTENT=============");
-            console.log(symbolTable);
-            console.log("===========================");
-            console.log(mvs);
-            console.log("=============FINISHED CONTENT=============");
-
             clearEverything();
             
             return result;            
@@ -257,20 +255,33 @@ algorithm
     ;
 
 routines
-    : /* blank */
+    : 
+        {
+            $$ = null;
+        }
     | routines_list
         {   
             mvs.push({label: "L0", instruction: "NADA", parameter: null, first_line: 0, last_line: 0, first_column: 0, last_column: 0})    
+            $$ = new SyntaxNode("Rotinas", [$1]);
         }
     ;
 
 routines_list
     : routines_list routine
+        {
+            $$ = new SyntaxNode("Declaração de Rotinas", [$1, new SyntaxNode("Rotina", [$2])]);
+        }
     | routine
+        {
+            $$ = new SyntaxNode("Rotina", [$1]);
+        }
     ;
 
 routine
     : procedure
+        {
+            $$ = new SyntaxNode("Procedimento", [$1]);
+        }
     // | function
     ;
 
@@ -287,7 +298,16 @@ procedure
             lastProcedure.subSymbolTree = symbolTable.slice(variableCount + ++procedureAndFunctionCount);
             symbolTable = [...globalSymbolTable]
             parameterStack = []
-            
+            $$ = new SyntaxNode("Procedimento", [
+                $1,
+                new SyntaxNode($2, []),
+                $3,
+                new SyntaxNode(")", []),
+                $5,
+                new SyntaxNode("inicio", []),
+                $7,
+                new SyntaxNode("fimproc", [])
+            ])
         }
     ;
 
@@ -348,13 +368,24 @@ procedure_header
 
             mvs.push({label: `L${label}`, instruction: "ENSP", parameter: null, first_line: 0, last_line: 0, first_column: 0, last_column: 0})    
             globalSymbolTable = [...symbolTable];
+
+            $$ = new SyntaxNode("Cabeçalho do Procedimento", [
+                new SyntaxNode($1, []),
+                new SyntaxNode($2, []),
+            ])
         }
     ;
 
 
 parameter_list
     : /* blank */
-    | parameter_list parameter
+        {
+            $$ = new SyntaxNode("IGNORE", []);
+        }
+    | parameter_list parameter 
+        {
+            $$ = new SyntaxNode("Parâmetros", [$2])
+        }
     ;
 
 parameter
@@ -374,17 +405,25 @@ parameter
             })
             lastProcedure = globalSymbolTable.at(-1);
             lastProcedure.parameter.push({type: variableType, mechanism: $1});
+
+            $$ = new SyntaxNode("Parâmetro", [
+                $1,
+                $2,
+                new SyntaxNode($3, [])
+            ])
         }
     ;
 
 mechanism
     : /* blank */
         {
-            $$ = "VALUE"
+            tmpTypeParameter = "VALUE"
+            $$ = new SyntaxNode("IGNORE", []);
         }
     |  T_REF 
         {
-            $$ = "REFERENCE"
+            tmpTypeParameter = "REFERENCE"
+            $$ = new SyntaxNode($1, []);
         }
     ;
 
@@ -555,7 +594,7 @@ command
         }
     | procedure_call
         {
-            // add a syntax node for procedure call
+            $$ = new SyntaxNode("Comando", [$1]);
         }
     ;
 
@@ -600,8 +639,6 @@ assignment
         {
             tmpType = typeStack.pop();
             tmpPos = labelStack.pop(); 
-
-            console.log(symbolTable[tmpPos]);
 
             if (symbolTable[tmpPos].type != tmpType) 
                 error(@3, "Incompatibilidade de tipo.");
@@ -805,6 +842,8 @@ argument_list
             }
             
             isVariable = true;
+
+            $$ = new SyntaxNode("Lista de argumentos", [$2])
         }
     | expression 
         {
@@ -819,6 +858,8 @@ argument_list
             }
 
             isVariable = true;
+
+            $$ = new SyntaxNode("Lista de argumentos", [$1])
         }
     ;
 
@@ -828,12 +869,12 @@ procedure_call_header
         {
             tmpVariableId = $1;
             tmpProcAndFunc = findVariable(tmpVariableId);
-            console.log(tmpProcAndFunc.parameter);
             argumentStack = [...tmpProcAndFunc.parameter];
             argumentStack.reverse();
             isArguments = true;
             isVariable = true;
-            $$ = @1;
+            tmpProcIdentifier = @1;
+            $$ = $1;
         }
     ;
 
@@ -847,10 +888,15 @@ procedure_call
             }
             
         
-            mvs.push({label: null, instruction: "SVCP", parameter: null, first_line: $1.first_line, last_line: @3.last_line, first_column: $1.first_column, last_column: @3.last_column})    
+            mvs.push({label: null, instruction: "SVCP", parameter: null, first_line: tmpProcIdentifier.first_line, last_line: @3.last_line, first_column: tmpProcIdentifier.first_column, last_column: @3.last_column})    
             mvs.push({label: null, instruction: "DSVS", parameter: `L${tmpProcAndFunc.label}`, first_line: $1.first_line, last_line: @3.last_line, first_column: $1.first_column, last_column: @3.last_column})    
         
-        
+            $$ = new SyntaxNode("Chamada de procedimento", [
+                new SyntaxNode($1, []),
+                new SyntaxNode("(", []),
+                $2,
+                new SyntaxNode(")",[])
+            ]);
         }
     ;
 

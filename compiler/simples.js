@@ -87,12 +87,14 @@ case 1:
 
             const headerNode = $$[$0-5];
             const variablesNode = $$[$0-4];
+            const routinesNode = $$[$0-3];
             const startBlockNode = $$[$0-2];
             const commandsNode = $$[$0-1];
             const footerNode = $$[$0];
 
             const children = [headerNode];
             if (variablesNode) children.push(variablesNode);
+            if (routinesNode) children.push(routinesNode);
             if (startBlockNode) children.push(startBlockNode);
             if (commandsNode) children.push(commandsNode);
             if (footerNode) children.push(footerNode);
@@ -104,20 +106,35 @@ case 1:
                 symbolTable: [...symbolTable] 
             }
 
-            console.log("=============DEBUG CONTENT=============");
-            console.log(symbolTable);
-            console.log("===========================");
-            console.log(mvs);
-            console.log("=============FINISHED CONTENT=============");
-
             clearEverything();
             
             return result;            
         
 break;
+case 2:
+
+            this.$ = null;
+        
+break;
 case 3:
    
             mvs.push({label: "L0", instruction: "NADA", parameter: null, first_line: 0, last_line: 0, first_column: 0, last_column: 0})    
+            this.$ = new SyntaxNode("Rotinas", [$$[$0]]);
+        
+break;
+case 4:
+
+            this.$ = new SyntaxNode("Declaração de Rotinas", [$$[$0-1], new SyntaxNode("Rotina", [$$[$0]])]);
+        
+break;
+case 5:
+
+            this.$ = new SyntaxNode("Rotina", [$$[$0]]);
+        
+break;
+case 6:
+
+            this.$ = new SyntaxNode("Procedimento", [$$[$0]]);
         
 break;
 case 7:
@@ -132,7 +149,16 @@ case 7:
             lastProcedure.subSymbolTree = symbolTable.slice(variableCount + ++procedureAndFunctionCount);
             symbolTable = [...globalSymbolTable]
             parameterStack = []
-            
+            this.$ = new SyntaxNode("Procedimento", [
+                $$[$0-7],
+                new SyntaxNode($$[$0-6], []),
+                $$[$0-5],
+                new SyntaxNode(")", []),
+                $$[$0-3],
+                new SyntaxNode("inicio", []),
+                $$[$0-1],
+                new SyntaxNode("fimproc", [])
+            ])
         
 break;
 case 8:
@@ -186,6 +212,21 @@ case 10:
 
             mvs.push({label: `L${label}`, instruction: "ENSP", parameter: null, first_line: 0, last_line: 0, first_column: 0, last_column: 0})    
             globalSymbolTable = [...symbolTable];
+
+            this.$ = new SyntaxNode("Cabeçalho do Procedimento", [
+                new SyntaxNode($$[$0-1], []),
+                new SyntaxNode($$[$0], []),
+            ])
+        
+break;
+case 11: case 18:
+
+            this.$ = new SyntaxNode("IGNORE", []);
+        
+break;
+case 12:
+
+            this.$ = new SyntaxNode("Parâmetros", [$$[$0]])
         
 break;
 case 13:
@@ -204,16 +245,24 @@ case 13:
             })
             lastProcedure = globalSymbolTable.at(-1);
             lastProcedure.parameter.push({type: variableType, mechanism: $$[$0-2]});
+
+            this.$ = new SyntaxNode("Parâmetro", [
+                $$[$0-2],
+                $$[$0-1],
+                new SyntaxNode($$[$0], [])
+            ])
         
 break;
 case 14:
 
-            this.$ = "VALUE"
+            tmpTypeParameter = "VALUE"
+            this.$ = new SyntaxNode("IGNORE", []);
         
 break;
 case 15:
 
-            this.$ = "REFERENCE"
+            tmpTypeParameter = "REFERENCE"
+            this.$ = new SyntaxNode($$[$0], []);
         
 break;
 case 16:
@@ -236,11 +285,6 @@ case 17:
                 new SyntaxNode($$[$0-1], []), 
                 new SyntaxNode($$[$0], [])
             ]);
-        
-break;
-case 18:
-
-            this.$ = new SyntaxNode("IGNORE", []);
         
 break;
 case 19:
@@ -355,14 +399,9 @@ case 27:
             this.$ = new SyntaxNode("Lista de comandos", [$$[$0-1], $$[$0]]);
         
 break;
-case 28: case 29: case 30: case 31:
+case 28: case 29: case 30: case 31: case 32:
 
             this.$ = new SyntaxNode("Comando", [$$[$0]]);
-        
-break;
-case 32:
-
-            // add a syntax node for procedure call
         
 break;
 case 33:
@@ -397,8 +436,6 @@ case 36:
 
             tmpType = typeStack.pop();
             tmpPos = labelStack.pop(); 
-
-            console.log(symbolTable[tmpPos]);
 
             if (symbolTable[tmpPos].type != tmpType) 
                 error(_$[$0], "Incompatibilidade de tipo.");
@@ -584,6 +621,8 @@ case 57:
             }
             
             isVariable = true;
+
+            this.$ = new SyntaxNode("Lista de argumentos", [$$[$0]])
         
 break;
 case 58:
@@ -599,18 +638,20 @@ case 58:
             }
 
             isVariable = true;
+
+            this.$ = new SyntaxNode("Lista de argumentos", [$$[$0]])
         
 break;
 case 59:
 
             tmpVariableId = $$[$0-1];
             tmpProcAndFunc = findVariable(tmpVariableId);
-            console.log(tmpProcAndFunc.parameter);
             argumentStack = [...tmpProcAndFunc.parameter];
             argumentStack.reverse();
             isArguments = true;
             isVariable = true;
-            this.$ = _$[$0-1];
+            tmpProcIdentifier = _$[$0-1];
+            this.$ = $$[$0-1];
         
 break;
 case 60:
@@ -622,10 +663,15 @@ case 60:
             }
             
         
-            mvs.push({label: null, instruction: "SVCP", parameter: null, first_line: $$[$0-2].first_line, last_line: _$[$0].last_line, first_column: $$[$0-2].first_column, last_column: _$[$0].last_column})    
+            mvs.push({label: null, instruction: "SVCP", parameter: null, first_line: tmpProcIdentifier.first_line, last_line: _$[$0].last_line, first_column: tmpProcIdentifier.first_column, last_column: _$[$0].last_column})    
             mvs.push({label: null, instruction: "DSVS", parameter: `L${tmpProcAndFunc.label}`, first_line: $$[$0-2].first_line, last_line: _$[$0].last_line, first_column: $$[$0-2].first_column, last_column: _$[$0].last_column})    
         
-        
+            this.$ = new SyntaxNode("Chamada de procedimento", [
+                new SyntaxNode($$[$0-2], []),
+                new SyntaxNode("(", []),
+                $$[$0-1],
+                new SyntaxNode(")",[])
+            ]);
         
 break;
 case 61:
@@ -944,7 +990,9 @@ let label = 0,
     tmpArgument,
     isVariable = true,
     isArguments = false,
-    tmpProcAndFunc;
+    tmpProcAndFunc,
+    tmpTypeParameter,
+    tmpProcIdentifier;
 
 const clearEverything = () => { // Clean all variable in an error case
     symbolTable = [];
