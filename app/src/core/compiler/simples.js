@@ -104,12 +104,6 @@ case 1:
                 symbolTable: [...symbolTable] 
             }
 
-            console.log("=============DEBUG CONTENT=============");
-            console.log(symbolTable);
-            console.log("===========================");
-            console.log(mvs);
-            console.log("=============FINISHED CONTENT=============");
-
             clearEverything();
             
             return result;            
@@ -398,8 +392,6 @@ case 36:
             tmpType = typeStack.pop();
             tmpPos = labelStack.pop(); 
 
-            console.log(symbolTable[tmpPos]);
-
             if (symbolTable[tmpPos].type != tmpType) 
                 error(_$[$0], "Incompatibilidade de tipo.");
             
@@ -605,7 +597,6 @@ case 59:
 
             tmpVariableId = $$[$0-1];
             tmpProcAndFunc = findVariable(tmpVariableId);
-            console.log(tmpProcAndFunc.parameter);
             argumentStack = [...tmpProcAndFunc.parameter];
             argumentStack.reverse();
             isArguments = true;

@@ -33,8 +33,6 @@ export const AppContextProvider = ({ children }) => {
     symbolTable: []
   });
 
-  useEffect(() => {console.log(parserResponse)},[parserResponse])
-
   const output = (type, content) => {
     setLogs((prevLogs) => [
       ...prevLogs,

@@ -108,7 +108,6 @@ const createHightlightExtension = (first_line, first_column, last_line, last_col
   };
   
   const getPos = (line, col) => {
-    console.log(line, col);
     const lineInfo = doc.line(line);
     return lineInfo.from + col;
   }

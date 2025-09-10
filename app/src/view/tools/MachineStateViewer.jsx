@@ -22,12 +22,6 @@ const SectionCard = styled.div`
   align-items: center;
 `;
 
-const BigSectionCard = styled(SectionCard)`
-  padding: 8px 10px;
-  border: 1px solid #e8e8e8;
-  height: 200px;
-`
-
 const PointersCard = styled(SectionCard)`
   padding: 8px 0px;
   height: max-content;
@@ -55,33 +49,6 @@ const SectionTitle = styled.div`
   color: #262626;
 `;
 
-const StyledTable = styled(Table)`
-  width: 250px;
-
-  .ant-table-thead > tr > th {
-    background: #fafafa;
-    font-weight: 500;
-    border-bottom: 1px solid #e8e8e8;
-  }
-  
-  .ant-table-tbody > tr > td {
-    border-bottom: 1px solid #f0f0f0;
-  }
-`;
-
-const EmptyState = styled.div`
-  text-align: center;
-  padding: 32px;
-  color: #8c8c8c;
-  font-size: 14px;
-`;
-
-const MemoryInfo = styled.div`
-  font-size: 12px;
-  color: #8c8c8c;
-  margin-top: 8px;
-`;
-
 const SecondarySection = styled.div`
   background: #fff;
   margin-top: 16px;
@@ -97,10 +64,6 @@ const ArrowCell = styled.div`
   text-align: center;
 `;
 
-const StyledTableInstructions = styled(Table)`
-  overflow-y: auto;
-`;
-
 const ControlBar = styled.div`
   margin: 20px 0px;
   display: flex;
@@ -110,10 +73,19 @@ const ControlBar = styled.div`
 `;
 
 const TableWrapper = styled.div`
-  display:flex;
-  flex-direction: column;
+  display: flex;
+  flex-direction: row;
   gap: 30px;
+  width: 100%;
+  justify-content: center;
 `
+
+const StackWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
 const MarginRightArrow = styled(FaArrowRight)`
   margin-right: 30px;
 `
@@ -179,12 +151,12 @@ export const MachineStateViewer = () => {
       {
         title: "Rótulo",
         dataIndex: "label",
-        width: 65,
+        width: 40,
       },
       {
         title: "Instrução",
         dataIndex: "instruction",
-        width: 85,
+        width: 40,
       },
       {
         title: "Parâmetro",
@@ -197,27 +169,6 @@ export const MachineStateViewer = () => {
       <div><NextToExecuteArrow /> Ponteiro para a próxima instrução</div>,
       <div><JustExecutedArrow /> Última instrução executada</div>
     ]
-  
-  const columns = [
-    {
-      title: "Endereço",
-      dataIndex: "address",
-      width: 100,
-    },
-    {
-      title: "Valor",
-      dataIndex: "value",
-      render: (value) => value ?? 0,
-    },
-  ];
-
-  const memoryData = mvsState.memory?.map((value, index) => ({
-    key: index,
-    address: index,
-    value,
-  })) || [];
-
-
   return (
     <Container>
         <Row>
@@ -231,54 +182,28 @@ export const MachineStateViewer = () => {
             </PointersContainer>
           </PointersCard>
         </Row>
-        <Row gutter={16}>
-          <Col span={14}>
-            <BigSectionCard>
-              <SectionTitle>Tabela de variáveis</SectionTitle>
-              {memoryData.length > 0 ? (
-                <>
-                  <StyledTable
-                    dataSource={memoryData}
-                    columns={columns}
-                    pagination={false}
-                    size="small"
-                    scroll={{y: 100}}
-                    
-                  />
-                  <MemoryInfo>
-                    {memoryData.length} posições alocadas
-                  </MemoryInfo>
-                </>
-              ) : (
-                <EmptyState>
-                  Nenhuma variável alocada
-                </EmptyState>
-              )}
-            </BigSectionCard>
-          </Col>
-          
-          <Col span={10}>
-            <BigSectionCard>
-              <SectionTitle>Pilha (Stack)</SectionTitle>
-              <Stack variables={mvsState?.memory || []} data={mvsState?.stack} />
-            </BigSectionCard>
-          </Col>
-        </Row>
 
         <Row>
           <SecondarySection>
 
             {parserResponse?.mvs?.length > 0 && 
               <TableWrapper>
-                <StyledTableInstructions
+                <Table
                   columns={columnsInstructions}
                   dataSource={parserResponse.mvs}
                   pagination={false}
                   size="small"
                   rowKey="key"
-                  scroll={{ y: 230 }}
-                />   
-            </TableWrapper>}
+                  scroll={{ y: 460 }}
+
+                />
+                
+                <StackWrapper>
+                  <SectionTitle>Pilha (Stack)</SectionTitle>
+                  <Stack variables={mvsState?.memory || []} data={mvsState?.stack} />
+                </StackWrapper>   
+            </TableWrapper>
+            }
             
         
           <ControlBar ref={controlBarRef}>

@@ -6,7 +6,6 @@ export const MVS = (
   stepByStep = false
 ) => {
   const algorithm = code;
-  console.log(code);
   const MAX_ITERATION = 10000;
   const INSTRUCTIONS_PER_FRAME = stepByStep ? 1 : 1;
 
