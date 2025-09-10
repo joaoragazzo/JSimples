@@ -278,10 +278,10 @@ procedure
     : procedure_header T_OPEN parameter_list routine_header_closed variables t_start_proc command_list T_ENDPROC
         {
             if (localVariableCount > 0)
-                mvs.push({label: null, instruction: "DMEM", parameter: localVariableCount, first_line: @8, last_line: @8, first_column: @8, last_column: @8})    
+                mvs.push({label: null, instruction: "DMEM", parameter: localVariableCount, first_line: @8.first_line, last_line: @8.last_line, first_column: @8.first_column, last_column: @8.last_column})    
             localVariableCount = 0;
 
-            mvs.push({label: null, instruction: "RTSP", parameter: parameterStack.length, first_line: @8, last_line: @8, first_column: @8, last_column: @8})    
+            mvs.push({label: null, instruction: "RTSP", parameter: parameterStack.length, first_line: @8.first_line, last_line: @8.last_line, first_column: @8.first_column, last_column: @8.last_column})    
             lastProcedure = globalSymbolTable.at(-1);
 
             lastProcedure.subSymbolTree = symbolTable.slice(variableCount + ++procedureAndFunctionCount);

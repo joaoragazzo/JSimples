@@ -123,10 +123,10 @@ break;
 case 7:
 
             if (localVariableCount > 0)
-                mvs.push({label: null, instruction: "DMEM", parameter: localVariableCount, first_line: _$[$0], last_line: _$[$0], first_column: _$[$0], last_column: _$[$0]})    
+                mvs.push({label: null, instruction: "DMEM", parameter: localVariableCount, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column})    
             localVariableCount = 0;
 
-            mvs.push({label: null, instruction: "RTSP", parameter: parameterStack.length, first_line: _$[$0], last_line: _$[$0], first_column: _$[$0], last_column: _$[$0]})    
+            mvs.push({label: null, instruction: "RTSP", parameter: parameterStack.length, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column})    
             lastProcedure = globalSymbolTable.at(-1);
 
             lastProcedure.subSymbolTree = symbolTable.slice(variableCount + ++procedureAndFunctionCount);
