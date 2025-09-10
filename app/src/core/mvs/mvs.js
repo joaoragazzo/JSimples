@@ -162,8 +162,10 @@ export const MVS = (
   const executeRtsp = () => {
     let tmp = stack.pop()
     let tmp2 = stack.pop()
+    stack.splice(-register.parameter, register.parameter);
     instructionPointer = tmp2;
-    dPointer = tmp
+    dPointer = tmp;
+    isIteration = true;
   }
 
   const executeCrvl = () => {
