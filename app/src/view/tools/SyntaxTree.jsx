@@ -15,7 +15,7 @@ const TreeContainer = styled.div`
   position: relative;
   overflow: hidden;
   box-shadow: inset 0 -10px 10px -10px rgba(0,0,0,0.1), inset 0 10px 10px -10px rgba(0,0,0,0.1);
-  display> ${({ hidden }) => (hidden ? "none" : "block")}
+  display: ${({ hidden }) => (hidden ? "none" : "block")}
 `;
 
 const TreeViewSettings = styled.div`

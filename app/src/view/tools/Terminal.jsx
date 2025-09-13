@@ -58,8 +58,6 @@ const TerminalCard = styled.div`
   padding: 20px;
   overflow-y: auto;
   border-radius: 16px;
-  display: flex;
-  flex-direction: col;
 
   @media (max-width: 768px) {
     min-height: 700px;  
