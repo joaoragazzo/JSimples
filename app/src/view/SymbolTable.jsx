@@ -1,5 +1,6 @@
-import React from 'react';
-import { Badge, Space, Table } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Badge, Space, Table, Drawer, Button } from 'antd';
+import { EyeOutlined } from '@ant-design/icons';
 import { useAppData } from '../contexts/AppContext';
 
 const toPtBrType = (type) => {
@@ -91,7 +92,8 @@ const expandColumns = [
   }
 ];
 
-const columns = [
+// Colunas para desktop (completas)
+const desktopColumns = [
   {
     title: 'Tipo',
     dataIndex: 'type',
@@ -157,15 +159,132 @@ const columns = [
   }
 ];
 
-const expandedRowRender = (record) => {
+// Colunas para mobile (simplificadas)
+const mobileColumns = [
+  {
+    title: 'Info',
+    key: 'info',
+    render: (_, record) => (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        <div style={{ fontFamily: "monospace", fontWeight: 'bold', fontSize: '14px' }}>
+          {record.name}
+        </div>
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          <Badge 
+            color={record.scope === 'GLOBAL' ? 'green' : 'blue'} 
+            text={record.scope} 
+          />
+          <Badge 
+            status={record.category === 'PROCEDURE' ? 'processing' : 'default'} 
+            text={record.category === "VARIABLE" ? "Var" : "Proc"} 
+          />
+        </div>
+        <div style={{ fontSize: '12px', color: '#666' }}>
+          {toPtBrType(record.type)} | End: {record.address !== null ? record.address : '-'}
+        </div>
+      </div>
+    )
+  },
+  {
+    title: 'Ações',
+    key: 'actions',
+    width: 80,
+    render: (_, record) => (
+      <DetailButton record={record} />
+    )
+  }
+];
 
-  
-    if (!record.subSymbolTree || record.subSymbolTree.length === 0) {
+// Componente para o botão de detalhes
+const DetailButton = ({ record }) => {
+  const [drawerVisible, setDrawerVisible] = useState(false);
+
+  return (
+    <>
+      <Button 
+        type="text" 
+        icon={<EyeOutlined />} 
+        onClick={() => setDrawerVisible(true)}
+        size="small"
+      />
+      <Drawer
+        title={`Detalhes: ${record.name}`}
+        placement="bottom"
+        onClose={() => setDrawerVisible(false)}
+        open={drawerVisible}
+        height="60vh"
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div><strong>Tipo:</strong> {toPtBrType(record.type)}</div>
+          <div><strong>Identificador:</strong> <code>{record.name}</code></div>
+          <div><strong>Endereço:</strong> {record.address !== null ? record.address : '-'}</div>
+          <div><strong>Escopo:</strong> 
+            <Badge 
+              color={record.scope === 'GLOBAL' ? 'green' : 'blue'} 
+              text={record.scope} 
+              style={{ marginLeft: '8px' }}
+            />
+          </div>
+          <div><strong>Rótulo:</strong> {record.label !== null ? record.label : '-'}</div>
+          <div><strong>Categoria:</strong>
+            <Badge 
+              status={record.category === 'PROCEDURE' ? 'processing' : 'default'} 
+              text={record.category === "VARIABLE" ? "Variável" : "Procedimento"} 
+              style={{ marginLeft: '8px' }}
+            />
+          </div>
+          {record.parameter && record.parameter.length > 0 && (
+            <div>
+              <strong>Parâmetros:</strong>
+              <div style={{ marginTop: '8px' }}>
+                {record.parameter.map((param, index) => (
+                  <div key={index} style={{ 
+                    padding: '4px 8px', 
+                    backgroundColor: '#f5f5f5', 
+                    borderRadius: '4px',
+                    marginBottom: '4px',
+                    fontSize: '12px' 
+                  }}>
+                    {toPtBrType(param.type)} ({toPtBrMechanism(param.mechanism)})
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {record.category === 'PROCEDURE' && record.subSymbolTree && record.subSymbolTree.length > 0 && (
+            <div>
+              <strong>Símbolos Locais:</strong>
+              <div style={{ marginTop: '8px' }}>
+                {record.subSymbolTree.map((symbol, index) => (
+                  <div key={index} style={{
+                    padding: '8px',
+                    backgroundColor: '#f9f9f9',
+                    borderRadius: '4px',
+                    marginBottom: '8px',
+                    fontSize: '12px'
+                  }}>
+                    <div><strong>{symbol.name}</strong> ({toPtBrType(symbol.type)})</div>
+                    <div>End: {symbol.address !== null ? symbol.address : '-'} | 
+                    Escopo: {symbol.scope} | 
+                    Cat: {toPtBrCategory(symbol.category)}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </Drawer>
+    </>
+  );
+};
+
+const expandedRowRender = (record) => {
+  if (!record.subSymbolTree || record.subSymbolTree.length === 0) {
     return <div style={{ padding: '16px', fontStyle: 'italic', color: '#999' }}>Sem símbolos locais</div>;
   }
 
   return (
-    <div style={{ backgroundColor: '#fafafa' , paddingRight: "10px", paddingLeft: "30px"}}>
+    <div style={{ backgroundColor: '#fafafa', paddingRight: "10px", paddingLeft: "30px"}}>
       <h4 style={{ margin: '5px', color: '#1890ff' }}>
         Tabela local para o procedimento "{record.name}"
       </h4>
@@ -175,6 +294,7 @@ const expandedRowRender = (record) => {
         pagination={false}
         size="small"
         bordered
+        scroll={{ x: 600 }}
       />
     </div>
   );
@@ -182,24 +302,37 @@ const expandedRowRender = (record) => {
 
 export const SymbolTable = () => {
   const { parserResponse } = useAppData();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
+
   const dataWithKeys = parserResponse.symbolTable.map((item, index) => ({ ...item, key: index.toString() }));
 
   return (
     <>
-    <h2 style={{margin: 0, marginBottom: "12px"}}>Tabela de Símbolos</h2>
-    <Table
-        columns={columns}
+      <h2 style={{margin: 0, marginBottom: "12px"}}>Tabela de Símbolos</h2>
+      <Table
+        columns={isMobile ? mobileColumns : desktopColumns}
         dataSource={dataWithKeys}
-        expandable={{
+        expandable={!isMobile ? {
           expandedRowRender,
           defaultExpandedRowKeys: ['4'],
           rowExpandable: (record) => record.category === 'PROCEDURE' && record.subSymbolTree !== null
-        }}
+        } : false}
         pagination={false}
         bordered
-        size="middle"
+        size={isMobile ? "small" : "middle"}
+        scroll={{ x: isMobile ? undefined : 'max-content' }}
       />
     </>
-      
   );
 };

@@ -32,17 +32,6 @@ const StyledCard = styled.div`
   width: 100%;
   z-index: 1;
   
-  @media (max-width: 768px) {
-    padding: 16px;
-    margin-bottom: 12px;
-    height: auto;
-    min-height: 700px;
-    
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-  
 `;
 
 const ContentWrapper = styled.div`
@@ -50,10 +39,6 @@ const ContentWrapper = styled.div`
   min-height: 0;
   display: flex;
   flex-direction: column;
-  
-  @media (max-width: 768px) {
-    min-height: 200px;
-  }
 `;
 
 const ResponsiveCol = styled(Col)`
