@@ -384,7 +384,7 @@ parameter_list
         }
     | parameter_list parameter 
         {
-            $$ = new SyntaxNode("Parâmetros", [$2])
+            $$ = new SyntaxNode("Lista de Parâmetros", [$2])
         }
     ;
 

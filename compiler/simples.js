@@ -226,7 +226,7 @@ case 11: case 18:
 break;
 case 12:
 
-            this.$ = new SyntaxNode("Parâmetros", [$$[$0]])
+            this.$ = new SyntaxNode("Lista de Parâmetros", [$$[$0]])
         
 break;
 case 13:
