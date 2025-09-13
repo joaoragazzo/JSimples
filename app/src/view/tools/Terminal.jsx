@@ -44,12 +44,12 @@ const WelcomeMessage = styled.div`
 const TerminalWrapper = styled.div`
   position: relative;
   color: #e2e8f0;
-  height: 710px;
+  height: 100%;
 `
 
 const TerminalCard = styled.div`
   flex: 1;
-  height: 750px;
+  height: 100%;
   box-sizing: border-box;
   background: #1a202c;
   font-family: "Courier New", monospace;
@@ -78,7 +78,7 @@ const ClearButton = styled.div`
   width: fit-content;
   padding: 10px;
   position: absolute;
-  bottom: -20px;
+  bottom: 20px;
   right: 20px;
   cursor: pointer;
   transition: background-color 0.2s;

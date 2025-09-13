@@ -238,11 +238,11 @@ case 13:
                 scope: "LOCAL",
                 label: null,
                 category: "VARIABLE",
-                mechanism: $$[$0-2],
+                mechanism: tmpParameterMechanism,
                 parameter: null,
                 subSymbolTree: null,
                 reference: _$[$0]
-            })
+            });
             lastProcedure = globalSymbolTable.at(-1);
             lastProcedure.parameter.push({type: variableType, mechanism: $$[$0-2]});
 
@@ -255,13 +255,13 @@ case 13:
 break;
 case 14:
 
-            tmpTypeParameter = "VALUE"
+            tmpParameterMechanism = "VALUE"
             this.$ = new SyntaxNode("IGNORE", []);
         
 break;
 case 15:
 
-            tmpTypeParameter = "REFERENCE"
+            tmpParameterMechanism = "REFERENCE"
             this.$ = new SyntaxNode($$[$0], []);
         
 break;
@@ -991,7 +991,7 @@ let label = 0,
     isVariable = true,
     isArguments = false,
     tmpProcAndFunc,
-    tmpTypeParameter,
+    tmpParameterMechanism,
     tmpProcIdentifier;
 
 const clearEverything = () => { // Clean all variable in an error case

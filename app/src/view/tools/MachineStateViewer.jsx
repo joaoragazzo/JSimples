@@ -11,11 +11,15 @@ import { VscDebugRestart } from "react-icons/vsc";
 import { Pointer } from "../../components/Pointer";
 
 const Container = styled.div`
-  height: 740px;
+  min-height: 70px;
+  padding: 0 10px;
+  
+  @media (max-width: 768px) {
+    padding: 0 5px;
+  }
 `;
 
 const SectionCard = styled.div`
-
   border-radius: 8px;
   display: flex;
   flex-direction: column;
@@ -28,25 +32,33 @@ const PointersCard = styled(SectionCard)`
   width: 100%;
   margin-bottom: 10px;
   flex-direction: row; 
-  
   align-items: center;
   justify-content: center;
   display: flex;
-`
+`;
 
 const PointersTitle = styled.div`
   font-size: 16px;
   font-weight: 500;
   color: #262626;
   margin-right: 25px;
-`
-
+  
+  @media (max-width: 768px) {
+    margin-right: 0;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+`;
 
 const SectionTitle = styled.div`
   font-size: 16px;
   font-weight: 500;
   margin-bottom: 10px;
   color: #262626;
+  
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
 const SecondarySection = styled.div`
@@ -54,11 +66,18 @@ const SecondarySection = styled.div`
   margin-top: 16px;
   border-radius: 8px;
   display: flex;
-  height: 310px;
+  height: auto;
+  min-height: 310px;
   width: 100%;
   flex-direction: column;
   align-items: center;
-`
+  padding: 10px;
+  
+  @media (max-width: 768px) {
+    margin-top: 10px;
+    padding: 5px;
+  }
+`;
 
 const ArrowCell = styled.div`
   text-align: center;
@@ -70,6 +89,11 @@ const ControlBar = styled.div`
   gap: 15px;
   flex-direction: column;
   width: 100%;
+  
+  @media (max-width: 768px) {
+    margin: 15px 0;
+    gap: 10px;
+  }
 `;
 
 const TableWrapper = styled.div`
@@ -78,32 +102,59 @@ const TableWrapper = styled.div`
   gap: 30px;
   width: 100%;
   justify-content: center;
-`
+  align-items: flex-start;
+  
+  @media (max-width: 1200px) {
+    gap: 20px;
+  }
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+`;
 
 const StackWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`
+  text-align: center;
+  min-width: 120px;
+  
+  @media (max-width: 768px) {
+    min-width: 100px;
+  }
+`;
 
 const MarginRightArrow = styled(FaArrowRight)`
   margin-right: 30px;
-`
+  
+  @media (max-width: 768px) {
+    margin-right: 15px;
+  }
+`;
 
 const JustExecutedArrow = styled(MarginRightArrow)`
   fill: rgb(30, 95, 214);
-`
+`;
 
 const NextToExecuteArrow = styled(MarginRightArrow)`
   fill: rgb(233, 39, 39);
-`
+`;
 
 const Warning = styled.div`
   display: flex;
   flex-direction: row;
   gap: 10px;
   align-items: center;
-`
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+    gap: 5px;
+  }
+`;
 
 const WarningWrapper = styled.div`
   padding: 15px;
@@ -111,7 +162,12 @@ const WarningWrapper = styled.div`
   color: oklch(55.3% 0.195 38.402);
   border-radius: 10px;
   border: 1px solid oklch(55.3% 0.195 38.402);
-`
+  
+  @media (max-width: 768px) {
+    padding: 10px;
+    font-size: 14px;
+  }
+`;
 
 const PointersContainer = styled.div`
   display: flex;
@@ -119,7 +175,43 @@ const PointersContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-`
+`;
+
+const ResponsiveTable = styled(Table)`
+  .ant-table-thead > tr > th {
+    @media (max-width: 768px) {
+      font-size: 12px;
+      padding: 8px 4px;
+    }
+  }
+  
+  .ant-table-tbody > tr > td {
+    @media (max-width: 768px) {
+      font-size: 12px;
+      padding: 6px 4px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .ant-table-container {
+      font-size: 12px;
+    }
+  }
+`;
+
+const ResponsiveRow = styled(Row)`
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+`;
+
+const ResponsiveCol = styled(Col)`
+  @media (max-width: 768px) {
+    margin-bottom: 10px;
+  }
+`;
 
 export const MachineStateViewer = () => {
   const controlBarRef = useRef(null);
@@ -149,6 +241,12 @@ export const MachineStateViewer = () => {
           </ArrowCell> : null
       },
       {
+        title: "Endereço", 
+        dataIndex: "address",
+        width: 60,
+        render: (_, __, index) => index, 
+      },
+      {
         title: "Rótulo",
         dataIndex: "label",
         width: 40,
@@ -156,12 +254,12 @@ export const MachineStateViewer = () => {
       {
         title: "Instrução",
         dataIndex: "instruction",
-        width: 40,
+        width: 50,
       },
       {
         title: "Parâmetro",
         dataIndex: "parameter",
-        width: 93
+        width: 60
       },      
     ];
   
@@ -169,88 +267,83 @@ export const MachineStateViewer = () => {
       <div><NextToExecuteArrow /> Ponteiro para a próxima instrução</div>,
       <div><JustExecutedArrow /> Última instrução executada</div>
     ]
+    
   return (
     <Container>
-        <Row>
+        <ResponsiveRow>
           <PointersCard>
             <PointersTitle>Registradores:</PointersTitle>
             <PointersContainer >
               <Pointer value={mvsState?.instructionPointer} label={"I"}/>
               <Pointer value={mvsState?.stack.length + (mvsState?.memory?.length || 0)} label={"S"}/>
               <Pointer value={mvsState?.dPointer || -1} label={"D"}/>
-              
             </PointersContainer>
           </PointersCard>
-        </Row>
+        </ResponsiveRow>
 
-        <Row>
+        <ResponsiveRow>
           <SecondarySection>
-
             {parserResponse?.mvs?.length > 0 && 
               <TableWrapper>
-                <Table
+                <ResponsiveTable
                   columns={columnsInstructions}
                   dataSource={parserResponse.mvs}
                   pagination={false}
                   size="small"
                   rowKey="key"
-                  scroll={{ y: 460 }}
-
+                  scroll={{ y: 460, x: 'max-content' }}
                 />
                 
                 <StackWrapper>
-                  <SectionTitle>Pilha (Stack)</SectionTitle>
+                  <SectionTitle>Pilha M</SectionTitle>
                   <Stack variables={mvsState?.memory || []} data={mvsState?.stack} />
                 </StackWrapper>   
             </TableWrapper>
             }
             
-        
-          <ControlBar ref={controlBarRef}>
-            {
-              !parserResponse?.mvs?.length && 
-              <WarningWrapper>
-                <Warning>
-                  <IoWarning size={30}/>
-                  <strong>Atenção: </strong>Não existe nenhum código MVS para ser executado. É necessário compilar o algoritmo primeiro.
-                </Warning>
-              </WarningWrapper>
-            }
-            {
-              parserResponse?.mvs?.length > 0 && 
-              <List 
-                ref={legendRef} 
-                header={<strong>Legenda</strong>} 
-                dataSource={caption} 
-                bordered 
-                renderItem={(item) => <List.Item>{item}</List.Item>} 
-                size="small" 
-              />
-            }
-            <Row gutter={24} align={"center"}>
-              <Col>
-                <Button onClick={resetVm} disabled={!parserResponse?.mvs?.length}>
-                  <VscDebugRestart />
-                  Reiniciar
-                </Button>
-              </Col>
-              <Col>
-                <Button
-                  onClick={() => {
-                    setMvsState(vmRef.current?.next());
-                  }}
-                  disabled={!parserResponse?.mvs?.length}
-                >
-                  Executar Instrução
-                  <AiFillCaretRight />
-                </Button>
-              </Col>
-            </Row>
-          </ControlBar>
-            {/* <CodeEditor stepByStep={true}/> */}
+            <ControlBar ref={controlBarRef}>
+              {
+                !parserResponse?.mvs?.length && 
+                <WarningWrapper>
+                  <Warning>
+                    <IoWarning size={30}/>
+                    <strong>Atenção: </strong>Não existe nenhum código MVS para ser executado. É necessário compilar o algoritmo primeiro.
+                  </Warning>
+                </WarningWrapper>
+              }
+              {
+                parserResponse?.mvs?.length > 0 && 
+                <List 
+                  ref={legendRef} 
+                  header={<strong>Legenda</strong>} 
+                  dataSource={caption} 
+                  bordered 
+                  renderItem={(item) => <List.Item>{item}</List.Item>} 
+                  size="small" 
+                />
+              }
+              <ResponsiveRow gutter={[16, 16]} align={"center"} justify="center">
+                <ResponsiveCol>
+                  <Button onClick={resetVm} disabled={!parserResponse?.mvs?.length}>
+                    <VscDebugRestart />
+                    Reiniciar
+                  </Button>
+                </ResponsiveCol>
+                <ResponsiveCol>
+                  <Button
+                    onClick={() => {
+                      setMvsState(vmRef.current?.next());
+                    }}
+                    disabled={!parserResponse?.mvs?.length}
+                  >
+                    Executar Instrução
+                    <AiFillCaretRight />
+                  </Button>
+                </ResponsiveCol>
+              </ResponsiveRow>
+            </ControlBar>
           </SecondarySection>
-        </Row>
-
+        </ResponsiveRow>
     </Container>
   );
 };

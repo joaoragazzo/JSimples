@@ -71,7 +71,7 @@ let label = 0,
     isVariable = true,
     isArguments = false,
     tmpProcAndFunc,
-    tmpTypeParameter,
+    tmpParameterMechanism,
     tmpProcIdentifier;
 
 const clearEverything = () => { // Clean all variable in an error case
@@ -398,11 +398,11 @@ parameter
                 scope: "LOCAL",
                 label: null,
                 category: "VARIABLE",
-                mechanism: $1,
+                mechanism: tmpParameterMechanism,
                 parameter: null,
                 subSymbolTree: null,
                 reference: @3
-            })
+            });
             lastProcedure = globalSymbolTable.at(-1);
             lastProcedure.parameter.push({type: variableType, mechanism: $1});
 
@@ -417,12 +417,12 @@ parameter
 mechanism
     : /* blank */
         {
-            tmpTypeParameter = "VALUE"
+            tmpParameterMechanism = "VALUE"
             $$ = new SyntaxNode("IGNORE", []);
         }
     |  T_REF 
         {
-            tmpTypeParameter = "REFERENCE"
+            tmpParameterMechanism = "REFERENCE"
             $$ = new SyntaxNode($1, []);
         }
     ;
