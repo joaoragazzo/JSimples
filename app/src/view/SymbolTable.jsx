@@ -92,7 +92,6 @@ const expandColumns = [
   }
 ];
 
-// Colunas para desktop (completas)
 const desktopColumns = [
   {
     title: 'Tipo',
@@ -159,7 +158,6 @@ const desktopColumns = [
   }
 ];
 
-// Colunas para mobile (simplificadas)
 const mobileColumns = [
   {
     title: 'Info',
@@ -195,15 +193,14 @@ const mobileColumns = [
   }
 ];
 
-// Componente para o botão de detalhes
 const DetailButton = ({ record }) => {
   const [drawerVisible, setDrawerVisible] = useState(false);
 
   return (
-    <>
+    <div style={{display: "flex", justifyContent: 'center'}}>
       <Button 
         type="text" 
-        icon={<EyeOutlined />} 
+        icon={<EyeOutlined width={1}/>} 
         onClick={() => setDrawerVisible(true)}
         size="small"
       />
@@ -274,7 +271,7 @@ const DetailButton = ({ record }) => {
           )}
         </div>
       </Drawer>
-    </>
+    </div>
   );
 };
 
