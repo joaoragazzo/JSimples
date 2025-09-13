@@ -244,7 +244,7 @@ case 13:
                 reference: _$[$0]
             });
             lastProcedure = globalSymbolTable.at(-1);
-            lastProcedure.parameter.push({type: variableType, mechanism: $$[$0-2]});
+            lastProcedure.parameter.push({type: variableType, mechanism: tmpParameterMechanism});
 
             this.$ = new SyntaxNode("Parâmetro", [
                 $$[$0-2],

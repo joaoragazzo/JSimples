@@ -404,7 +404,7 @@ parameter
                 reference: @3
             });
             lastProcedure = globalSymbolTable.at(-1);
-            lastProcedure.parameter.push({type: variableType, mechanism: $1});
+            lastProcedure.parameter.push({type: variableType, mechanism: tmpParameterMechanism});
 
             $$ = new SyntaxNode("Parâmetro", [
                 $1,
