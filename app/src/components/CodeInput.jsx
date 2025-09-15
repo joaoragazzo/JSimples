@@ -164,7 +164,6 @@ export const CodeInput = ({ stepByStep=false }) => {
             highlightSelectionMatches: false,
             searchKeymap: true,
           }}
-          readOnly={stepByStep}
         />
       </StyledCodeMirror>
   );

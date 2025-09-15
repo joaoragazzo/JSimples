@@ -247,7 +247,6 @@ algorithm
                 mvs: mvs, 
                 symbolTable: [...symbolTable] 
             }
-
             clearEverything();
             
             return result;            
@@ -430,7 +429,6 @@ mechanism
 start_block 
     : T_START
         {
-            mvs.push({label: null, instruction: "AMEM", parameter: variableCount, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column}); 
             insideFunctionDeclaration = false;
             $$ = new SyntaxNode($1, []);
 
@@ -471,6 +469,7 @@ variable_declaration
         }
     | type variable_list
         {
+            mvs.push({label: null, instruction: "AMEM", parameter: variableCount, first_line: 0, last_line: 0, first_column: 0, last_column: 0}); 
             $$ = new SyntaxNode("Declaração de variáveis", [$1, $2]);
         }
     ;

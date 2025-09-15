@@ -80,14 +80,9 @@ const StackVariable = styled.div`
   }
 `;
 
-export const Stack = ({ data, variables }) => {
+export const Stack = ({ data }) => {  
   return (
     <StackFrame>
-      {variables.map((value, index) => (
-        <StackVariable key={index}>
-          {typeof value === "number" ? value : value ? "V" : "F"}
-        </StackVariable>
-      ))}
       {data.map((value, index) => (
         <StackItem key={index}>
           {typeof value === "number" ? value : value ? "V" : "F"}

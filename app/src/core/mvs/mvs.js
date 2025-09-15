@@ -181,7 +181,7 @@ export const MVS = (
   }
 
   const executeCreg = () => {
-    stack.push(stack.parameter)
+    stack.push(register.parameter)
   }
 
   const executeCrvi = () => {

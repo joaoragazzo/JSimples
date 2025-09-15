@@ -105,7 +105,6 @@ case 1:
                 mvs: mvs, 
                 symbolTable: [...symbolTable] 
             }
-
             clearEverything();
             
             return result;            
@@ -267,7 +266,6 @@ case 15:
 break;
 case 16:
 
-            mvs.push({label: null, instruction: "AMEM", parameter: variableCount, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column}); 
             insideFunctionDeclaration = false;
             this.$ = new SyntaxNode($$[$0], []);
 
@@ -299,6 +297,7 @@ case 20:
 break;
 case 21:
 
+            mvs.push({label: null, instruction: "AMEM", parameter: variableCount, first_line: 0, last_line: 0, first_column: 0, last_column: 0}); 
             this.$ = new SyntaxNode("Declaração de variáveis", [$$[$0-1], $$[$0]]);
         
 break;
