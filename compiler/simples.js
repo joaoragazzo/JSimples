@@ -72,12 +72,12 @@
   }
 */
 var simples = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[20,26,28],$V1=[2,22],$V2=[1,7],$V3=[1,8],$V4=[1,18],$V5=[1,17],$V6=[22,29],$V7=[20,26,28,29,36,37],$V8=[1,46],$V9=[1,40],$Va=[1,43],$Vb=[1,44],$Vc=[1,45],$Vd=[2,30],$Ve=[27,32,36,37],$Vf=[2,15],$Vg=[19,25,48,50,59,81],$Vh=[19,25,29,44,48,50,55,56,59,60,81],$Vi=[1,61],$Vj=[1,63],$Vk=[1,56],$Vl=[1,57],$Vm=[1,58],$Vn=[1,59],$Vo=[1,60],$Vp=[2,59],$Vq=[36,37],$Vr=[2,18],$Vs=[1,76],$Vt=[1,81],$Vu=[1,82],$Vv=[1,83],$Vw=[1,84],$Vx=[1,85],$Vy=[1,86],$Vz=[1,87],$VA=[1,88],$VB=[1,89],$VC=[15,19,22,25,27,29,44,48,49,50,55,56,59,60,61,62,63,64,65,66,67,68,69,70,77,78,79,80,81],$VD=[15,22,27,29,77,78,79,80],$VE=[26,36,37],$VF=[1,116],$VG=[15,19,22,25,27,29,44,48,49,50,55,56,59,60,61,64,65,66,67,68,69,70,77,78,79,80,81],$VH=[15,19,22,25,27,29,44,48,49,50,55,56,59,60,61,66,67,68,69,70,77,78,79,80,81],$VI=[15,19,22,25,27,29,44,48,49,50,55,56,59,60,61,69,70,77,78,79,80,81];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[21,27,29],$V1=[2,23],$V2=[1,7],$V3=[1,8],$V4=[23,32],$V5=[1,21],$V6=[1,20],$V7=[21,27,29,32,37,38],$V8=[1,48],$V9=[1,47],$Va=[1,41],$Vb=[1,44],$Vc=[1,45],$Vd=[1,46],$Ve=[2,31],$Vf=[28,33,37,38],$Vg=[2,16],$Vh=[20,26,49,51,60,82],$Vi=[20,23,26,32,45,49,51,56,57,60,61,82],$Vj=[1,63],$Vk=[1,65],$Vl=[1,58],$Vm=[1,59],$Vn=[1,60],$Vo=[1,61],$Vp=[1,62],$Vq=[37,38],$Vr=[2,19],$Vs=[1,75],$Vt=[1,80],$Vu=[1,81],$Vv=[1,82],$Vw=[1,83],$Vx=[1,84],$Vy=[1,85],$Vz=[1,86],$VA=[1,87],$VB=[1,88],$VC=[16,20,23,26,28,32,45,49,50,51,56,57,60,61,62,63,64,65,66,67,68,69,70,71,78,79,80,81,82],$VD=[2,60],$VE=[27,37,38],$VF=[16,23,28,32,78,79,80,81],$VG=[1,118],$VH=[16,20,23,26,28,32,45,49,50,51,56,57,60,61,62,65,66,67,68,69,70,71,78,79,80,81,82],$VI=[16,20,23,26,28,32,45,49,50,51,56,57,60,61,62,67,68,69,70,71,78,79,80,81,82],$VJ=[16,20,23,26,28,32,45,49,50,51,56,57,60,61,62,70,71,78,79,80,81,82];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"algorithm":3,"header":4,"variables":5,"routines":6,"start_block":7,"command_list":8,"footer":9,"routines_list":10,"routine":11,"procedure":12,"function":13,"function_header":14,"T_OPEN":15,"parameter_list":16,"func_header_closed":17,"t_start_proc":18,"T_ENDFUNC":19,"T_FUNC":20,"type":21,"T_FUNC_CALL_START":22,"procedure_header":23,"routine_header_closed":24,"T_ENDPROC":25,"T_START":26,"T_CLOSE":27,"T_PROC":28,"T_IDENTIFIER":29,"parameter":30,"mechanism":31,"T_REF":32,"T_PROGRAM":33,"variable_declaration":34,"variable_list":35,"T_LOGIC":36,"T_INTEGER":37,"command":38,"input_output":39,"repeat_loop":40,"conditional":41,"assignment":42,"procedure_call":43,"T_IF":44,"expression":45,"then_token":46,"else_token":47,"T_ENDIF":48,"T_THEN":49,"T_ELSE":50,"assignment_identifier":51,"T_ATRIB":52,"input":53,"output":54,"T_READ":55,"T_PRINT":56,"while_token":57,"do_token":58,"T_ENDWHILE":59,"T_WHILE":60,"T_DO":61,"T_TIMES":62,"T_DIV":63,"T_PLUS":64,"T_MINUS":65,"T_GREATER":66,"T_LESS":67,"T_EQUAL":68,"T_AND":69,"T_OR":70,"term":71,"arguments":72,"argument_list":73,"procedure_call_header":74,"function_call_header":75,"function_call":76,"T_NUMBER":77,"T_T":78,"T_F":79,"T_NOT":80,"T_END":81,"EOF":82,"$accept":0,"$end":1},
-terminals_: {2:"error",15:"T_OPEN",19:"T_ENDFUNC",20:"T_FUNC",22:"T_FUNC_CALL_START",25:"T_ENDPROC",26:"T_START",27:"T_CLOSE",28:"T_PROC",29:"T_IDENTIFIER",32:"T_REF",33:"T_PROGRAM",36:"T_LOGIC",37:"T_INTEGER",44:"T_IF",48:"T_ENDIF",49:"T_THEN",50:"T_ELSE",52:"T_ATRIB",55:"T_READ",56:"T_PRINT",59:"T_ENDWHILE",60:"T_WHILE",61:"T_DO",62:"T_TIMES",63:"T_DIV",64:"T_PLUS",65:"T_MINUS",66:"T_GREATER",67:"T_LESS",68:"T_EQUAL",69:"T_AND",70:"T_OR",77:"T_NUMBER",78:"T_T",79:"T_F",80:"T_NOT",81:"T_END",82:"EOF"},
-productions_: [0,[3,6],[6,0],[6,1],[10,2],[10,1],[11,1],[11,1],[13,8],[14,3],[12,8],[18,1],[17,1],[24,1],[23,2],[16,0],[16,2],[30,3],[31,0],[31,1],[7,1],[4,2],[5,0],[5,1],[34,3],[34,2],[21,1],[21,1],[35,2],[35,1],[8,0],[8,2],[38,1],[38,1],[38,1],[38,1],[38,1],[41,7],[46,1],[47,1],[42,3],[51,1],[39,1],[39,1],[53,2],[54,2],[40,5],[57,1],[58,1],[45,3],[45,3],[45,3],[45,3],[45,3],[45,3],[45,3],[45,3],[45,3],[45,1],[72,0],[72,1],[73,2],[73,1],[74,2],[75,1],[43,3],[76,4],[71,1],[71,1],[71,1],[71,1],[71,1],[71,2],[71,3],[9,2]],
+symbols_: {"error":2,"algorithm":3,"header":4,"variables":5,"amem_helper":6,"routines":7,"start_block":8,"command_list":9,"footer":10,"routines_list":11,"routine":12,"procedure":13,"function":14,"function_header":15,"T_OPEN":16,"parameter_list":17,"func_header_closed":18,"t_start_proc":19,"T_ENDFUNC":20,"T_FUNC":21,"type":22,"T_ROUTINE_START":23,"procedure_header":24,"routine_header_closed":25,"T_ENDPROC":26,"T_START":27,"T_CLOSE":28,"T_PROC":29,"parameter":30,"mechanism":31,"T_IDENTIFIER":32,"T_REF":33,"T_PROGRAM":34,"variable_declaration":35,"variable_list":36,"T_LOGIC":37,"T_INTEGER":38,"command":39,"input_output":40,"repeat_loop":41,"conditional":42,"assignment":43,"procedure_call":44,"T_IF":45,"expression":46,"then_token":47,"else_token":48,"T_ENDIF":49,"T_THEN":50,"T_ELSE":51,"assignment_identifier":52,"T_ATRIB":53,"input":54,"output":55,"T_READ":56,"T_PRINT":57,"while_token":58,"do_token":59,"T_ENDWHILE":60,"T_WHILE":61,"T_DO":62,"T_TIMES":63,"T_DIV":64,"T_PLUS":65,"T_MINUS":66,"T_GREATER":67,"T_LESS":68,"T_EQUAL":69,"T_AND":70,"T_OR":71,"term":72,"arguments":73,"argument_list":74,"procedure_call_header":75,"function_call_header":76,"function_call":77,"T_NUMBER":78,"T_T":79,"T_F":80,"T_NOT":81,"T_END":82,"EOF":83,"$accept":0,"$end":1},
+terminals_: {2:"error",16:"T_OPEN",20:"T_ENDFUNC",21:"T_FUNC",23:"T_ROUTINE_START",26:"T_ENDPROC",27:"T_START",28:"T_CLOSE",29:"T_PROC",32:"T_IDENTIFIER",33:"T_REF",34:"T_PROGRAM",37:"T_LOGIC",38:"T_INTEGER",45:"T_IF",49:"T_ENDIF",50:"T_THEN",51:"T_ELSE",53:"T_ATRIB",56:"T_READ",57:"T_PRINT",60:"T_ENDWHILE",61:"T_WHILE",62:"T_DO",63:"T_TIMES",64:"T_DIV",65:"T_PLUS",66:"T_MINUS",67:"T_GREATER",68:"T_LESS",69:"T_EQUAL",70:"T_AND",71:"T_OR",78:"T_NUMBER",79:"T_T",80:"T_F",81:"T_NOT",82:"T_END",83:"EOF"},
+productions_: [0,[3,7],[6,0],[7,0],[7,1],[11,2],[11,1],[12,1],[12,1],[14,8],[15,3],[13,8],[19,1],[18,1],[25,1],[24,2],[17,0],[17,2],[30,3],[31,0],[31,1],[8,1],[4,2],[5,0],[5,1],[35,3],[35,2],[22,1],[22,1],[36,2],[36,1],[9,0],[9,2],[39,1],[39,1],[39,1],[39,1],[39,1],[42,7],[47,1],[48,1],[43,3],[52,1],[40,1],[40,1],[54,2],[55,2],[41,5],[58,1],[59,1],[46,3],[46,3],[46,3],[46,3],[46,3],[46,3],[46,3],[46,3],[46,3],[46,1],[73,0],[73,1],[74,2],[74,1],[75,1],[76,1],[44,4],[77,4],[72,1],[72,1],[72,1],[72,1],[72,1],[72,2],[72,3],[10,2]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -85,8 +85,8 @@ var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
 
-            const headerNode = $$[$0-5];
-            const variablesNode = $$[$0-4];
+            const headerNode = $$[$0-6];
+            const variablesNode = $$[$0-5];
             const routinesNode = $$[$0-3];
             const startBlockNode = $$[$0-2];
             const commandsNode = $$[$0-1];
@@ -100,48 +100,53 @@ case 1:
             if (footerNode) children.push(footerNode);
 
             let syntaxTree = new SyntaxNode("Algoritmo", children);
+            console.log(syntaxTree);
             let result = { 
                 syntaxTree: syntaxTree, 
                 mvs: mvs, 
                 symbolTable: [...symbolTable] 
             }
-            console.log(syntaxTree);
             clearEverything();
             return result;            
         
 break;
 case 2:
 
-            this.$ = null;
+            mvs.push({label: null, instruction: "AMEM", parameter: variableCount, first_line: 0, last_line: 0, first_column: 0, last_column: 0});         
         
 break;
 case 3:
+
+            this.$ = null;
+        
+break;
+case 4:
    
             mvs.push({label: "L0", instruction: "NADA", parameter: null, first_line: 0, last_line: 0, first_column: 0, last_column: 0})    
             this.$ = new SyntaxNode("Rotinas", [$$[$0]]);
         
 break;
-case 4:
+case 5:
 
             this.$ = new SyntaxNode("Declaração de Rotinas", [$$[$0-1], new SyntaxNode("Rotina", [$$[$0]])]);
         
 break;
-case 5:
+case 6:
 
             this.$ = new SyntaxNode("Rotina", [$$[$0]]);
         
 break;
-case 6:
+case 7:
 
             this.$ = new SyntaxNode("Procedimento", [$$[$0]]);
         
 break;
-case 7:
+case 8:
 
             this.$ = new SyntaxNode("Função", [$$[$0]]);
         
 break;
-case 8:
+case 9:
 
             if (localVariableCount > 0)
                 mvs.push({label: null, instruction: "DMEM", parameter: localVariableCount, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column})    
@@ -164,7 +169,7 @@ case 8:
             ])
         
 break;
-case 9:
+case 10:
 
             if (!procAndFuncStarted) {
                 procAndFuncStarted = true;
@@ -194,7 +199,7 @@ case 9:
             ])
         
 break;
-case 10:
+case 11:
 
             if (localVariableCount > 0)
                 mvs.push({label: null, instruction: "DMEM", parameter: localVariableCount, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column})    
@@ -218,13 +223,13 @@ case 10:
             ])
         
 break;
-case 11:
+case 12:
 
             if (localVariableCount > 0)
                 mvs.push({label: null, instruction: "AMEM", parameter: localVariableCount, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column}); 
         
 break;
-case 12:
+case 13:
 
             parameterStack.reverse();
 
@@ -254,7 +259,7 @@ case 12:
 
         
 break;
-case 13:
+case 14:
 
             parameterStack.reverse();
 
@@ -280,7 +285,7 @@ case 13:
             }
         
 break;
-case 14:
+case 15:
 
             if (!procAndFuncStarted) {
                 procAndFuncStarted = true;
@@ -308,17 +313,17 @@ case 14:
             ])
         
 break;
-case 15: case 22:
+case 16: case 23:
 
             this.$ = new SyntaxNode("IGNORE", []);
         
 break;
-case 16:
+case 17:
 
             this.$ = new SyntaxNode("Lista de Parâmetros", [$$[$0]])
         
 break;
-case 17:
+case 18:
 
             parameterStack.push({
                 type: variableType, 
@@ -343,19 +348,19 @@ case 17:
             ])
         
 break;
-case 18:
+case 19:
 
             tmpParameterMechanism = "VALUE"
             this.$ = new SyntaxNode("IGNORE", []);
         
 break;
-case 19:
+case 20:
 
             tmpParameterMechanism = "REFERENCE"
             this.$ = new SyntaxNode($$[$0], []);
         
 break;
-case 20:
+case 21:
 
             insideFunctionDeclaration = false;
             this.$ = new SyntaxNode($$[$0], []);
@@ -367,7 +372,7 @@ case 20:
             
         
 break;
-case 21:
+case 22:
 
             mvs.push({label: null, instruction: "INPP", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0].last_column});
             this.$ = new SyntaxNode("Cabeçalho", [
@@ -376,35 +381,34 @@ case 21:
             ]);
         
 break;
-case 23:
+case 24:
 
             this.$ = new SyntaxNode("Variáveis", [$$[$0]]);
         
 break;
-case 24:
+case 25:
 
             this.$ = new SyntaxNode("Declaração de variáveis", [$$[$0-2], $$[$0-1], $$[$0]]);
         
 break;
-case 25:
+case 26:
 
-            mvs.push({label: null, instruction: "AMEM", parameter: variableCount, first_line: 0, last_line: 0, first_column: 0, last_column: 0}); 
             this.$ = new SyntaxNode("Declaração de variáveis", [$$[$0-1], $$[$0]]);
         
 break;
-case 26:
+case 27:
 
             variableType = types.LOGIC;
             this.$ = new SyntaxNode("Tipo", [new SyntaxNode($$[$0],[])]);
         
 break;
-case 27:
+case 28:
 
             variableType = types.INTEGER;
             this.$ = new SyntaxNode("Tipo", [new SyntaxNode($$[$0], [])]);
         
 break;
-case 28:
+case 29:
 
             if (!procAndFuncStarted) {
                 success = addSymbol({
@@ -441,7 +445,7 @@ case 28:
             this.$ = new SyntaxNode("Lista de variáveis", [$$[$0-1], new SyntaxNode($$[$0],[])]);
         
 break;
-case 29:
+case 30:
 
 
             if (!procAndFuncStarted) {
@@ -479,29 +483,29 @@ case 29:
             this.$ = new SyntaxNode("Lista de variáveis", [new SyntaxNode($$[$0], [])]);
         
 break;
-case 30:
+case 31:
   
             this.$ = new SyntaxNode("IGNORE", []);
         
 break;
-case 31:
+case 32:
 
             this.$ = new SyntaxNode("Lista de comandos", [$$[$0-1], $$[$0]]);
         
 break;
-case 32: case 33: case 34: case 35: case 36:
+case 33: case 34: case 35: case 36: case 37:
 
             this.$ = new SyntaxNode("Comando", [$$[$0]]);
         
 break;
-case 37:
+case 38:
 
             tmpLabel = labelStack.pop();
             mvs.push({label: `L${tmpLabel}`, instruction: "NADA", parameter: null, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
             this.$ = new SyntaxNode("Condicional", [new SyntaxNode($$[$0-6], []),$$[$0-5],$$[$0-4],$$[$0-3],$$[$0-2],$$[$0-1], new SyntaxNode($$[$0],[])]);
         
 break;
-case 38:
+case 39:
 
             tmpType = typeStack.pop();
 
@@ -513,7 +517,7 @@ case 38:
             this.$ = new SyntaxNode("Token então", [new SyntaxNode($$[$0],[])]);
         
 break;
-case 39:
+case 40:
 
             mvs.push({label: null, instruction: "DSVS", parameter: `L${++label}`, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
             tmpLabel = labelStack.pop();
@@ -522,7 +526,7 @@ case 39:
             this.$ = new SyntaxNode("Token Senão", [new SyntaxNode($$[$0],[])]);
         
 break;
-case 40:
+case 41:
 
             tmpType = typeStack.pop();
             tmpPos = labelStack.pop(); 
@@ -551,7 +555,7 @@ case 40:
             this.$ = new SyntaxNode("Atribuição", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
-case 41:
+case 42:
 
             tmpPos = findVariablePosition($$[$0]);
             
@@ -563,12 +567,12 @@ case 41:
             this.$ = new SyntaxNode("Identificador de atribuição", [new SyntaxNode($$[$0],[])]);
         
 break;
-case 42: case 43:
+case 43: case 44:
 
             this.$ = new SyntaxNode("Entrada/Saída", [$$[$0]]);
         
 break;
-case 44:
+case 45:
 
             let variable = findVariable($$[$0]);
 
@@ -591,14 +595,14 @@ case 44:
             this.$ = new SyntaxNode("Entrada", [new SyntaxNode($$[$0-1],[]), new SyntaxNode($$[$0],[])]);
         
 break;
-case 45:
+case 46:
 
             tmpType = typeStack.pop();
             mvs.push({label: null, instruction: "ESCR", parameter: null, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
             this.$ = new SyntaxNode("Saída", [new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
-case 46:
+case 47:
 
             let firstLabel = labelStack.pop();
             let secondLabel = labelStack.pop();
@@ -607,14 +611,14 @@ case 46:
             this.$ = new SyntaxNode("Loop de repetição", [$$[$0-4], $$[$0-3], $$[$0-2], $$[$0-1], new SyntaxNode($$[$0], [])]);
         
 break;
-case 47:
+case 48:
 
             mvs.push({label: `L${++label}`, instruction: "NADA", parameter: null, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
             labelStack.push(label);
             this.$ = new SyntaxNode("Token enquanto", [new SyntaxNode($$[$0],[])]);
         
 break;
-case 48:
+case 49:
 
             tmpType = typeStack.pop();
             if (tmpType !== types.LOGIC) 
@@ -624,7 +628,7 @@ case 48:
             this.$ = new SyntaxNode("Faça Token", [new SyntaxNode($$[$0],[])]);
         
 break;
-case 49:
+case 50:
 
             isVariable = false;
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
@@ -632,7 +636,7 @@ case 49:
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
-case 50:
+case 51:
 
             isVariable = false;
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
@@ -640,7 +644,7 @@ case 50:
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
-case 51:
+case 52:
 
             isVariable = false;
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
@@ -648,7 +652,7 @@ case 51:
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
-case 52:
+case 53:
 
             isVariable = false;
             typeCheck(types.INTEGER, types.INTEGER, types.INTEGER);
@@ -656,7 +660,7 @@ case 52:
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
-case 53:
+case 54:
 
             isVariable = false;
             typeCheck(types.INTEGER, types.INTEGER, types.LOGIC);
@@ -664,7 +668,7 @@ case 53:
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
-case 54:
+case 55:
 
             isVariable = false;
             typeCheck(types.INTEGER, types.INTEGER, types.LOGIC);
@@ -672,7 +676,7 @@ case 54:
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
-case 55:
+case 56:
 
             isVariable = false;
             typeCheck(types.INTEGER, types.INTEGER, types.LOGIC);
@@ -680,7 +684,7 @@ case 55:
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
-case 56:
+case 57:
 
             isVariable = false;
             typeCheck(types.LOGIC, types.LOGIC, types.LOGIC);
@@ -688,7 +692,7 @@ case 56:
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
-case 57:
+case 58:
 
             isVariable = false;
             typeCheck(types.LOGIC, types.LOGIC, types.LOGIC);
@@ -696,12 +700,13 @@ case 57:
             this.$ = new SyntaxNode("Expressão", [$$[$0-2], new SyntaxNode($$[$0-1],[]), $$[$0]]);
         
 break;
-case 58:
+case 59:
 
             this.$ = new SyntaxNode("Expressão", [$$[$0]]);
         
 break;
-case 61:
+case 62:
+
 
             tmpArgument = argumentStack.pop();
             
@@ -718,7 +723,7 @@ case 61:
             this.$ = new SyntaxNode("Lista de argumentos", [$$[$0]])
         
 break;
-case 62:
+case 63:
 
             tmpArgument = argumentStack.pop();
             
@@ -735,25 +740,16 @@ case 62:
             this.$ = new SyntaxNode("Lista de argumentos", [$$[$0]])
         
 break;
-case 63:
-
-            tmpVariableId = $$[$0-1];
-            tmpProcAndFunc = findVariable(tmpVariableId);
-            argumentStack = [...tmpProcAndFunc.parameter];
-            argumentStack.reverse();
-            isArguments = true;
-            isVariable = true;
-            tmpProcIdentifier = _$[$0-1];
-            this.$ = $$[$0-1];
-        
-break;
 case 64:
 
-            mvs.push({label: null, instruction: "AMEM", parameter: 1, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column})
             tmpVariableId = $$[$0];
             tmpProcAndFunc = findVariable(tmpVariableId);
-            argumentStack = [...tmpProcAndFunc.parameter];
-            argumentStack.reverse();
+            
+            tmpArgumentStack = [...tmpProcAndFunc.parameter];
+            tmpArgumentStack.reverse();
+
+            argumentStack = [...argumentStack, "end", ...tmpArgumentStack];
+
             isArguments = true;
             isVariable = true;
             tmpProcIdentifier = _$[$0];
@@ -762,33 +758,50 @@ case 64:
 break;
 case 65:
 
-            isArguments = false;
+            mvs.push({label: null, instruction: "AMEM", parameter: 1, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column})
+            tmpVariableId = $$[$0];
+            tmpProcAndFunc = findVariable(tmpVariableId);
+            typeStack.push(tmpProcAndFunc.type);
+            tmpArgumentStack = [...tmpProcAndFunc.parameter];
+            tmpArgumentStack.reverse();
+
+            argumentStack = [...argumentStack, "end", ...tmpArgumentStack];
+
+            isArguments = true;
+            isVariable = true;
+            tmpProcIdentifier = _$[$0];
+            this.$ = $$[$0];
         
-            if (argumentStack.length != 0) {
-                error(_$[$0], "Quantidade de parâmetros errada!")
+break;
+case 66:
+
+            isArguments = false;
+
+            if (argumentStack.pop() !== "end") {
+                error(_$[$0-1], "Quantidade de parâmetros errada!")
             }
             
-            mvs.push({label: null, instruction: "SVCP", parameter: null, first_line: tmpProcIdentifier.first_line, last_line: _$[$0].last_line, first_column: tmpProcIdentifier.first_column, last_column: _$[$0].last_column})    
-            mvs.push({label: null, instruction: "DSVS", parameter: `L${tmpProcAndFunc.label}`, first_line: $$[$0-2].first_line, last_line: _$[$0].last_line, first_column: $$[$0-2].first_column, last_column: _$[$0].last_column})    
+            mvs.push({label: null, instruction: "SVCP", parameter: null, first_line: tmpProcIdentifier.first_line, last_line: _$[$0-1].last_line, first_column: tmpProcIdentifier.first_column, last_column: _$[$0-1].last_column})    
+            mvs.push({label: null, instruction: "DSVS", parameter: `L${findVariable($$[$0-3]).label}`, first_line: $$[$0-3].first_line, last_line: _$[$0-1].last_line, first_column: $$[$0-3].first_column, last_column: _$[$0-1].last_column})    
         
             this.$ = new SyntaxNode("Chamada de procedimento", [
-                new SyntaxNode($$[$0-2], []),
+                new SyntaxNode($$[$0-3], []),
                 new SyntaxNode("(", []),
                 $$[$0-1],
                 new SyntaxNode(")",[])
             ]);
         
 break;
-case 66:
+case 67:
 
             isArguments = false;
         
-            if (argumentStack.length != 0) {
+            if (argumentStack.pop() !== "end") {
                 error(_$[$0-1], "Quantidade de parâmetros errada!")
             }
             
             mvs.push({label: null, instruction: "SVCP", parameter: null, first_line: tmpProcIdentifier.first_line, last_line: _$[$0-1].last_line, first_column: tmpProcIdentifier.first_column, last_column: _$[$0-1].last_column})    
-            mvs.push({label: null, instruction: "DSVS", parameter: `L${tmpProcAndFunc.label}`, first_line: $$[$0-3].first_line, last_line: _$[$0-1].last_line, first_column: $$[$0-3].first_column, last_column: _$[$0-1].last_column})    
+            mvs.push({label: null, instruction: "DSVS", parameter: `L${findVariable($$[$0-3]).label}`, first_line: $$[$0-3].first_line, last_line: _$[$0-1].last_line, first_column: $$[$0-3].first_column, last_column: _$[$0-1].last_column})    
         
             this.$ = new SyntaxNode("Chamada de função", [
                 new SyntaxNode($$[$0-3], []),
@@ -799,12 +812,12 @@ case 66:
         
         
 break;
-case 67:
+case 68:
 
             this.$ = $$[$0];
         
 break;
-case 68:
+case 69:
    
             if (insideFunctionDeclaration) {
                 tmpVariableId = $$[$0];
@@ -849,7 +862,7 @@ case 68:
         
         
 break;
-case 69:
+case 70:
 
             mvs.push({label: null, instruction: "CRCT", parameter: parseInt($$[$0]), first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
             typeStack.push(types.INTEGER);
@@ -857,7 +870,7 @@ case 69:
             this.$ = new SyntaxNode("Termo", [new SyntaxNode($$[$0], [])]);
         
 break;
-case 70:
+case 71:
 
             mvs.push({label: null, instruction: "CRCT", parameter: 1, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
             typeStack.push(types.LOGIC);
@@ -865,7 +878,7 @@ case 70:
             this.$ = new SyntaxNode("Termo", [new SyntaxNode($$[$0], [])]);
         
 break;
-case 71:
+case 72:
 
             mvs.push({label: null, instruction: "CRCT", parameter: 0, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
             typeStack.push(types.LOGIC);
@@ -873,7 +886,7 @@ case 71:
             this.$ = new SyntaxNode("Termo", [new SyntaxNode($$[$0], [])]);
         
 break;
-case 72:
+case 73:
 
             tmpType = typeStack.pop();
             if (tmpType !== types.LOGIC) 
@@ -884,13 +897,13 @@ case 72:
             this.$ = new SyntaxNode("Termo", [new SyntaxNode($$[$0-1], []), $$[$0]]);
         
 break;
-case 73:
+case 74:
 
             isVariable = false;
             this.$ = new SyntaxNode("Termo", [new SyntaxNode($$[$0-2], []),$$[$0-1],new SyntaxNode($$[$0], [])]);
         
 break;
-case 74:
+case 75:
    
             if (variableCount > 0)
                 mvs.push({label: null, instruction: "DMEM", parameter: variableCount, first_line: _$[$0-1].first_line, last_line: _$[$0-1].last_line, first_column: _$[$0-1].first_column, last_column: _$[$0-1].last_column});
@@ -901,8 +914,8 @@ case 74:
 break;
 }
 },
-table: [{3:1,4:2,33:[1,3]},{1:[3]},o($V0,$V1,{5:4,34:5,21:6,36:$V2,37:$V3}),{29:[1,9]},{6:10,10:11,11:12,12:13,13:14,14:16,20:$V4,23:15,26:[2,2],28:$V5},o($V0,[2,23]),{29:[1,20],35:19},o($V6,[2,26]),o($V6,[2,27]),o([20,26,28,36,37],[2,21]),{7:21,26:[1,22]},{11:23,12:13,13:14,14:16,20:$V4,23:15,26:[2,3],28:$V5},o($V0,[2,5]),o($V0,[2,6]),o($V0,[2,7]),{15:[1,24]},{15:[1,25]},{29:[1,26]},{21:27,36:$V2,37:$V3},o($V0,[2,25],{21:6,34:28,29:[1,29],36:$V2,37:$V3}),o($V7,[2,29]),{8:30,29:$V8,38:31,39:32,40:33,41:34,42:35,43:36,44:$V9,51:41,53:37,54:38,55:$Va,56:$Vb,57:39,60:$Vc,74:42,81:$Vd},o([29,44,55,56,60,81],[2,20]),o($V0,[2,4]),o($Ve,$Vf,{16:47}),o($Ve,$Vf,{16:48}),{15:[2,14]},{22:[1,49]},o($V0,[2,24]),o($V7,[2,28]),{9:50,81:[1,51]},o($Vg,$Vd,{38:31,39:32,40:33,41:34,42:35,43:36,53:37,54:38,57:39,51:41,74:42,8:52,29:$V8,44:$V9,55:$Va,56:$Vb,60:$Vc}),o($Vh,[2,32]),o($Vh,[2,33]),o($Vh,[2,34]),o($Vh,[2,35]),o($Vh,[2,36]),o($Vh,[2,42]),o($Vh,[2,43]),{15:$Vi,22:$Vj,29:$Vk,45:53,71:54,75:62,76:55,77:$Vl,78:$Vm,79:$Vn,80:$Vo},{15:$Vi,22:$Vj,29:$Vk,45:64,71:54,75:62,76:55,77:$Vl,78:$Vm,79:$Vn,80:$Vo},{52:[1,65]},{15:$Vi,22:$Vj,27:$Vp,29:$Vk,45:68,71:54,72:66,73:67,75:62,76:55,77:$Vl,78:$Vm,79:$Vn,80:$Vo},{29:[1,69]},{15:$Vi,22:$Vj,29:$Vk,45:70,71:54,75:62,76:55,77:$Vl,78:$Vm,79:$Vn,80:$Vo},o([15,22,29,77,78,79,80],[2,47]),{15:[1,71],52:[2,41]},o($Vq,$Vr,{24:72,30:73,31:75,27:[1,74],32:$Vs}),o($Vq,$Vr,{30:73,31:75,17:77,27:[1,78],32:$Vs}),{15:[2,9]},{1:[2,1]},{82:[1,79]},o($Vg,[2,31]),{58:80,61:[1,90],62:$Vt,63:$Vu,64:$Vv,65:$Vw,66:$Vx,67:$Vy,68:$Vz,69:$VA,70:$VB},o($VC,[2,58]),o($VC,[2,67]),o($VC,[2,68]),o($VC,[2,69]),o($VC,[2,70]),o($VC,[2,71]),{15:$Vi,22:$Vj,29:$Vk,71:91,75:62,76:55,77:$Vl,78:$Vm,79:$Vn,80:$Vo},{15:$Vi,22:$Vj,29:$Vk,45:92,71:54,75:62,76:55,77:$Vl,78:$Vm,79:$Vn,80:$Vo},{15:[1,93]},{15:[2,64]},{46:94,49:[1,95],62:$Vt,63:$Vu,64:$Vv,65:$Vw,66:$Vx,67:$Vy,68:$Vz,69:$VA,70:$VB},{15:$Vi,22:$Vj,29:$Vk,45:96,71:54,75:62,76:55,77:$Vl,78:$Vm,79:$Vn,80:$Vo},{27:[1,97]},{15:$Vi,22:$Vj,27:[2,60],29:$Vk,45:98,71:54,75:62,76:55,77:$Vl,78:$Vm,79:$Vn,80:$Vo},o($VD,[2,62],{62:$Vt,63:$Vu,64:$Vv,65:$Vw,66:$Vx,67:$Vy,68:$Vz,69:$VA,70:$VB}),o($Vh,[2,44]),o($Vh,[2,45],{62:$Vt,63:$Vu,64:$Vv,65:$Vw,66:$Vx,67:$Vy,68:$Vz,69:$VA,70:$VB}),o($VD,[2,63]),{5:99,21:6,26:$V1,34:5,36:$V2,37:$V3},o($Ve,[2,16]),o($VE,[2,13]),{21:100,36:$V2,37:$V3},o($Vq,[2,19]),{5:101,21:6,26:$V1,34:5,36:$V2,37:$V3},o($VE,[2,12]),{1:[2,74]},{8:102,29:$V8,38:31,39:32,40:33,41:34,42:35,43:36,44:$V9,51:41,53:37,54:38,55:$Va,56:$Vb,57:39,59:$Vd,60:$Vc,74:42},{15:$Vi,22:$Vj,29:$Vk,45:103,71:54,75:62,76:55,77:$Vl,78:$Vm,79:$Vn,80:$Vo},{15:$Vi,22:$Vj,29:$Vk,45:104,71:54,75:62,76:55,77:$Vl,78:$Vm,79:$Vn,80:$Vo},{15:$Vi,22:$Vj,29:$Vk,45:105,71:54,75:62,76:55,77:$Vl,78:$Vm,79:$Vn,80:$Vo},{15:$Vi,22:$Vj,29:$Vk,45:106,71:54,75:62,76:55,77:$Vl,78:$Vm,79:$Vn,80:$Vo},{15:$Vi,22:$Vj,29:$Vk,45:107,71:54,75:62,76:55,77:$Vl,78:$Vm,79:$Vn,80:$Vo},{15:$Vi,22:$Vj,29:$Vk,45:108,71:54,75:62,76:55,77:$Vl,78:$Vm,79:$Vn,80:$Vo},{15:$Vi,22:$Vj,29:$Vk,45:109,71:54,75:62,76:55,77:$Vl,78:$Vm,79:$Vn,80:$Vo},{15:$Vi,22:$Vj,29:$Vk,45:110,71:54,75:62,76:55,77:$Vl,78:$Vm,79:$Vn,80:$Vo},{15:$Vi,22:$Vj,29:$Vk,45:111,71:54,75:62,76:55,77:$Vl,78:$Vm,79:$Vn,80:$Vo},o([29,44,55,56,59,60],[2,48]),o($VC,[2,72]),{27:[1,112],62:$Vt,63:$Vu,64:$Vv,65:$Vw,66:$Vx,67:$Vy,68:$Vz,69:$VA,70:$VB},{15:$Vi,22:$Vj,27:$Vp,29:$Vk,45:68,71:54,72:113,73:67,75:62,76:55,77:$Vl,78:$Vm,79:$Vn,80:$Vo},{8:114,29:$V8,38:31,39:32,40:33,41:34,42:35,43:36,44:$V9,50:$Vd,51:41,53:37,54:38,55:$Va,56:$Vb,57:39,60:$Vc,74:42},o([29,44,50,55,56,60],[2,38]),o($Vh,[2,40],{62:$Vt,63:$Vu,64:$Vv,65:$Vw,66:$Vx,67:$Vy,68:$Vz,69:$VA,70:$VB}),o($Vh,[2,65]),o($VD,[2,61],{62:$Vt,63:$Vu,64:$Vv,65:$Vw,66:$Vx,67:$Vy,68:$Vz,69:$VA,70:$VB}),{18:115,26:$VF},{29:[1,117]},{18:118,26:$VF},{59:[1,119]},o($VC,[2,49]),o($VC,[2,50]),o($VG,[2,51],{62:$Vt,63:$Vu}),o($VG,[2,52],{62:$Vt,63:$Vu}),o($VH,[2,53],{62:$Vt,63:$Vu,64:$Vv,65:$Vw}),o($VH,[2,54],{62:$Vt,63:$Vu,64:$Vv,65:$Vw}),o([15,19,22,25,27,29,44,48,49,50,55,56,59,60,61,68,69,70,77,78,79,80,81],[2,55],{62:$Vt,63:$Vu,64:$Vv,65:$Vw,66:$Vx,67:$Vy}),o($VI,[2,56],{62:$Vt,63:$Vu,64:$Vv,65:$Vw,66:$Vx,67:$Vy,68:$Vz}),o($VI,[2,57],{62:$Vt,63:$Vu,64:$Vv,65:$Vw,66:$Vx,67:$Vy,68:$Vz}),o($VC,[2,73]),{27:[1,120]},{47:121,50:[1,122]},{8:123,25:$Vd,29:$V8,38:31,39:32,40:33,41:34,42:35,43:36,44:$V9,51:41,53:37,54:38,55:$Va,56:$Vb,57:39,60:$Vc,74:42},o([19,25,29,44,55,56,60],[2,11]),o($Ve,[2,17]),{8:124,19:$Vd,29:$V8,38:31,39:32,40:33,41:34,42:35,43:36,44:$V9,51:41,53:37,54:38,55:$Va,56:$Vb,57:39,60:$Vc,74:42},o($Vh,[2,46]),o($VC,[2,66]),{8:125,29:$V8,38:31,39:32,40:33,41:34,42:35,43:36,44:$V9,48:$Vd,51:41,53:37,54:38,55:$Va,56:$Vb,57:39,60:$Vc,74:42},o([29,44,48,55,56,60],[2,39]),{25:[1,126]},{19:[1,127]},{48:[1,128]},o($V0,[2,10]),o($V0,[2,8]),o($Vh,[2,37])],
-defaultActions: {26:[2,14],49:[2,9],50:[2,1],63:[2,64],79:[2,74]},
+table: [{3:1,4:2,34:[1,3]},{1:[3]},o($V0,$V1,{5:4,35:5,22:6,37:$V2,38:$V3}),{32:[1,9]},o($V0,[2,2],{6:10}),o($V0,[2,24]),{32:[1,12],36:11},o($V4,[2,27]),o($V4,[2,28]),o([21,27,29,37,38],[2,22]),{7:13,11:14,12:15,13:16,14:17,15:19,21:$V5,24:18,27:[2,3],29:$V6},o($V0,[2,26],{22:6,35:22,32:[1,23],37:$V2,38:$V3}),o($V7,[2,30]),{8:24,27:[1,25]},{12:26,13:16,14:17,15:19,21:$V5,24:18,27:[2,4],29:$V6},o($V0,[2,6]),o($V0,[2,7]),o($V0,[2,8]),{16:[1,27]},{16:[1,28]},{23:[1,29]},{22:30,37:$V2,38:$V3},o($V0,[2,25]),o($V7,[2,29]),{9:31,23:$V8,32:$V9,39:32,40:33,41:34,42:35,43:36,44:37,45:$Va,52:42,54:38,55:39,56:$Vb,57:$Vc,58:40,61:$Vd,75:43,82:$Ve},o([23,32,45,56,57,61,82],[2,21]),o($V0,[2,5]),o($Vf,$Vg,{17:49}),o($Vf,$Vg,{17:50}),{16:[2,15]},{23:[1,51]},{10:52,82:[1,53]},o($Vh,$Ve,{39:32,40:33,41:34,42:35,43:36,44:37,54:38,55:39,58:40,52:42,75:43,9:54,23:$V8,32:$V9,45:$Va,56:$Vb,57:$Vc,61:$Vd}),o($Vi,[2,33]),o($Vi,[2,34]),o($Vi,[2,35]),o($Vi,[2,36]),o($Vi,[2,37]),o($Vi,[2,43]),o($Vi,[2,44]),{16:$Vj,23:$Vk,32:$Vl,46:55,72:56,76:64,77:57,78:$Vm,79:$Vn,80:$Vo,81:$Vp},{16:$Vj,23:$Vk,32:$Vl,46:66,72:56,76:64,77:57,78:$Vm,79:$Vn,80:$Vo,81:$Vp},{53:[1,67]},{16:[1,68]},{32:[1,69]},{16:$Vj,23:$Vk,32:$Vl,46:70,72:56,76:64,77:57,78:$Vm,79:$Vn,80:$Vo,81:$Vp},o([16,23,32,78,79,80,81],[2,48]),{53:[2,42]},{16:[2,64]},o($Vq,$Vr,{25:71,30:72,31:74,28:[1,73],33:$Vs}),o($Vq,$Vr,{30:72,31:74,18:76,28:[1,77],33:$Vs}),{16:[2,10]},{1:[2,1]},{83:[1,78]},o($Vh,[2,32]),{59:79,62:[1,89],63:$Vt,64:$Vu,65:$Vv,66:$Vw,67:$Vx,68:$Vy,69:$Vz,70:$VA,71:$VB},o($VC,[2,59]),o($VC,[2,68]),o($VC,[2,69]),o($VC,[2,70]),o($VC,[2,71]),o($VC,[2,72]),{16:$Vj,23:$Vk,32:$Vl,72:90,76:64,77:57,78:$Vm,79:$Vn,80:$Vo,81:$Vp},{16:$Vj,23:$Vk,32:$Vl,46:91,72:56,76:64,77:57,78:$Vm,79:$Vn,80:$Vo,81:$Vp},{16:[1,92]},{16:[2,65]},{47:93,50:[1,94],63:$Vt,64:$Vu,65:$Vv,66:$Vw,67:$Vx,68:$Vy,69:$Vz,70:$VA,71:$VB},{16:$Vj,23:$Vk,32:$Vl,46:95,72:56,76:64,77:57,78:$Vm,79:$Vn,80:$Vo,81:$Vp},{16:$Vj,23:$Vk,28:$VD,32:$Vl,46:98,72:56,73:96,74:97,76:64,77:57,78:$Vm,79:$Vn,80:$Vo,81:$Vp},o($Vi,[2,45]),o($Vi,[2,46],{63:$Vt,64:$Vu,65:$Vv,66:$Vw,67:$Vx,68:$Vy,69:$Vz,70:$VA,71:$VB}),{5:99,22:6,27:$V1,35:5,37:$V2,38:$V3},o($Vf,[2,17]),o($VE,[2,14]),{22:100,37:$V2,38:$V3},o($Vq,[2,20]),{5:101,22:6,27:$V1,35:5,37:$V2,38:$V3},o($VE,[2,13]),{1:[2,75]},{9:102,23:$V8,32:$V9,39:32,40:33,41:34,42:35,43:36,44:37,45:$Va,52:42,54:38,55:39,56:$Vb,57:$Vc,58:40,60:$Ve,61:$Vd,75:43},{16:$Vj,23:$Vk,32:$Vl,46:103,72:56,76:64,77:57,78:$Vm,79:$Vn,80:$Vo,81:$Vp},{16:$Vj,23:$Vk,32:$Vl,46:104,72:56,76:64,77:57,78:$Vm,79:$Vn,80:$Vo,81:$Vp},{16:$Vj,23:$Vk,32:$Vl,46:105,72:56,76:64,77:57,78:$Vm,79:$Vn,80:$Vo,81:$Vp},{16:$Vj,23:$Vk,32:$Vl,46:106,72:56,76:64,77:57,78:$Vm,79:$Vn,80:$Vo,81:$Vp},{16:$Vj,23:$Vk,32:$Vl,46:107,72:56,76:64,77:57,78:$Vm,79:$Vn,80:$Vo,81:$Vp},{16:$Vj,23:$Vk,32:$Vl,46:108,72:56,76:64,77:57,78:$Vm,79:$Vn,80:$Vo,81:$Vp},{16:$Vj,23:$Vk,32:$Vl,46:109,72:56,76:64,77:57,78:$Vm,79:$Vn,80:$Vo,81:$Vp},{16:$Vj,23:$Vk,32:$Vl,46:110,72:56,76:64,77:57,78:$Vm,79:$Vn,80:$Vo,81:$Vp},{16:$Vj,23:$Vk,32:$Vl,46:111,72:56,76:64,77:57,78:$Vm,79:$Vn,80:$Vo,81:$Vp},o([23,32,45,56,57,60,61],[2,49]),o($VC,[2,73]),{28:[1,112],63:$Vt,64:$Vu,65:$Vv,66:$Vw,67:$Vx,68:$Vy,69:$Vz,70:$VA,71:$VB},{16:$Vj,23:$Vk,28:$VD,32:$Vl,46:98,72:56,73:113,74:97,76:64,77:57,78:$Vm,79:$Vn,80:$Vo,81:$Vp},{9:114,23:$V8,32:$V9,39:32,40:33,41:34,42:35,43:36,44:37,45:$Va,51:$Ve,52:42,54:38,55:39,56:$Vb,57:$Vc,58:40,61:$Vd,75:43},o([23,32,45,51,56,57,61],[2,39]),o($Vi,[2,41],{63:$Vt,64:$Vu,65:$Vv,66:$Vw,67:$Vx,68:$Vy,69:$Vz,70:$VA,71:$VB}),{28:[1,115]},{16:$Vj,23:$Vk,28:[2,61],32:$Vl,46:116,72:56,76:64,77:57,78:$Vm,79:$Vn,80:$Vo,81:$Vp},o($VF,[2,63],{63:$Vt,64:$Vu,65:$Vv,66:$Vw,67:$Vx,68:$Vy,69:$Vz,70:$VA,71:$VB}),{19:117,27:$VG},{32:[1,119]},{19:120,27:$VG},{60:[1,121]},o($VC,[2,50]),o($VC,[2,51]),o($VH,[2,52],{63:$Vt,64:$Vu}),o($VH,[2,53],{63:$Vt,64:$Vu}),o($VI,[2,54],{63:$Vt,64:$Vu,65:$Vv,66:$Vw}),o($VI,[2,55],{63:$Vt,64:$Vu,65:$Vv,66:$Vw}),o([16,20,23,26,28,32,45,49,50,51,56,57,60,61,62,69,70,71,78,79,80,81,82],[2,56],{63:$Vt,64:$Vu,65:$Vv,66:$Vw,67:$Vx,68:$Vy}),o($VJ,[2,57],{63:$Vt,64:$Vu,65:$Vv,66:$Vw,67:$Vx,68:$Vy,69:$Vz}),o($VJ,[2,58],{63:$Vt,64:$Vu,65:$Vv,66:$Vw,67:$Vx,68:$Vy,69:$Vz}),o($VC,[2,74]),{28:[1,122]},{48:123,51:[1,124]},o($Vi,[2,66]),o($VF,[2,62],{63:$Vt,64:$Vu,65:$Vv,66:$Vw,67:$Vx,68:$Vy,69:$Vz,70:$VA,71:$VB}),{9:125,23:$V8,26:$Ve,32:$V9,39:32,40:33,41:34,42:35,43:36,44:37,45:$Va,52:42,54:38,55:39,56:$Vb,57:$Vc,58:40,61:$Vd,75:43},o([20,23,26,32,45,56,57,61],[2,12]),o($Vf,[2,18]),{9:126,20:$Ve,23:$V8,32:$V9,39:32,40:33,41:34,42:35,43:36,44:37,45:$Va,52:42,54:38,55:39,56:$Vb,57:$Vc,58:40,61:$Vd,75:43},o($Vi,[2,47]),o($VC,[2,67]),{9:127,23:$V8,32:$V9,39:32,40:33,41:34,42:35,43:36,44:37,45:$Va,49:$Ve,52:42,54:38,55:39,56:$Vb,57:$Vc,58:40,61:$Vd,75:43},o([23,32,45,49,56,57,61],[2,40]),{26:[1,128]},{20:[1,129]},{49:[1,130]},o($V0,[2,11]),o($V0,[2,9]),o($Vi,[2,38])],
+defaultActions: {29:[2,15],47:[2,42],48:[2,64],51:[2,10],52:[2,1],65:[2,65],78:[2,75]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
         this.trace(str);
@@ -1113,6 +1126,7 @@ let label = 0,
     globalSymbolTable = [], // This is to save the global symbol table temporarly
     parameterStack = [],
     argumentStack = [],
+    tmpArgumentStack = [],
     symbolTable = [],
     success,
     lastProcedure,
@@ -1143,7 +1157,8 @@ const clearEverything = () => { // Clean all variable in an error case
     argumentStack = [],
     isVariable = true,
     tmpProcAndFunc = null,
-    isArguments=false;
+    isArguments=false,
+    tmpArgumentStack = [];
 }
 
 /**
@@ -1536,11 +1551,11 @@ var YYSTATE=YY_START;
 switch($avoiding_name_collisions) {
 case 0:/* skip whitespaces */
 break;
-case 1:return 33;
+case 1:return 34;
 break;
-case 2:return 26;
+case 2:return 27;
 break;
-case 3:return 81;
+case 3:return 82;
 break;
 case 4:return "T_READ";
 break;
@@ -1604,13 +1619,13 @@ case 33:return "T_FUNC";
 break;
 case 34:return "T_ENDFUNC";
 break;
-case 35:return 82;
+case 35:return 83;
 break;
-case 36:return 22;
+case 36:return 23;
 break;
-case 37:return 29;
+case 37:return 32;
 break;
-case 38:return 77;
+case 38:return 78;
 break;
 }
 },

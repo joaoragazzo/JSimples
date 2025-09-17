@@ -62,6 +62,7 @@ let label = 0,
     globalSymbolTable = [], // This is to save the global symbol table temporarly
     parameterStack = [],
     argumentStack = [],
+    tmpArgumentStack = [],
     symbolTable = [],
     success,
     lastProcedure,
@@ -92,7 +93,8 @@ const clearEverything = () => { // Clean all variable in an error case
     argumentStack = [],
     isVariable = true,
     tmpProcAndFunc = null,
-    isArguments=false;
+    isArguments=false,
+    tmpArgumentStack = [];
 }
 
 /**
@@ -211,7 +213,7 @@ const error = (token, message) => {
 
 <<EOF>>         return 'EOF';
 
-[a-zA-Z_][a-zA-Z0-9_]*(?=\()   return 'T_FUNC_CALL_START';
+[a-zA-Z_][a-zA-Z0-9_]*(?=\()   return 'T_ROUTINE_START';
 [a-zA-Z_][a-zA-Z0-9_]*      return 'T_IDENTIFIER';
 
 [0-9]+                  return 'T_NUMBER';
@@ -223,22 +225,19 @@ const error = (token, message) => {
 %left T_PLUS T_MINUS
 %left T_TIMES T_DIV
 
-%left T_OPEN
-%nonassoc T_IDENTIFIER
-
 %start algorithm
 %%
 
 
 algorithm
-    : header variables routines start_block command_list footer
+    : header variables amem_helper routines start_block command_list footer
         {
             const headerNode = $1;
             const variablesNode = $2;
-            const routinesNode = $3;
-            const startBlockNode = $4;
-            const commandsNode = $5;
-            const footerNode = $6;
+            const routinesNode = $4;
+            const startBlockNode = $5;
+            const commandsNode = $6;
+            const footerNode = $7;
 
             const children = [headerNode];
             if (variablesNode) children.push(variablesNode);
@@ -248,14 +247,21 @@ algorithm
             if (footerNode) children.push(footerNode);
 
             let syntaxTree = new SyntaxNode("Algoritmo", children);
+            console.log(syntaxTree);
             let result = { 
                 syntaxTree: syntaxTree, 
                 mvs: mvs, 
                 symbolTable: [...symbolTable] 
             }
-            console.log(syntaxTree);
             clearEverything();
             return result;            
+        }
+    ;
+
+amem_helper 
+    : /* blank */ 
+        {
+            mvs.push({label: null, instruction: "AMEM", parameter: variableCount, first_line: 0, last_line: 0, first_column: 0, last_column: 0});         
         }
     ;
 
@@ -321,7 +327,7 @@ function
 
 
 function_header
-    : T_FUNC type T_FUNC_CALL_START
+    : T_FUNC type T_ROUTINE_START
         {
             if (!procAndFuncStarted) {
                 procAndFuncStarted = true;
@@ -448,7 +454,7 @@ routine_header_closed
     ;
 
 procedure_header
-    : T_PROC T_IDENTIFIER
+    : T_PROC T_ROUTINE_START
         {
             if (!procAndFuncStarted) {
                 procAndFuncStarted = true;
@@ -572,7 +578,6 @@ variable_declaration
         }
     | type variable_list
         {
-            mvs.push({label: null, instruction: "AMEM", parameter: variableCount, first_line: 0, last_line: 0, first_column: 0, last_column: 0}); 
             $$ = new SyntaxNode("Declaração de variáveis", [$1, $2]);
         }
     ;
@@ -936,6 +941,7 @@ arguments
 argument_list 
     : argument_list expression 
         {
+
             tmpArgument = argumentStack.pop();
             
             if (tmpArgument.mechanism === "REFERENCE" && !isVariable) {
@@ -970,12 +976,16 @@ argument_list
 
 
 procedure_call_header
-    : T_IDENTIFIER T_OPEN
+    : T_ROUTINE_START
         {
             tmpVariableId = $1;
             tmpProcAndFunc = findVariable(tmpVariableId);
-            argumentStack = [...tmpProcAndFunc.parameter];
-            argumentStack.reverse();
+            
+            tmpArgumentStack = [...tmpProcAndFunc.parameter];
+            tmpArgumentStack.reverse();
+
+            argumentStack = [...argumentStack, "end", ...tmpArgumentStack];
+
             isArguments = true;
             isVariable = true;
             tmpProcIdentifier = @1;
@@ -984,13 +994,17 @@ procedure_call_header
     ;
 
 function_call_header 
-    : T_FUNC_CALL_START
+    : T_ROUTINE_START
         {
             mvs.push({label: null, instruction: "AMEM", parameter: 1, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column})
             tmpVariableId = $1;
             tmpProcAndFunc = findVariable(tmpVariableId);
-            argumentStack = [...tmpProcAndFunc.parameter];
-            argumentStack.reverse();
+            typeStack.push(tmpProcAndFunc.type);
+            tmpArgumentStack = [...tmpProcAndFunc.parameter];
+            tmpArgumentStack.reverse();
+
+            argumentStack = [...argumentStack, "end", ...tmpArgumentStack];
+
             isArguments = true;
             isVariable = true;
             tmpProcIdentifier = @1;
@@ -999,21 +1013,21 @@ function_call_header
     ;
 
 procedure_call
-    : procedure_call_header arguments T_CLOSE
+    : procedure_call_header T_OPEN arguments T_CLOSE
         {
             isArguments = false;
-        
-            if (argumentStack.length != 0) {
+
+            if (argumentStack.pop() !== "end") {
                 error(@3, "Quantidade de parâmetros errada!")
             }
             
             mvs.push({label: null, instruction: "SVCP", parameter: null, first_line: tmpProcIdentifier.first_line, last_line: @3.last_line, first_column: tmpProcIdentifier.first_column, last_column: @3.last_column})    
-            mvs.push({label: null, instruction: "DSVS", parameter: `L${tmpProcAndFunc.label}`, first_line: $1.first_line, last_line: @3.last_line, first_column: $1.first_column, last_column: @3.last_column})    
+            mvs.push({label: null, instruction: "DSVS", parameter: `L${findVariable($1).label}`, first_line: $1.first_line, last_line: @3.last_line, first_column: $1.first_column, last_column: @3.last_column})    
         
             $$ = new SyntaxNode("Chamada de procedimento", [
                 new SyntaxNode($1, []),
                 new SyntaxNode("(", []),
-                $2,
+                $3,
                 new SyntaxNode(")",[])
             ]);
         }
@@ -1024,12 +1038,12 @@ function_call
         {
             isArguments = false;
         
-            if (argumentStack.length != 0) {
+            if (argumentStack.pop() !== "end") {
                 error(@3, "Quantidade de parâmetros errada!")
             }
             
             mvs.push({label: null, instruction: "SVCP", parameter: null, first_line: tmpProcIdentifier.first_line, last_line: @3.last_line, first_column: tmpProcIdentifier.first_column, last_column: @3.last_column})    
-            mvs.push({label: null, instruction: "DSVS", parameter: `L${tmpProcAndFunc.label}`, first_line: $1.first_line, last_line: @3.last_line, first_column: $1.first_column, last_column: @3.last_column})    
+            mvs.push({label: null, instruction: "DSVS", parameter: `L${findVariable($1).label}`, first_line: $1.first_line, last_line: @3.last_line, first_column: $1.first_column, last_column: @3.last_column})    
         
             $$ = new SyntaxNode("Chamada de função", [
                 new SyntaxNode($1, []),
