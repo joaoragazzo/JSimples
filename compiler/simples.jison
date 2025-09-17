@@ -72,7 +72,8 @@ let label = 0,
     isArguments = false,
     tmpProcAndFunc,
     tmpParameterMechanism,
-    tmpProcIdentifier;
+    tmpProcIdentifier,
+    tmpFuncName;
 
 const clearEverything = () => { // Clean all variable in an error case
     symbolTable = [];
@@ -204,6 +205,9 @@ const error = (token, message) => {
 "fimproc"       return "T_ENDPROC";
 "ref"           return "T_REF";
 
+"func"          return "T_FUNC";
+"fimfunc"       return "T_ENDFUNC";
+
 <<EOF>>         return 'EOF';
 
 [a-zA-Z_][a-zA-Z0-9_]* return 'T_IDENTIFIER';
@@ -247,8 +251,8 @@ algorithm
                 mvs: mvs, 
                 symbolTable: [...symbolTable] 
             }
+            console.log(symbolTable);
             clearEverything();
-            
             return result;            
         }
     ;
@@ -281,8 +285,71 @@ routine
         {
             $$ = new SyntaxNode("Procedimento", [$1]);
         }
-    // | function
+    | function
+        {
+            $$ = new SyntaxNode("Função", [$1]);
+        }
     ;
+
+function
+    : function_header T_OPEN parameter_list func_header_closed variables t_start_proc command_list T_ENDFUNC
+        {
+            if (localVariableCount > 0)
+                mvs.push({label: null, instruction: "DMEM", parameter: localVariableCount, first_line: @8.first_line, last_line: @8.last_line, first_column: @8.first_column, last_column: @8.last_column})    
+            localVariableCount = 0;
+            mvs.push({label: null, instruction: "RTSP", parameter: parameterStack.length, first_line: @8.first_line, last_line: @8.last_line, first_column: @8.first_column, last_column: @8.last_column})    
+            lastProcedure = globalSymbolTable.at(-1);
+        
+            lastProcedure.subSymbolTree = symbolTable.slice(variableCount + ++procedureAndFunctionCount);
+            symbolTable = [...globalSymbolTable]
+            parameterStack = []
+            $$ = new SyntaxNode("Função", [
+                // $1,
+                // new SyntaxNode($2, []),
+                // $3,
+                // new SyntaxNode(")", []),
+                // $5,
+                // new SyntaxNode("inicio", []),
+                // $7,
+                // new SyntaxNode("fimfunc", [])
+            ])
+        }
+    
+    ;
+
+
+function_header
+    : T_FUNC type T_IDENTIFIER
+        {
+            if (!procAndFuncStarted) {
+                procAndFuncStarted = true;
+                mvs.push({label: null, instruction: "DSVS", parameter: "L0", first_line: 0, last_line: 0, first_column: 0, last_column: 0});
+            }
+
+            tmpFuncName = $3;
+
+            addSymbol({
+                type: variableType, 
+                name: $3, 
+                address: null,
+                scope: "GLOBAL",
+                label: ++label,
+                category: "FUNCTION",
+                mechanism: null,
+                parameter: [],
+                subSymbolTree: null
+            })
+
+            mvs.push({label: `L${label}`, instruction: "ENSP", parameter: null, first_line: 0, last_line: 0, first_column: 0, last_column: 0})    
+            globalSymbolTable = [...symbolTable];
+
+            $$ = new SyntaxNode("Cabeçalho da Função", [
+                // new SyntaxNode($1, []),
+                // new SyntaxNode($2, []),
+            ])
+        }
+    ;
+
 
 procedure
     : procedure_header T_OPEN parameter_list routine_header_closed variables t_start_proc command_list T_ENDPROC
@@ -318,13 +385,47 @@ t_start_proc
         }
     ;
 
+func_header_closed
+    : T_CLOSE
+        {
+            parameterStack.reverse();
+
+            for (let i = 0; i < parameterStack.length; i++) {
+                parameterStack.at(i).address = -3 -i;
+            }
+
+            for (let i = 0; i < parameterStack.length; i++) {
+                tmpVariable = parameterStack.at(i);
+                success = addSymbol({
+                    type: tmpVariable.type, 
+                    name: tmpVariable.name, 
+                    address: tmpVariable.address,
+                    scope: tmpVariable.scope,
+                    label: tmpVariable.label,
+                    category: tmpVariable.category,
+                    mechanism: tmpVariable.mechanism,
+                    parameter: tmpVariable.parameter,
+                    subSymbolTree: tmpVariable.subSymbolTree
+                })
+                if(!success)
+                    error(tmpVariable.reference, "Nome do parâmetro já declarado nesse escopo")
+            }
+
+            symbolTable.find((v) => v.name === tmpFuncName).address = -parameterStack.length - 3;
+            globalSymbolTable.find((v) => v.name === tmpFuncName).address = -parameterStack.length - 3;
+
+        }
+    ;
+
 routine_header_closed 
     : T_CLOSE 
         {
             parameterStack.reverse();
+
             for (let i = 0; i < parameterStack.length; i++) {
                 parameterStack.at(i).address = -3 -i;
             }
+
             for (let i = 0; i < parameterStack.length; i++) {
                 tmpVariable = parameterStack.at(i);
                 success = addSymbol({
@@ -350,9 +451,8 @@ procedure_header
         {
             if (!procAndFuncStarted) {
                 procAndFuncStarted = true;
-                mvs.push({label: null, instruction: "DSVS", parameter: "L0", first_line: 0, last_line: 0, first_column: 0, last_column: 0})    
+                mvs.push({label: null, instruction: "DSVS", parameter: "L0", first_line: 0, last_line: 0, first_column: 0, last_column: 0});   
             }
-
             addSymbol({
                 type: null, 
                 name: $2, 
@@ -639,6 +739,9 @@ assignment
             tmpType = typeStack.pop();
             tmpPos = labelStack.pop(); 
 
+            if (symbolTable[tmpPos].category === "PROCEDURE")
+                error(@1, "Procedimentos não podem receber atribuições.");
+
             if (symbolTable[tmpPos].type != tmpType) 
                 error(@3, "Incompatibilidade de tipo.");
             
@@ -877,6 +980,21 @@ procedure_call_header
         }
     ;
 
+// function_call_header 
+//     : T_IDENTIFIER T_OPEN
+//         {
+//             mvs.push({label: null, instruction: "AMEM", parameter: 1, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column})
+//             tmpVariableId = $1;
+//             tmpProcAndFunc = findVariable(tmpVariableId);
+//             argumentStack = [...tmpProcAndFunc.parameter];
+//             argumentStack.reverse();
+//             isArguments = true;
+//             isVariable = true;
+//             tmpProcIdentifier = @1;
+//             $$ = $1;
+//         }
+//     ;
+
 procedure_call
     : procedure_call_header arguments T_CLOSE
         {
@@ -886,7 +1004,6 @@ procedure_call
                 error(@3, "Quantidade de parâmetros errada!")
             }
             
-        
             mvs.push({label: null, instruction: "SVCP", parameter: null, first_line: tmpProcIdentifier.first_line, last_line: @3.last_line, first_column: tmpProcIdentifier.first_column, last_column: @3.last_column})    
             mvs.push({label: null, instruction: "DSVS", parameter: `L${tmpProcAndFunc.label}`, first_line: $1.first_line, last_line: @3.last_line, first_column: $1.first_column, last_column: @3.last_column})    
         
@@ -898,7 +1015,6 @@ procedure_call
             ]);
         }
     ;
-
 
 term
     : T_IDENTIFIER 
@@ -944,7 +1060,7 @@ term
             
             $$ = new SyntaxNode("Termo", [new SyntaxNode($1, [])]);
         }
-    // |  T_IDENTIFIER T_OPEN arguments T_CLOSE
+    // | function_call_header arguments T_CLOSE
     //     {
     //         // Isso aqui é para função (apenas)
     //     }

@@ -32,6 +32,10 @@ const toPtBrCategory = (category) => {
         return "Procedimento"
     }
 
+    if (category === "FUNCTION") {
+       return "Função"
+    }
+
     return category
 }
 
@@ -135,7 +139,7 @@ const desktopColumns = [
     render: (category) => (
       <Badge 
         status={category === 'PROCEDURE' ? 'processing' : 'default'} 
-        text={category === "VARIABLE" ?  "Variável" : "Procedimento"} 
+        text={toPtBrCategory(category)} 
       />
     )
   },
@@ -173,8 +177,7 @@ const mobileColumns = [
             text={record.scope} 
           />
           <Badge 
-            status={record.category === 'PROCEDURE' ? 'processing' : 'default'} 
-            text={record.category === "VARIABLE" ? "Var" : "Proc"} 
+            text={toPtBrCategory(record.category)} 
           />
         </div>
         <div style={{ fontSize: '12px', color: '#666' }}>
@@ -225,8 +228,7 @@ const DetailButton = ({ record }) => {
           <div><strong>Rótulo:</strong> {record.label !== null ? record.label : '-'}</div>
           <div><strong>Categoria:</strong>
             <Badge 
-              status={record.category === 'PROCEDURE' ? 'processing' : 'default'} 
-              text={record.category === "VARIABLE" ? "Variável" : "Procedimento"} 
+              text={toPtBrCategory(record.category)} 
               style={{ marginLeft: '8px' }}
             />
           </div>
@@ -323,7 +325,7 @@ export const SymbolTable = () => {
         expandable={!isMobile ? {
           expandedRowRender,
           defaultExpandedRowKeys: ['4'],
-          rowExpandable: (record) => record.category === 'PROCEDURE' && record.subSymbolTree !== null
+          rowExpandable: (record) => (record.category === 'PROCEDURE' || record.category === "FUNCTION") && record.subSymbolTree !== null
         } : false}
         pagination={false}
         bordered
