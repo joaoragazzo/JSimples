@@ -749,10 +749,10 @@ assignment
                 mvs.push({label: null, instruction: "ARZG", parameter: symbolTable[tmpPos].address, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
             
             if (insideFunctionDeclaration) {
-                if (symbolTable[tmpPos].mechanism === "REFERENCE")
+                if (symbolTable[tmpPos].mechanism === "REFERENCE" && symbolTable[tmpPos].category !== "FUNCTION") 
                     mvs.push({label: null, instruction: "ARMI", parameter: symbolTable[tmpPos].address, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
                 else {
-                    if (symbolTable[tmpPos].scope === "LOCAL")
+                    if (symbolTable[tmpPos].scope === "LOCAL" || symbolTable[tmpPos].category === "FUNCTION")
                         mvs.push({label: null, instruction: "ARZL", parameter: symbolTable[tmpPos].address, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});
                     else 
                         mvs.push({label: null, instruction: "ARZG", parameter: symbolTable[tmpPos].address, first_line: @2.first_line, last_line: @2.last_line, first_column: @2.first_column, last_column: @2.last_column});

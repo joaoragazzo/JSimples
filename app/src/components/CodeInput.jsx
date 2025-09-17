@@ -77,7 +77,10 @@ const JSimples = StreamLanguage.define({
         "escreva",
         "leia",
         "proc",
-        "fimproc"
+        "fimproc",
+        "func",
+        "fimfunc",
+        "ref"
       ];
 
       const types = [
