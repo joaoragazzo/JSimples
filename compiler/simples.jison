@@ -208,18 +208,20 @@ const error = (token, message) => {
 "func"          return "T_FUNC";
 "fimfunc"       return "T_ENDFUNC";
 
+
 <<EOF>>         return 'EOF';
 
-[a-zA-Z_][a-zA-Z0-9_]* return 'T_IDENTIFIER';
+[a-zA-Z_][a-zA-Z0-9_]*(?=\()   return 'T_FUNC_CALL_START';
+[a-zA-Z_][a-zA-Z0-9_]*      return 'T_IDENTIFIER';
+
 [0-9]+                  return 'T_NUMBER';
 
 /lex 
-
 %left T_AND T_OR 
 %left T_EQUAL
 %left T_GREATER T_LESS
 %left T_PLUS T_MINUS
-%left T_TIMES T_DIV 
+%left T_TIMES T_DIV
 
 %left T_OPEN
 %nonassoc T_IDENTIFIER
@@ -319,7 +321,7 @@ function
 
 
 function_header
-    : T_FUNC type T_IDENTIFIER
+    : T_FUNC type T_FUNC_CALL_START
         {
             if (!procAndFuncStarted) {
                 procAndFuncStarted = true;
@@ -330,7 +332,7 @@ function_header
 
             addSymbol({
                 type: variableType, 
-                name: $3, 
+                name: tmpFuncName, 
                 address: null,
                 scope: "GLOBAL",
                 label: ++label,
@@ -445,7 +447,6 @@ routine_header_closed
         }
     ;
 
-
 procedure_header
     : T_PROC T_IDENTIFIER
         {
@@ -453,6 +454,7 @@ procedure_header
                 procAndFuncStarted = true;
                 mvs.push({label: null, instruction: "DSVS", parameter: "L0", first_line: 0, last_line: 0, first_column: 0, last_column: 0});   
             }
+
             addSymbol({
                 type: null, 
                 name: $2, 
@@ -502,6 +504,7 @@ parameter
                 subSymbolTree: null,
                 reference: @3
             });
+            
             lastProcedure = globalSymbolTable.at(-1);
             lastProcedure.parameter.push({type: variableType, mechanism: tmpParameterMechanism});
 
@@ -980,20 +983,20 @@ procedure_call_header
         }
     ;
 
-// function_call_header 
-//     : T_IDENTIFIER T_OPEN
-//         {
-//             mvs.push({label: null, instruction: "AMEM", parameter: 1, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column})
-//             tmpVariableId = $1;
-//             tmpProcAndFunc = findVariable(tmpVariableId);
-//             argumentStack = [...tmpProcAndFunc.parameter];
-//             argumentStack.reverse();
-//             isArguments = true;
-//             isVariable = true;
-//             tmpProcIdentifier = @1;
-//             $$ = $1;
-//         }
-//     ;
+function_call_header 
+    : T_FUNC_CALL_START
+        {
+            mvs.push({label: null, instruction: "AMEM", parameter: 1, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column})
+            tmpVariableId = $1;
+            tmpProcAndFunc = findVariable(tmpVariableId);
+            argumentStack = [...tmpProcAndFunc.parameter];
+            argumentStack.reverse();
+            isArguments = true;
+            isVariable = true;
+            tmpProcIdentifier = @1;
+            $$ = $1;
+        }
+    ;
 
 procedure_call
     : procedure_call_header arguments T_CLOSE
@@ -1016,9 +1019,32 @@ procedure_call
         }
     ;
 
-term
-    : T_IDENTIFIER 
+function_call
+    : function_call_header T_OPEN arguments T_CLOSE
         {
+            isArguments = false;
+        
+            if (argumentStack.length != 0) {
+                error(@3, "Quantidade de parâmetros errada!")
+            }
+            
+            mvs.push({label: null, instruction: "SVCP", parameter: null, first_line: tmpProcIdentifier.first_line, last_line: @3.last_line, first_column: tmpProcIdentifier.first_column, last_column: @3.last_column})    
+            mvs.push({label: null, instruction: "DSVS", parameter: `L${tmpProcAndFunc.label}`, first_line: $1.first_line, last_line: @3.last_line, first_column: $1.first_column, last_column: @3.last_column})    
+        
+            $$ = new SyntaxNode("Chamada de função", [
+                new SyntaxNode($1, []),
+                new SyntaxNode("(", []),
+                $2,
+                new SyntaxNode(")",[])
+            ]);
+        
+        }
+    ;
+
+term
+    : function_call
+    | T_IDENTIFIER
+        {   
             if (insideFunctionDeclaration) {
                 tmpVariableId = $1;
                 tmpVariable = findVariable(tmpVariableId);
@@ -1059,11 +1085,8 @@ term
             
             
             $$ = new SyntaxNode("Termo", [new SyntaxNode($1, [])]);
+        
         }
-    // | function_call_header arguments T_CLOSE
-    //     {
-    //         // Isso aqui é para função (apenas)
-    //     }
     | T_NUMBER
         {
             mvs.push({label: null, instruction: "CRCT", parameter: parseInt($1), first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
