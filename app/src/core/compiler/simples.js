@@ -105,7 +105,7 @@ case 1:
                 mvs: mvs, 
                 symbolTable: [...symbolTable] 
             }
-            console.log(symbolTable);
+            console.log(syntaxTree);
             clearEverything();
             return result;            
         
@@ -793,10 +793,15 @@ case 66:
             this.$ = new SyntaxNode("Chamada de função", [
                 new SyntaxNode($$[$0-3], []),
                 new SyntaxNode("(", []),
-                $$[$0-2],
+                $$[$0-1],
                 new SyntaxNode(")",[])
             ]);
         
+        
+break;
+case 67:
+
+            this.$ = $$[$0];
         
 break;
 case 68:

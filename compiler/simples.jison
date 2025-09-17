@@ -253,7 +253,7 @@ algorithm
                 mvs: mvs, 
                 symbolTable: [...symbolTable] 
             }
-            console.log(symbolTable);
+            console.log(syntaxTree);
             clearEverything();
             return result;            
         }
@@ -1034,7 +1034,7 @@ function_call
             $$ = new SyntaxNode("Chamada de função", [
                 new SyntaxNode($1, []),
                 new SyntaxNode("(", []),
-                $2,
+                $3,
                 new SyntaxNode(")",[])
             ]);
         
@@ -1043,6 +1043,9 @@ function_call
 
 term
     : function_call
+        {
+            $$ = $1;
+        }
     | T_IDENTIFIER
         {   
             if (insideFunctionDeclaration) {
