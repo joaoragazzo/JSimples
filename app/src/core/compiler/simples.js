@@ -819,7 +819,7 @@ case 69:
                 tmpVariableId = $$[$0];
                 tmpVariable = findVariable(tmpVariableId);
                 if(tmpVariable.mechanism === "REFERENCE") {
-                    mvs.push({label: null, instruction: "CREL", parameter: tmpVariable.address, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
+                    mvs.push({label: null, instruction: "CRVI", parameter: tmpVariable.address, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});
                 } else {
                     if (tmpVariable.scope === "LOCAL")
                         mvs.push({label: null, instruction: "CRVL", parameter: tmpVariable.address, first_line: _$[$0].first_line, last_line: _$[$0].last_line, first_column: _$[$0].first_column, last_column: _$[$0].last_column});

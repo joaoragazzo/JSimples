@@ -185,7 +185,7 @@ export const MVS = (
   }
 
   const executeCrvi = () => {
-    stack.push(stack[stack[d + register.parameter]])
+    stack.push(stack[stack[dPointer + register.parameter]])
   }
 
   const executeFrame = async () => {

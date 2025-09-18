@@ -1067,7 +1067,7 @@ term
                 tmpVariableId = $1;
                 tmpVariable = findVariable(tmpVariableId);
                 if(tmpVariable.mechanism === "REFERENCE") {
-                    mvs.push({label: null, instruction: "CREL", parameter: tmpVariable.address, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
+                    mvs.push({label: null, instruction: "CRVI", parameter: tmpVariable.address, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
                 } else {
                     if (tmpVariable.scope === "LOCAL")
                         mvs.push({label: null, instruction: "CRVL", parameter: tmpVariable.address, first_line: @1.first_line, last_line: @1.last_line, first_column: @1.first_column, last_column: @1.last_column});
