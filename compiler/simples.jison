@@ -247,7 +247,7 @@ algorithm
             if (footerNode) children.push(footerNode);
 
             let syntaxTree = new SyntaxNode("Algoritmo", children);
-            console.log(syntaxTree);
+
             let result = { 
                 syntaxTree: syntaxTree, 
                 mvs: mvs, 
@@ -280,22 +280,22 @@ routines
 routines_list
     : routines_list routine
         {
-            $$ = new SyntaxNode("Declaração de Rotinas", [$1, new SyntaxNode("Rotina", [$2])]);
+            $$ = new SyntaxNode("Lista de Rotinas", [$1, $2]);
         }
     | routine
         {
-            $$ = new SyntaxNode("Rotina", [$1]);
+            $$ = new SyntaxNode("Lista de Rotinas", [$1]);
         }
     ;
 
 routine
     : procedure
         {
-            $$ = new SyntaxNode("Procedimento", [$1]);
+            $$ = new SyntaxNode("Rotina", [$1]);
         }
     | function
         {
-            $$ = new SyntaxNode("Função", [$1]);
+            $$ = new SyntaxNode("Rotina", [$1]);
         }
     ;
 
@@ -312,14 +312,14 @@ function
             symbolTable = [...globalSymbolTable]
             parameterStack = []
             $$ = new SyntaxNode("Função", [
-                // $1,
-                // new SyntaxNode($2, []),
-                // $3,
-                // new SyntaxNode(")", []),
-                // $5,
-                // new SyntaxNode("inicio", []),
-                // $7,
-                // new SyntaxNode("fimfunc", [])
+                $1,
+                new SyntaxNode($2, []),
+                $3,
+                new SyntaxNode(")", []),
+                $5,
+                new SyntaxNode("inicio", []),
+                $7,
+                new SyntaxNode("fimfunc", [])
             ])
         }
     
@@ -352,8 +352,9 @@ function_header
             globalSymbolTable = [...symbolTable];
 
             $$ = new SyntaxNode("Cabeçalho da Função", [
-                // new SyntaxNode($1, []),
-                // new SyntaxNode($2, []),
+                new SyntaxNode($1, []),
+                $2,
+                new SyntaxNode($3, [])
             ])
         }
     ;

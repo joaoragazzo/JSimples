@@ -100,7 +100,7 @@ case 1:
             if (footerNode) children.push(footerNode);
 
             let syntaxTree = new SyntaxNode("Algoritmo", children);
-            console.log(syntaxTree);
+
             let result = { 
                 syntaxTree: syntaxTree, 
                 mvs: mvs, 
@@ -128,22 +128,17 @@ case 4:
 break;
 case 5:
 
-            this.$ = new SyntaxNode("Declaração de Rotinas", [$$[$0-1], new SyntaxNode("Rotina", [$$[$0]])]);
+            this.$ = new SyntaxNode("Lista de Rotinas", [$$[$0-1], $$[$0]]);
         
 break;
 case 6:
 
+            this.$ = new SyntaxNode("Lista de Rotinas", [$$[$0]]);
+        
+break;
+case 7: case 8:
+
             this.$ = new SyntaxNode("Rotina", [$$[$0]]);
-        
-break;
-case 7:
-
-            this.$ = new SyntaxNode("Procedimento", [$$[$0]]);
-        
-break;
-case 8:
-
-            this.$ = new SyntaxNode("Função", [$$[$0]]);
         
 break;
 case 9:
@@ -158,14 +153,14 @@ case 9:
             symbolTable = [...globalSymbolTable]
             parameterStack = []
             this.$ = new SyntaxNode("Função", [
-                // $$[$0-7],
-                // new SyntaxNode($$[$0-6], []),
-                // $$[$0-5],
-                // new SyntaxNode(")", []),
-                // $$[$0-3],
-                // new SyntaxNode("inicio", []),
-                // $$[$0-1],
-                // new SyntaxNode("fimfunc", [])
+                $$[$0-7],
+                new SyntaxNode($$[$0-6], []),
+                $$[$0-5],
+                new SyntaxNode(")", []),
+                $$[$0-3],
+                new SyntaxNode("inicio", []),
+                $$[$0-1],
+                new SyntaxNode("fimfunc", [])
             ])
         
 break;
@@ -194,8 +189,9 @@ case 10:
             globalSymbolTable = [...symbolTable];
 
             this.$ = new SyntaxNode("Cabeçalho da Função", [
-                // new SyntaxNode($$[$0-2], []),
-                // new SyntaxNode($$[$0-1], []),
+                new SyntaxNode($$[$0-2], []),
+                $$[$0-1],
+                new SyntaxNode($$[$0], [])
             ])
         
 break;
