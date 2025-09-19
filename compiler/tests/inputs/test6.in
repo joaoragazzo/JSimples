@@ -1,0 +1,34 @@
+programa teste6
+    inteiro z x
+
+    proc g(inteiro t)
+        inteiro y
+    inicio
+        y <- t*t
+        z <- z + x + y
+        escreva z
+    fimproc
+
+    proc f1(inteiro x inteiro y)
+        inteiro t
+    inicio
+        t <- z + x + y
+        g(t)
+        z <- t
+    fimproc
+
+    proc h(inteiro y)
+        inteiro x
+    inicio
+        x <- y + 1
+        f1(x y)
+        g(z + x)
+    fimproc
+inicio
+    z <- 1
+    x <- 3
+    h(x)
+    g(x)
+    escreva x
+    escreva z
+fimprograma

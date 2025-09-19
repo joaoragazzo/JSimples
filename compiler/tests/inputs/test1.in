@@ -1,0 +1,10 @@
+programa teste1
+    inteiro x
+    proc muda(ref inteiro a)
+    inicio
+        a <- 7
+    fimproc
+inicio
+    muda(x)
+    escreva x
+fimprograma

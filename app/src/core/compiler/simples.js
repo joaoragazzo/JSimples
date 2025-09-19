@@ -106,13 +106,19 @@ case 1:
                 mvs: mvs, 
                 symbolTable: [...symbolTable] 
             }
+
+            for (let mvs of result.mvs) {
+                console.log(`${mvs.label ?? ""}\t${mvs.instruction}\t${mvs.parameter ?? ""}`);
+            }
+
             clearEverything();
             return result;            
         
 break;
 case 2:
 
-            mvs.push({label: null, instruction: "AMEM", parameter: variableCount, first_line: 0, last_line: 0, first_column: 0, last_column: 0});         
+            if (variableCount > 0)
+                mvs.push({label: null, instruction: "AMEM", parameter: variableCount, first_line: 0, last_line: 0, first_column: 0, last_column: 0});         
         
 break;
 case 3:

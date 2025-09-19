@@ -1,0 +1,13 @@
+programa nome_programa
+    inteiro x y
+    proc soma(inteiro a inteiro b)
+        inteiro s
+    inicio
+        s <- a + b
+        escreva s
+    fimproc
+inicio
+    leia x
+    leia y
+    soma(x y)
+fimprograma

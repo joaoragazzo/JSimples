@@ -1,0 +1,17 @@
+programa teste20
+    inteiro a b
+    logico c d
+    proc teste(ref inteiro a)
+    inicio
+      a <- a + 1
+    fimproc
+
+    func inteiro teste2()
+    inicio
+      teste2 <- 20 * 2
+    fimfunc
+inicio
+    a <- teste2()
+    teste(a)
+    escreva a
+fimprograma

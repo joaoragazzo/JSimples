@@ -1,0 +1,49 @@
+programa t_subprogramas
+    inteiro a b c
+    logico f1 k4 y5
+
+    proc test(logico lol inteiro a inteiro b)
+        inteiro a1 a2 a3 a4 a5
+    inicio
+        se lol entao
+            escreva a
+        senao
+            escreva b
+        fimse
+    fimproc
+
+    func inteiro soma(inteiro a inteiro b)
+        inteiro a1 a2 a3 a4 a5
+        inteiro b1 b2 b3 b4 b5
+    inicio
+        soma <- a + b
+    fimfunc
+
+    proc proc_soma(ref inteiro c inteiro a inteiro b)
+    inicio
+        c <- a + b
+    fimproc
+
+    func logico maior(inteiro a inteiro b)
+    inicio
+        maior <- a > b
+    fimfunc
+
+inicio
+    leia a
+    b <- 7
+
+    proc_soma(c a b)
+    escreva c
+
+    escreva soma(a b)
+
+    test(maior(a b) a b)
+
+    se maior(a b) entao
+        escreva 1
+    senao
+        escreva 0
+    fimse
+
+fimprograma

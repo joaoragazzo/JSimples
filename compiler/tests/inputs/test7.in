@@ -1,0 +1,11 @@
+programa nome_programa
+    inteiro x y
+    proc le(ref inteiro a ref inteiro b)
+    inicio
+        leia a
+        leia b
+    fimproc
+inicio
+    le(x y)
+    escreva x + y
+fimprograma

@@ -1,0 +1,12 @@
+programa teste5
+    inteiro x y z
+    proc soma(inteiro a inteiro b ref inteiro c)
+    inicio
+        c <- a + b
+    fimproc
+inicio
+    leia x
+    leia y
+    soma(x y z)
+    escreva z
+fimprograma

@@ -1,0 +1,9 @@
+programa nome_programa
+    func inteiro soma(inteiro a inteiro b)
+    inicio
+        soma <- a + b
+    fimfunc
+inicio
+    escreva soma(10 20)
+    escreva soma(5 100)
+fimprograma
