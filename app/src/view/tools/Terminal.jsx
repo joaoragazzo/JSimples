@@ -44,7 +44,7 @@ const WelcomeMessage = styled.div`
 const TerminalWrapper = styled.div`
   position: relative;
   color: #e2e8f0;
-  height: 100%;
+  height: 745px;
 `
 
 const TerminalCard = styled.div`
