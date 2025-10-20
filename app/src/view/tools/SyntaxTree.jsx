@@ -7,6 +7,7 @@ import { ViewContainer } from "@/components/atomic/ViewContainer";
 import '@/styles/Tree.css';
 import { IoWarning } from "react-icons/io5";
 import { FaGear } from "react-icons/fa6";
+import { renderCustomNode } from "../../components/TreeNode";
 
 const TreeContainer = styled.div`
   flex-grow: 1;
@@ -99,6 +100,8 @@ export const SyntaxTree = () => {
 
   const nothingCompiled = Object.keys(completeSyntaxTree).length === 0;
 
+  
+
   return (
     <ViewContainer id="viewContainer">
       <TreeViewSettings>
@@ -123,9 +126,10 @@ export const SyntaxTree = () => {
             pathFunc="straight"
             data={ tab === 'syntaxTree' ? simplifiedSyntaxTree : completeSyntaxTree}
             translate={translate}
-            scaleExtent={{ min: 0.3, max: 4 }}
+            separation={{ siblings: 1.8, nonSiblings: 1.2 }}
+            renderCustomNodeElement={renderCustomNode}
             zoom={0.8}
-            nodeSize={{ x: 200, y: 100 }}
+            nodeSize={{ x: 100, y: 100 }}
             rootNodeClassName="node__root"
             branchNodeClassName="node__branch"
             leafNodeClassName="node__leaf"
