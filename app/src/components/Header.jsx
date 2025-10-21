@@ -10,41 +10,17 @@ const HeaderBar = styled(Row)`
   align-items: center;
 `;
 
-const Link = styled.span`
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: border 0.5s;
-  padding-bottom: 5px;
+const Logo = styled.img`
+  height: 40px;
+`;
 
-  &:hover {
-    border-color: black;
-  }
-`
-
+/**
+ * Componente de cabeçalho da aplicação
+ */
 export const Header = () => {
-  const items = [
-    {
-      key: 'home',
-      label: 'Início',
-    },
-    {
-        key: 'workspace',
-        label: 'Workspace',
-    },
-    {
-        key: 'help',
-        label: 'Ajuda',
-    },
-    {
-        key: 'about',
-        label: 'Sobre'
-    }
-]
-  
   return (
     <HeaderBar>
-      <img src={logo} height={40} />
-        {/* <Tabs items={items}/> */}
+      <Logo src={logo} alt="JSimples Logo" />
     </HeaderBar>
   );
 };
