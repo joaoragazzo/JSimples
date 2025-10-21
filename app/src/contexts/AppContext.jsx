@@ -185,25 +185,34 @@ export const AppContextProvider = ({ children }) => {
       value={{
         code,
         setCode,
+        /* Função para compilar e resultado */
         parserResponse,
         compile,
+        /* Árvore de derivação e árvore sintática*/
         completeSyntaxTree,
         simplifiedSyntaxTree,
+        /* Valores da saída do terminal */
         logs,
         setLogs,
+        /* Algoritmo rodando */
         runAlgorithm,
+        stopAlgorithm,
+        isRunning,
+        /* Valores da funcionalidade selcionada */
         tab,
         setTab,
-        isRunning,
-        stopAlgorithm,
+        /* Valores de requisição de Input */
+        requestInput,
         waitingInput,
         setWaitingInput,
         inputCallbackRef,
-        requestInput,
+        /* Referência a máquina virtual e resetar operação na máquina */
         vmRef,
         resetVm,
-        setMvsState,
+        /* Estádo da maquina virtual */
         mvsState,
+        setMvsState,
+        /* Notificação de I/O na interface */
         terminalNotification,
       }}
     >
