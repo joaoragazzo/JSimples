@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { useAppData } from "@/contexts/AppContext";
 import styled from "styled-components";
 import CodeMirror, { Decoration, EditorState, EditorView } from "@uiw/react-codemirror";

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppData } from "@/contexts/AppContext";
 import styled from "styled-components";
 import { AiOutlineRight } from "react-icons/ai";

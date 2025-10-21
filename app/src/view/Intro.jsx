@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import JS from '@/assets/JS.svg';
 import IMPLES from '@/assets/Imples.svg';
 
