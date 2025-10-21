@@ -166,7 +166,7 @@ const JSimplesIntro = ({ onAnimationComplete }) => {
 };
 
 export const Intro = ({children}) => {
-  const [showApp, setShowApp] = useState(true); // if its true, disable the intro
+  const [showApp, setShowApp] = useState(false); 
 
   const handleAnimationComplete = () => {
     setShowApp(true);
