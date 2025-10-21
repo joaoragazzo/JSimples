@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import JS from '@/assets/JS.svg';
 import IMPLES from '@/assets/Imples.svg';
 
@@ -166,7 +166,7 @@ const JSimplesIntro = ({ onAnimationComplete }) => {
 };
 
 export const Intro = ({children}) => {
-  const [showApp, setShowApp] = useState(true); // if its true, disable the intro
+  const [showApp, setShowApp] = useState(false); 
 
   const handleAnimationComplete = () => {
     setShowApp(true);

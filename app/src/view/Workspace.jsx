@@ -79,7 +79,6 @@ export const Workspace = () => {
     </ExtendedRow>
     <ExtendedRow>
       <StyledCard>
-
         <SymbolTable />
       </StyledCard>
     </ExtendedRow>

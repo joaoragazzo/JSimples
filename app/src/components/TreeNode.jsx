@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 
-// Transforme em um componente React
 const CustomNode = ({ nodeDatum, toggleNode }) => {
   const textRef = useRef(null);
   const [textBBox, setTextBBox] = useState(null);
