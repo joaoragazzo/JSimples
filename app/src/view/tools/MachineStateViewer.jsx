@@ -1,4 +1,4 @@
-import { Button, Col, List, Row, Table } from "antd";
+import { Button, Col, Collapse, List, Row, Table } from "antd";
 import { useAppData } from "@/contexts/AppContext";
 import styled from "styled-components";
 import { Stack } from "@/components/Stack";
@@ -349,12 +349,22 @@ export const MachineStateViewer = () => {
               </WarningWrapper>
             )}
             {hasMvsCode && (
-              <List
-                ref={legendRef}
-                header={<strong>Legenda</strong>}
-                dataSource={legendItems}
-                bordered
-                renderItem={(item) => <List.Item>{item}</List.Item>}
+              <Collapse
+                items={[
+                  {
+                    key: '1',
+                    label: <strong>Legenda</strong>,
+                    children: (
+                      <List
+                        ref={legendRef}
+                        dataSource={legendItems}
+                        renderItem={(item) => <List.Item>{item}</List.Item>}
+                        size="small"
+                      />
+                    ),
+                  },
+                ]}
+                defaultActiveKey={['1']}
                 size="small"
               />
             )}
