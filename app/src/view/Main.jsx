@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { Header } from "../components/Header";
 import { Workspace } from "./Workspace";
 import { Intro } from "./Intro";
+import Footer from "../components/Footer";
 
 const MainWrapper = styled.div`
   box-sizing: border-box;
@@ -46,6 +47,7 @@ export const Main = () => {
         <Container>
           <Workspace />
         </Container>
+        <Footer />
       </MainWrapper>
     </Intro>
   );
