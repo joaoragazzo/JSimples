@@ -39,6 +39,7 @@ export const AppContextProvider = ({ children }) => {
   const [simplifiedSyntaxTree, setSimplifiedSyntaxTree] = useState({});
   const [terminalNotification, setTerminalNotification] = useState(false);
   const [parserResponse, setParserResponse] = useState(DEFAULT_PARSER_RESPONSE);
+  const [highContrast, setHighContrast] = useState(false);
 
   /**
    * Adiciona uma mensagem de log ao terminal
@@ -214,6 +215,9 @@ export const AppContextProvider = ({ children }) => {
         setMvsState,
         /* Notificação de I/O na interface */
         terminalNotification,
+        /* Tema de alto contraste do terminal */
+        highContrast,
+        setHighContrast
       }}
     >
       {contextHolder}

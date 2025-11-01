@@ -1,51 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { useAppData } from "@/contexts/AppContext";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { AiOutlineRight } from "react-icons/ai";
 import { PiBroomBold } from "react-icons/pi";
+import { MdContrast } from "react-icons/md"; // Ícone de contraste
 import { formatTime } from "@/utils/dateUtils";
 import { COLORS, SIZES } from "@/constants/theme";
 
-const LogLine = styled.div`
-  margin-bottom: 8px;
-  display: flex;
-
-  &.error {
-    color: ${COLORS.terminal.error};
-  }
-
-  &.success {
-    color: ${COLORS.terminal.success};
-  }
-
-  &.warning {
-    color: ${COLORS.terminal.warning};
-  }
-
-  &.info {
-    color: ${COLORS.terminal.info};
-  }
-`;
-
-const Timestamp = styled.span`
-  color: ${COLORS.terminal.timestamp};
-  margin-right: 12px;
-  min-width: 80px;
-`;
-
-const LogContent = styled.span`
-  flex: 1;
-`;
-
-const WelcomeMessage = styled.div`
-  color: ${COLORS.terminal.welcome};
-  margin-bottom: 18px;
-  font-weight: 600;
-`;
-
 const TerminalWrapper = styled.div`
   position: relative;
-  color: ${COLORS.terminal.text};
+  color: ${({ highContrast }) =>
+    highContrast ? "#111" : COLORS.terminal.text};
   height: ${SIZES.terminal.height};
 `;
 
@@ -53,7 +18,13 @@ const TerminalCard = styled.div`
   flex: 1;
   height: 100%;
   box-sizing: border-box;
-  background: ${COLORS.terminal.background};
+  background: ${({ highContrast }) =>
+    highContrast ? "#fff" : COLORS.terminal.background};
+  border: ${({ highContrast }) =>
+    highContrast ? "1px solid #11111136" : "1px solid rgba(255, 255, 255, 0.1)"};
+  box-shadow: 0 4px 12px
+    ${({ highContrast }) =>
+      highContrast ? "rgba(0, 0, 0, 0.2)" : "rgba(0, 0, 0, 0.1)"};
   font-family: "Courier New", monospace;
   font-size: 14px;
   line-height: 1.6;
@@ -66,11 +37,48 @@ const TerminalCard = styled.div`
   }
 `;
 
+const LogLine = styled.div`
+  margin-bottom: 8px;
+  display: flex;
+
+  &.error {
+    color: ${({ highContrast }) => (highContrast ? "#b00020" : COLORS.terminal.error)};
+  }
+
+  &.success {
+    color: ${({ highContrast }) => (highContrast ? "#006400" : COLORS.terminal.success)};
+  }
+
+  &.warning {
+    color: ${({ highContrast }) => (highContrast ? "#b36b00" : COLORS.terminal.warning)};
+  }
+
+  &.info {
+    color: ${({ highContrast }) => (highContrast ? "#1a237e" : COLORS.terminal.info)};
+  }
+`;
+
+const Timestamp = styled.span`
+  color: ${({ highContrast }) => (highContrast ? "#888" : COLORS.terminal.timestamp)};
+  margin-right: 12px;
+  min-width: 80px;
+`;
+
+const LogContent = styled.span`
+  flex: 1;
+`;
+
+const WelcomeMessage = styled.div`
+  color: ${({ highContrast }) => (highContrast ? "#333" : COLORS.terminal.welcome)};
+  margin-bottom: 18px;
+  font-weight: 600;
+`;
+
 const StyledInput = styled.input`
   border: none;
   width: 100%;
   background-color: transparent;
-  color: white;
+  color: ${({ highContrast }) => (highContrast ? "#111" : "white")};
 
   &:focus {
     outline: none;
@@ -91,9 +99,33 @@ const ClearButton = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  background: ${({ highContrast }) => (highContrast ? "#eee" : "transparent")};
+  border-color: ${({ highContrast }) => (highContrast ? "#111" : "white")};
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: ${({ highContrast }) =>
+      highContrast ? "#ddd" : "rgba(255, 255, 255, 0.1)"};
+  }
+`;
+
+const ContrastButton = styled.div`
+  border: 2px solid ${({ highContrast }) => (highContrast ? "#111" : "white")};
+  border-radius: 7px;
+  width: fit-content;
+  padding: 10px;
+  position: absolute;
+  bottom: 20px;
+  right: 70px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: ${({ highContrast }) => (highContrast ? "#eee" : "transparent")};
+
+  &:hover {
+    background-color: ${({ highContrast }) =>
+      highContrast ? "#ddd" : "rgba(255, 255, 255, 0.1)"};
   }
 `;
 
@@ -103,9 +135,6 @@ const InputContainer = styled.div`
   margin-top: 10px;
 `;
 
-/**
- * Retorna a classe CSS apropriada para o tipo de log
- */
 const getLogClass = (type) => {
   const LOG_TYPE_CLASSES = {
     error: "error",
@@ -117,24 +146,17 @@ const getLogClass = (type) => {
   return LOG_TYPE_CLASSES[type] || "";
 };
 
-/**
- * Componente de terminal para exibir logs e capturar input do usuário
- */
 export const Terminal = () => {
-  const { logs, setLogs, waitingInput, inputCallbackRef, setWaitingInput } = useAppData();
+  const { highContrast, setHighContrast, logs, setLogs, waitingInput, inputCallbackRef, setWaitingInput } = useAppData();
   const terminalRef = useRef(null);
   const [inputValue, setInputValue] = useState("");
 
-  // Auto-scroll para o final quando novos logs são adicionados
   useEffect(() => {
     if (terminalRef.current) {
       terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
     }
   }, [logs]);
 
-  /**
-   * Manipula a submissão de input do usuário
-   */
   const handleInputSubmit = () => {
     if (inputCallbackRef.current) {
       inputCallbackRef.current(inputValue);
@@ -144,32 +166,32 @@ export const Terminal = () => {
     }
   };
 
-  /**
-   * Manipula o evento de tecla pressionada no input
-   */
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       handleInputSubmit();
     }
   };
 
-  /**
-   * Limpa todos os logs do terminal
-   */
   const handleClearLogs = () => {
     setLogs([]);
   };
 
+  const handleToggleContrast = () => {
+    setHighContrast((prev) => !prev);
+  };
+
   return (
-    <TerminalWrapper>
-      <TerminalCard ref={terminalRef}>
-        <WelcomeMessage>[JSimples@UNIFAL-MG terminal]$ Terminal JSimples</WelcomeMessage>
+    <TerminalWrapper highContrast={highContrast}>
+      <TerminalCard ref={terminalRef} highContrast={highContrast}>
+        <WelcomeMessage highContrast={highContrast}>
+          [JSimples@UNIFAL-MG terminal]$ Terminal JSimples
+        </WelcomeMessage>
 
         {logs &&
           logs.length > 0 &&
           logs.map((log, index) => (
-            <LogLine key={index} className={getLogClass(log.type)}>
-              <Timestamp>{formatTime(log.timestamp)}</Timestamp>
+            <LogLine key={index} className={getLogClass(log.type)} highContrast={highContrast}>
+              <Timestamp highContrast={highContrast}>{formatTime(log.timestamp)}</Timestamp>
               <LogContent>{log.message}</LogContent>
             </LogLine>
           ))}
@@ -183,11 +205,15 @@ export const Terminal = () => {
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyDown}
               autoFocus
+              highContrast={highContrast}
             />
           </InputContainer>
         )}
       </TerminalCard>
-      <ClearButton onClick={handleClearLogs}>
+      <ContrastButton onClick={handleToggleContrast} highContrast={highContrast} title="Alternar alto contraste">
+        <MdContrast size={20} />
+      </ContrastButton>
+      <ClearButton onClick={handleClearLogs} highContrast={highContrast}>
         <PiBroomBold size={20} />
       </ClearButton>
     </TerminalWrapper>
